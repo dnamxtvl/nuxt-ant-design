@@ -14,7 +14,13 @@ export default defineNuxtConfig({
       meta: [{ name: 'Nuxt app', content: 'Nuxt Ant Design Tailwind' }],
     },
   },
-  css: ["~/assets/css/main.scss", "~/assets/css/app.css"],
+  css: [
+    "~/assets/css/main.scss",
+    "~/assets/css/app.scss",
+    '~/assets/fonts/fontawesome.css',
+    '~/assets/fonts/tabler-icons.css',
+    '~/assets/fonts/flag-icons.css',
+  ],
   runtimeConfig: {
     public: {
     }

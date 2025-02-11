@@ -9,6 +9,7 @@
       class="custom-sider"
     >
       <div class="ant-pro-sider-menu-logo flex items-center">
+        <!-- Logo -->
         <svg
           viewBox="0 0 128 128"
           version="1.1"
@@ -78,31 +79,19 @@
             </g>
           </g>
         </svg>
+        <!-- End Logo -->
         <transition name="fade">
           <h1 v-if="!collapsed" class="logo">Ant Design Pro</h1>
         </transition>
       </div>
 
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
-        <a-menu-item key="1">
-          <user-outlined class="align-middle" />
-          <span v-if="!collapsed">User</span>
-        </a-menu-item>
-
-        <a-sub-menu key="sub1">
-          <template #title>
-            <video-camera-outlined class="align-middle" />
-            <span v-if="!collapsed">Media</span>
-          </template>
-          <a-menu-item key="2">Videos</a-menu-item>
-          <a-menu-item key="3">Images</a-menu-item>
-        </a-sub-menu>
-
-        <a-menu-item key="4">
-          <upload-outlined class="align-middle" />
-          <span v-if="!collapsed">Upload</span>
-        </a-menu-item>
-      </a-menu>
+      <a-menu
+        v-model:selectedKeys="selectedKeys"
+        v-model:openKeys="openKeys"
+        theme="dark"
+        mode="inline"
+        :items="items"
+      />
     </a-layout-sider>
 
     <!-- Content Area -->
@@ -120,16 +109,16 @@
           <template #overlay>
             <a-menu>
               <a-menu-item key="1">
-                <user-outlined class="align-middle" />
+                <user-outlined class="ant-dropdown-menu-title-content-custom" />
                 Profile
               </a-menu-item>
               <a-menu-item key="2">
-                <setting-outlined class="align-middle" />
+                <setting-outlined class="ant-dropdown-menu-title-content-custom" />
                 Settings
               </a-menu-item>
               <a-menu-divider />
               <a-menu-item key="3">
-                <logout-outlined class="align-middle" />
+                <logout-outlined class="ant-dropdown-menu-title-content-custom" />
                 Logout
               </a-menu-item>
             </a-menu>
@@ -139,11 +128,7 @@
 
       <!-- Main Content -->
       <a-layout-content class="custom-content">
-        <a-breadcrumb class="breadcrumb ant-breadcrumb-arrow-no-separator">
-          <a-breadcrumb-item>Home</a-breadcrumb-item>
-          <a-breadcrumb-item>Dashboard</a-breadcrumb-item>
-        </a-breadcrumb>
-        <div class="content-box">Content</div>
+        <slot />
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -161,6 +146,34 @@ import {
 
 const selectedKeys = ref<string[]>(["1"]);
 const collapsed = ref<boolean>(false);
+const openKeys = ref<string[]>(["sub1"]);
+const items = ref([
+  {
+    key: "sub1",
+    icon: () => h(UserOutlined, { class: "align-middle" }),
+    label: collapsed.value ? null : "User",
+    children: [
+      {
+        key: "1",
+        label: "List",
+      },
+    ],
+  },
+  {
+    key: "sub2",
+    icon: () => h(VideoCameraOutlined, { class: "align-middle" }),
+    label: collapsed.value ? null : "Media",
+    children: [
+      { key: "2", label: "Videos" },
+      { key: "3", label: "Images" },
+    ],
+  },
+  {
+    key: "4",
+    icon: () => h(UploadOutlined, { class: "align-middle" }),
+    label: collapsed.value ? null : "Upload",
+  },
+]);
 </script>
 
 <style scoped>
@@ -209,11 +222,6 @@ const collapsed = ref<boolean>(false);
   cursor: pointer;
 }
 
-.breadcrumb {
-  flex: 1;
-  margin-left: 16px;
-}
-
 .avatar {
   cursor: pointer;
 }
@@ -223,13 +231,6 @@ const collapsed = ref<boolean>(false);
   background: #f0f2f5;
   min-height: calc(100vh - 64px);
   padding-top: 1rem;
-}
-
-.content-box {
-  background: white;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .ant-pro-sider-menu-logo {
@@ -246,16 +247,8 @@ const collapsed = ref<boolean>(false);
   margin-top: 15px;
   margin-bottom: 10px;
   margin-right: 10px;
-  height: 32px;
-  width: 32px;
+  height: 2rem;
+  width: 2rem;
   display: inline-block;
-}
-
-.align-middle {
-  vertical-align: middle;
-}
-
-.ant-breadcrumb-arrow-no-separator {
-  margin-bottom: 1rem;
 }
 </style>
