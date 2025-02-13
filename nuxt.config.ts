@@ -1,9 +1,9 @@
 import tailwindcss from "@tailwindcss/vite";;
 
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2025-02-12',
   devtools: { enabled: false },
-  ssr: false,
+  ssr: true,
   devServer: {
     host: '0.0.0.0',
     port: 3000
@@ -15,11 +15,11 @@ export default defineNuxtConfig({
     },
   },
   css: [
-    "~/assets/css/main.scss",
-    "~/assets/css/app.scss",
+    "~/assets/css/tailwind/main.css",
     '~/assets/fonts/fontawesome.css',
     '~/assets/fonts/tabler-icons.css',
     '~/assets/fonts/flag-icons.css',
+    "~/assets/css/app.scss",
   ],
   runtimeConfig: {
     public: {

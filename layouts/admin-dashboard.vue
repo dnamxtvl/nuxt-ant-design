@@ -90,8 +90,26 @@
         v-model:openKeys="openKeys"
         theme="dark"
         mode="inline"
-        :items="items"
-      />
+      >
+        <template v-for="item in items" :key="item.key">
+          <!-- Nếu có children thì là sub-menu -->
+          <a-sub-menu v-if="item.children && item.children.length" :key="item.key">
+            <template #title>
+              <component v-if="item.icon" :is="item.icon" />
+              <span v-if="!collapsed">{{ item.label }}</span>
+            </template>
+            <a-menu-item v-for="child in item.children" :key="child.key">
+              {{ child.label }}
+            </a-menu-item>
+          </a-sub-menu>
+
+          <!-- Nếu không có children thì là menu-item -->
+          <a-menu-item v-else :key="item.key">
+            <component v-if="item.icon" :is="item.icon" />
+            <span v-if="!collapsed">{{ item.label }}</span>
+          </a-menu-item>
+        </template>
+      </a-menu>
     </a-layout-sider>
 
     <!-- Content Area -->
@@ -150,19 +168,14 @@ const openKeys = ref<string[]>(["sub1"]);
 const items = ref([
   {
     key: "sub1",
-    icon: () => h(UserOutlined, { class: "align-middle" }),
-    label: collapsed.value ? null : "User",
-    children: [
-      {
-        key: "1",
-        label: "List",
-      },
-    ],
+    icon: UserOutlined,
+    label: "User",
+    children: [{ key: "1", label: "List" }],
   },
   {
     key: "sub2",
-    icon: () => h(VideoCameraOutlined, { class: "align-middle" }),
-    label: collapsed.value ? null : "Media",
+    icon: VideoCameraOutlined,
+    label: "Media",
     children: [
       { key: "2", label: "Videos" },
       { key: "3", label: "Images" },
@@ -170,8 +183,12 @@ const items = ref([
   },
   {
     key: "4",
-    icon: () => h(UploadOutlined, { class: "align-middle" }),
-    label: collapsed.value ? null : "Upload",
+    icon: UploadOutlined,
+    label: "Upload",
+    children: [
+      { key: "5", label: "Upload1" },
+      { key: "6", label: "Upload2" },
+    ],
   },
 ]);
 </script>
