@@ -81,16 +81,13 @@
       <!-- Tabs -->
       <div class="mt-2">
         <a-form
+          ref="formRef"
           :model="formState"
+          :rules="rules"
           layout="vertical"
           autocomplete="off"
-          @finish="onFinish"
         >
-          <a-form-item
-            label="Email"
-            name="email"
-            :rules="[{ required: true, message: 'Email is required!' }]"
-          >
+          <a-form-item label="Email" name="email">
             <a-input
               v-model:value="formState.email"
               placeholder="Please enter your email"
@@ -101,11 +98,7 @@
             </a-input>
           </a-form-item>
 
-          <a-form-item
-            label="Password"
-            name="password"
-            :rules="[{ required: true, message: 'Password is required!' }]"
-          >
+          <a-form-item label="Password" name="password">
             <a-input-password
               v-model:value="formState.password"
               placeholder="Please enter your password"
@@ -124,7 +117,7 @@
           </a-form-item>
 
           <a-form-item>
-            <a-button type="primary" html-type="submit" class="w-full">Login</a-button>
+            <a-button type="primary" @click="onSubmit" class="w-full">Login</a-button>
           </a-form-item>
         </a-form>
       </div>
@@ -144,18 +137,31 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { UserOutlined, LockOutlined, GoogleOutlined } from "@ant-design/icons-vue";
+import type { FormInputLogin } from "~/types/auth/input";
+import type { Rule } from "ant-design-vue/es/form";
+import { RULES_VALIDATION } from "~/constants/config/validation";
 
-const activeTab = ref("1");
-
-const formState = reactive({
+const formRef = ref();
+const formState = ref<FormInputLogin>({
   email: "",
   password: "",
   remember: true,
 });
 
-const onFinish = (values: any) => {
-  console.log("Success:", values);
+const rules: Record<string, Rule[]> = {
+  email: [
+    { required: true, message: "Email is required!" },
+    {
+      min: RULES_VALIDATION.EMAIL_LENGTH.MIN,
+      message: "Email must be at least 6 characters!",
+    },
+  ],
+  password: [{ required: true, message: "Password is required!" }],
+};
+
+const onSubmit = () => {
+  formRef.value.validate().then(() => {});
 };
 </script>

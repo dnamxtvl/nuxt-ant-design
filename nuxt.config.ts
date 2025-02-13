@@ -3,7 +3,7 @@ import tailwindcss from "@tailwindcss/vite";;
 export default defineNuxtConfig({
   compatibilityDate: '2025-02-12',
   devtools: { enabled: false },
-  ssr: true,
+  ssr: process.env.SSR === 'true',
   devServer: {
     host: '0.0.0.0',
     port: 3000
@@ -23,9 +23,14 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
+      SSR: process.env.SSR === 'true',
+      APP_ENV: process.env.APP_ENV,
+      BACKEND_URL: process.env.BACKEND_URL,
+      FRONTEND_URL: process.env.FRONTEND_URL
     }
   },
   modules: [
+    '@pinia/nuxt',
     '@ant-design-vue/nuxt',
   ],
   antd:{

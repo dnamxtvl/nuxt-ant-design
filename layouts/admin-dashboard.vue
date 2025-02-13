@@ -92,7 +92,6 @@
         mode="inline"
       >
         <template v-for="item in items" :key="item.key">
-          <!-- Nếu có children thì là sub-menu -->
           <a-sub-menu v-if="item.children && item.children.length" :key="item.key">
             <template #title>
               <component v-if="item.icon" :is="item.icon" />
@@ -102,8 +101,6 @@
               {{ child.label }}
             </a-menu-item>
           </a-sub-menu>
-
-          <!-- Nếu không có children thì là menu-item -->
           <a-menu-item v-else :key="item.key">
             <component v-if="item.icon" :is="item.icon" />
             <span v-if="!collapsed">{{ item.label }}</span>
