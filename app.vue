@@ -1,5 +1,5 @@
 <template>
-  <div v-if="appLoaded">
+  <div v-show="appLoaded">
     <NuxtRouteAnnouncer />
     <NuxtLayout>
       <NuxtPage />
