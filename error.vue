@@ -1,28 +1,38 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-screen bg-gray-100 text-center">
-    <div class="max-w-md">
-      <img
-        src="/img/illustrations/19.svg"
-        alt="404 Not Found"
-        class="mx-auto w-60 mb-6"
-      />
-      <h1 class="text-3xl font-bold text-gray-800">{{ error.statusCode }}</h1>
-      <p class="text-gray-500 mt-2">{{ getMsgError(error.statusCode) }}</p>
-      <a-button type="primary" class="mt-4" @click="handleError">Go Home</a-button>
-    </div>
+  <div class="h-screen flex items-center justify-center">
+    <a-result
+      v-show="appLoaded"
+      :status="error.statusCode"
+      :title="error.statusCode"
+      :sub-title="getMsgError(error.statusCode)"
+    >
+      <template #extra>
+        <a-button type="primary" class="mt-4" @click="handleError">Go Home</a-button>
+      </template>
+    </a-result>
   </div>
 </template>
 <script setup lang="ts">
 import type { NuxtError } from "#app";
 import { ERR_MESSAGE } from "./constants/config/application";
+import { ROUTE_APP } from "./constants/config/route";
 
 const props = defineProps({
   error: Object as () => NuxtError,
 });
 
-const handleError = () => clearError({ redirect: "/" });
+const appLoaded = ref(false);
+const handleError = () => {
+  navigateTo(ROUTE_APP.USER.LIST);
+};
 
 const getMsgError = (statusCode: number) => {
   return ERR_MESSAGE[statusCode] || "An error occurred";
 };
+
+onMounted(() => {
+  requestAnimationFrame(() => {
+    appLoaded.value = true;
+  });
+});
 </script>

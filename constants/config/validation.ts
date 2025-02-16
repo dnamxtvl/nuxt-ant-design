@@ -12,7 +12,7 @@ export const RULES_VALIDATION = {
         MAX: 255
     },
     PASSWORD_LENGTH: {
-        MIN: 6,
+        MIN: 8,
         MAX: 100
     },
     EMAIL_LENGTH: {

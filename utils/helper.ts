@@ -1,14 +1,13 @@
-import { GROUP_ROUTE } from "~/constants/config/application";
-import LocalStorageManager from "./localStorage";
 import { useMainStore } from "~/store";
 import moment from "moment";
-import type { GamerAnswer } from "~/constants/type";
 import { USER_TYPE_ENUM } from "~/constants/enums/user";
 import {
   JWT_KEY_ACEESS_TOKEN_NAME,
   USER_PROFILE_KEY_NAME,
 } from "~/constants/config/application";
 import CookieManager from "~/utils/cookies";
+import type { LoginResponse } from "~/types/auth/res";
+import { ROUTE_APP } from "~/constants/config/route";
 
 export default class helperApp {
   static getErrorMessage = (error: unknown): string => {
@@ -19,24 +18,9 @@ export default class helperApp {
   }
 
   static logOutWhenTokenExpired = () => {
-    LocalStorageManager.setItemWithKey('isLoggedIn', false);
+    CookieManager.setCookie('isLoggedIn', false);
     let store = useMainStore();
     store.logout(store.$state);
-    ElNotification({ title: 'Error', message: 'Phiên đăng nhập hết hạn!', type: 'error', showClose: false });
-    ElLoading.service({ fullscreen: true }).close();
-  }
-
-  static getForwardGroupRouteWhenRedirect: Object | null = (path: string) => {
-    let currentPrefixPath = path.split("/")[1];
-    return Object.values(GROUP_ROUTE).find((group) => {
-      const prefixPath: Record<string, string> = group.PREFIX_PATH;
-      return (
-        prefixPath &&
-        Object.keys(prefixPath).some(
-          (key) => prefixPath[key] === currentPrefixPath
-        )
-      );
-    }) || null;
   }
 
   static getRandomColor() {
@@ -95,36 +79,6 @@ export default class helperApp {
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
   }
 
-  static getColorOfQuestion = (gamerAnswers: Array<GamerAnswer> | [], questionId: string) => {
-    if (gamerAnswers.length == 0) {
-      return {
-          score: 0,
-          class: "bg-warning"
-      };
-    }
-
-    let answer = gamerAnswers.filter((answer: GamerAnswer) => answer.question_id == questionId);
-
-    if (answer.length > 0) {
-        if (answer[0].score > 0) {
-            return {
-                score: answer[0].score,
-                class: "bg-success"
-            };
-        }
-
-        return {
-          score: 0,
-          class: "bg-danger",
-        };
-    }
-    
-    return {
-        score: 0,
-        class: "bg-warning"
-    };
-  }
-
   static redirectToHome = (type: number) => {
     if (type == USER_TYPE_ENUM.USER) {
       return navigateTo("/admin/dashboard/my-library");
@@ -133,18 +87,17 @@ export default class helperApp {
     }
   };
 
-  static setValueStoreLogin = async (data: any) => {
+  static setValueStoreLogin = async (data: LoginResponse) => {
     let store = useMainStore();
     const userInfo = {
       id: data.user.id,
       email: data.user.email,
       name: data.user.name,
-      type: data.user.type,
       avatar: data.user.avatar
     };
-    await LocalStorageManager.setItemWithKey("isLoggedIn", true);
-    await CookieManager.setCookie(JWT_KEY_ACEESS_TOKEN_NAME, data.token);
-    await LocalStorageManager.setItemWithKey(USER_PROFILE_KEY_NAME, userInfo);
+    CookieManager.setCookie('isLoggedIn', true);
+    CookieManager.setCookie(JWT_KEY_ACEESS_TOKEN_NAME, data.token);
+    CookieManager.setCookie(USER_PROFILE_KEY_NAME, userInfo);
     store.login(store.$state, userInfo, data.token);
   };
 };

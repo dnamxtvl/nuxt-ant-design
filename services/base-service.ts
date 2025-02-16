@@ -1,7 +1,6 @@
 import helperApp from "~/utils/helper";
-import { useMainStore } from "~/store";
 import axios from 'axios';
-import { CODE } from "~/constants/config/application";
+import { STATUS_CODE } from "~/constants/config/application";
 import type { ErrorResponse, ResponseData } from "~/types/common/res";
 
 export default class BaseService {
@@ -22,20 +21,11 @@ export default class BaseService {
     private logError(e: any, error: (error: ErrorResponse) => void) {
         let errors: string[] = [];
         let errorMessages: string[] = [];
-        let codeError: number = CODE.NETWORK_ERROR;
-
-        if (e.code == CODE.SERVER_NOT_WORKING) {
-            errors = [helperApp.getErrorMessage(e.message)];
-        }
+        let codeError: number = STATUS_CODE.NETWORK_ERROR;
 
         if (e.response?.hasOwnProperty('status')) {
-            if (e.response.status == CODE.AUTHTHENTICATE_FAIL) {
-                helperApp.logOutWhenTokenExpired();
-                return navigateTo('/admin/login');
-            }
-
             let errorsObject: Record<string, string[]>;
-            if (e.response.status === CODE.VALIDATE_FAIL) {
+            if (e.response.status === STATUS_CODE.VALIDATE_FAIL) {
                 errorsObject = e.response.data.errors;
                 Object.entries(errorsObject).map(([key, value]: [string, string[]]) => {
                     errorMessages.push(value[0]);
@@ -70,10 +60,18 @@ export default class BaseService {
         endpoint: string,
         params: Record<string, any> = {},
         success: (json: ResponseData) => void,
-        error: (error: ErrorResponse) => void
+        error: (error: ErrorResponse) => void,
+        token: string = '',
+        withFile: boolean = false,
     ) {
         try {
-            const response = await this.getInstanceAxios().post(this.prefix + endpoint, params);
+            let headers: Record<string, string> = withFile 
+                ? { 'Content-Type': 'multipart/form-data' } 
+                : { 'Content-Type': 'application/json' };
+
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const response = await this.getInstanceAxios().post(this.prefix + endpoint, params, { headers });
             const json = this.processResponse(response);
             success(json);
         } catch (e) {
@@ -85,10 +83,18 @@ export default class BaseService {
         endpoint: string,
         params: Record<string, any> = {},
         success: (json: ResponseData) => void,
-        error: (error: ErrorResponse) => void
+        error: (error: ErrorResponse) => void,
+        withFile: boolean = false,
+        token: string = '',
     ) {
         try {
-            const response = await this.getInstanceAxios().put(this.prefix + endpoint, params);
+            let headers: Record<string, string> = withFile 
+                ? { 'Content-Type': 'multipart/form-data' } 
+                : { 'Content-Type': 'application/json' };
+
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const response = await this.getInstanceAxios().put(this.prefix + endpoint, params, { headers });
             const json = this.processResponse(response);
             success(json);
         } catch (e) {
@@ -136,14 +142,12 @@ export default class BaseService {
     }
 
     getInstanceAxios = () => {
-        let store = useMainStore();
         const config = useRuntimeConfig();
         const instance = axios.create({
             baseURL: config.public.BACKEND_URL + 'api',
-            headers: { 'Authorization': `Bearer ${store.$state.token}` }
         });
 
-        instance.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+        // instance.defaults.headers.post['Content-Type'] = 'multipart/form-data';
         instance.defaults.headers.get['Content-Type'] = 'application/json';
         instance.defaults.headers.put['Content-Type'] = 'multipart/form-data';
         instance.defaults.headers.delete['Content-Type'] = 'application/json';

@@ -1,6 +1,4 @@
-export interface ResponseData {
-    data: any;
-}
+export type ResponseData = any;
 
 export interface ErrorResponse {
     code: number;

@@ -10,8 +10,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
         return;
     }
 
-    if (to.path === '/admin/login' || to.path.includes('/user') || to.path.includes('/auth')) {
-
-        return navigateTo("/user/list");
+    if (to.path === '/admin/login' || to.path.includes('/auth')) {
+        return navigateTo("/admin/user/list");
     }
 });

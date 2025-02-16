@@ -77,8 +77,8 @@
         ></span>
         <h2 class="mt-2 text-2xl font-semibold text-sky-500">Ant Design Pro</h2>
       </div>
-
       <!-- Tabs -->
+      <FullScreenLoader :loading="loading" />
       <div class="mt-2">
         <a-form
           ref="formRef"
@@ -87,6 +87,14 @@
           layout="vertical"
           autocomplete="off"
         >
+          <div
+            v-if="errorMsgs.length > 0"
+            class="mb-2"
+            v-for="(error, index) in errorMsgs"
+            :key="index"
+          >
+            <a-alert :message="error" type="error" show-icon />
+          </div>
           <a-form-item label="Email" name="email">
             <a-input
               v-model:value="formState.email"
@@ -142,7 +150,14 @@ import { UserOutlined, LockOutlined, GoogleOutlined } from "@ant-design/icons-vu
 import type { FormInputLogin } from "~/types/auth/input";
 import type { Rule } from "ant-design-vue/es/form";
 import { RULES_VALIDATION } from "~/constants/config/validation";
+import { FETCH_API } from "~/constants/config/api";
+import type { ErrorResponse } from "~/types/common/res";
+import type { LoginResponse } from "~/types/auth/res";
+import helperApp from "~/utils/helper";
+import { ROUTE_APP } from "~/constants/config/route";
+import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
 
+const loading = ref<boolean>(false);
 const formRef = ref();
 const formState = ref<FormInputLogin>({
   email: "",
@@ -150,18 +165,71 @@ const formState = ref<FormInputLogin>({
   remember: true,
 });
 
+const errorMsgs = ref<string[]>([]);
+
 const rules: Record<string, Rule[]> = {
   email: [
-    { required: true, message: "Email is required!" },
+    { required: true, message: "Email is required!", trigger: "change" },
     {
       min: RULES_VALIDATION.EMAIL_LENGTH.MIN,
-      message: "Email must be at least 6 characters!",
+      message:
+        "Email must be at least " + RULES_VALIDATION.EMAIL_LENGTH.MIN + " characters!",
+      trigger: "change",
+    },
+    {
+      max: RULES_VALIDATION.EMAIL_LENGTH.MAX,
+      message:
+        "Email must be at most " + RULES_VALIDATION.EMAIL_LENGTH.MAX + " characters!",
+      trigger: "change",
+    },
+    {
+      validator(_, value) {
+        if (!useValidator().isInvalidEmail(value)) {
+          return Promise.reject(new Error("Email is invalid!"));
+        }
+        return Promise.resolve();
+      },
     },
   ],
-  password: [{ required: true, message: "Password is required!" }],
+  password: [
+    { required: true, message: "Password is required!" },
+    {
+      min: RULES_VALIDATION.PASSWORD_LENGTH.MIN,
+      message:
+        "Password must be at least " +
+        RULES_VALIDATION.PASSWORD_LENGTH.MIN +
+        " characters!",
+      trigger: "change",
+    },
+    {
+      max: RULES_VALIDATION.PASSWORD_LENGTH.MAX,
+      message:
+        "Password must be at most " +
+        RULES_VALIDATION.PASSWORD_LENGTH.MAX +
+        " characters!",
+      trigger: "change",
+    },
+  ],
 };
 
 const onSubmit = () => {
-  formRef.value.validate().then(() => {});
+  formRef.value
+    .validate()
+    .then(async () => {
+      loading.value = true;
+      const res: LoginResponse = await customFetch(FETCH_API.AUTH.LOGIN, {
+        method: "post",
+        body: formState.value,
+      });
+      loading.value = false;
+      helperApp.setValueStoreLogin(res);
+
+      return navigateTo(ROUTE_APP.USER.LIST);
+    })
+    .catch((error: ErrorResponse) => {
+      console.log(error);
+      loading.value = false;
+      errorMsgs.value = error.error;
+    });
 };
 </script>

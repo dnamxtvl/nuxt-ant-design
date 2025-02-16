@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-02-12',
   devtools: { enabled: false },
   ssr: process.env.SSR === 'true',
+  debug: process.env.DEBUG === 'true',
   devServer: {
     host: '0.0.0.0',
     port: 3000
@@ -21,6 +22,9 @@ export default defineNuxtConfig({
     '~/assets/fonts/flag-icons.css',
     "~/assets/css/app.scss",
   ],
+  experimental: {
+    payloadExtraction: false,
+  },
   runtimeConfig: {
     public: {
       SSR: process.env.SSR === 'true',
@@ -34,7 +38,7 @@ export default defineNuxtConfig({
     '@ant-design-vue/nuxt',
   ],
   antd:{
-    extractStyle: true
+    extractStyle: true,
   },
   typescript: {
     strict: true,

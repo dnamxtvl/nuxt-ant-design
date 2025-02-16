@@ -1,4 +1,3 @@
-import { useCookie } from '#app';
 import { EXPIRES_COOKIE_DAY } from "~/constants/config/application";
 
 export default class CookieManager {
@@ -9,7 +8,8 @@ export default class CookieManager {
 
   static setCookie = (cookieName: string, cookieValue: any) => {
     const cookie = useCookie(cookieName, {
-      maxAge: EXPIRES_COOKIE_DAY * 24 * 60 * 60
+      maxAge: EXPIRES_COOKIE_DAY * 24 * 60 * 60,
+      sameSite: 'strict'
     });
     cookie.value = cookieValue;
   }

@@ -8,12 +8,12 @@ export const JWT_KEY_ACEESS_TOKEN_NAME = 'jwt_access_token';
 
 export const USER_PROFILE_KEY_NAME = 'user_profile_key';
 
-export const CODE = {
+export const STATUS_CODE = {
     NETWORK_ERROR: 911,
     SERVER_NOT_WORKING: 'ERR_NETWORK',
     VALIDATE_FAIL: 422,
     NOT_FOUND: 404,
-    AUTHTHENTICATE_FAIL: 401,
+    TOKEN_EXPIRED: 401,
     UNAUTHORIZED: 403,
 }
 
