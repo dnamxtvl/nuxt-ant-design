@@ -157,7 +157,7 @@ import helperApp from "~/utils/helper";
 import { ROUTE_APP } from "~/constants/config/route";
 import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
 
-const loading = ref<boolean>(false);
+const loading = useState<boolean>("globalLoading", () => false);
 const formRef = ref();
 const formState = ref<FormInputLogin>({
   email: "",
@@ -221,7 +221,6 @@ const onSubmit = () => {
         method: "post",
         body: formState.value,
       });
-      loading.value = false;
       helperApp.setValueStoreLogin(res);
 
       return navigateTo(ROUTE_APP.USER.LIST);
@@ -232,4 +231,8 @@ const onSubmit = () => {
       errorMsgs.value = error.error;
     });
 };
+
+onMounted(() => {
+  loading.value = false;
+});
 </script>
