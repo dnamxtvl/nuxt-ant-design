@@ -11,15 +11,13 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import type { ItemBreadcrumb } from "~/types/common/res";
 
 export default defineComponent({
   name: "Breadcrumb",
   props: {
     itemBreads: {
-      type: Array<{
-        name: string;
-        link: string;
-      }>,
+      type: Array<ItemBreadcrumb>,
       required: true,
     },
   },
