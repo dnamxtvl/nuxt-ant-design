@@ -13,6 +13,7 @@
   "dependencies": {
     "@ant-design-vue/nuxt": "^1.4.6",
     "@ant-design/icons-vue": "^7.0.1",
+    "@nuxtjs/i18n": "^9.2.0",
     "@nuxtjs/tailwindcss": "^6.13.1",
     "@pinia/nuxt": "^0.10.1",
     "@tailwindcss/vite": "^4.0.6",

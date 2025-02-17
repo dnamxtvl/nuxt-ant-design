@@ -156,6 +156,7 @@ import type { LoginResponse } from "~/types/auth/res";
 import helperApp from "~/utils/helper";
 import { ROUTE_APP } from "~/constants/config/route";
 import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
+import { customFetch } from "~/composables/custom-fetch";
 
 const loading = useState<boolean>("globalLoading", () => false);
 const formRef = ref();

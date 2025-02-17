@@ -57,5 +57,6 @@ const collapsed = ref<boolean>(false);
   background: #f0f2f5;
   min-height: calc(100vh - 64px);
   padding-top: 1rem;
+  overflow: auto;
 }
 </style>
