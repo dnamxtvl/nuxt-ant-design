@@ -35,15 +35,26 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const localPage = ref<number>(props.currentPageApp);
+    const isChangingPageSize = ref<boolean>(false);
 
     const onChange = (page: number) => {
-      localPage.value = page;
-      emit("onChange", page);
+      if (!isChangingPageSize.value) {
+        localPage.value = page;
+        emit("onChange", page);
+      }
+      isChangingPageSize.value = false;
     };
 
     const onChangeSize = (current: number, size: number) => {
+      isChangingPageSize.value = true;
+      localPage.value = 1;
       emit("onChangeSize", size);
+      emit("onChange", 1);
     };
+
+    onMounted(() => {
+      isChangingPageSize.value = false;
+    });
 
     return {
       localPage,

@@ -31,7 +31,6 @@ export default defineNuxtConfig({
       APP_ENV: process.env.APP_ENV,
       BACKEND_URL: process.env.BACKEND_URL,
       FRONTEND_URL: process.env.FRONTEND_URL,
-      APP_LOCATE: process.env.APP_LOCATE,
     }
   },
   modules: [
@@ -41,7 +40,7 @@ export default defineNuxtConfig({
   ],
   i18n: {
     vueI18n: './i18n.config.ts',
-    defaultLocale: 'fr',
+    defaultLocale: process.env.APP_LOCATE ?? 'en',
   },
   antd:{
     extractStyle: true,

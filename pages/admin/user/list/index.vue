@@ -5,50 +5,13 @@
     <TitleScreen :titleScreen="title" />
     <!-- Content -->
     <!-- Filter -->
-    <div class="content-box content-box-filter">
-      <h1 class="title-filter">{{ $t("welcome") }}</h1>
-      <a-form
-        ref="formRef"
-        name="advanced_search"
-        class="ant-advanced-search-form"
-        :model="formState"
-        @finish="onFinish"
-      >
-        <a-row :gutter="24">
-          <template v-for="i in 10" :key="i">
-            <a-col v-show="expand || i <= 6" :span="8">
-              <a-form-item
-                :name="`field-${i}`"
-                :label="`field-${i}`"
-                :rules="[{ required: true, message: 'input something' }]"
-              >
-                <a-input
-                  v-model:value="formState[`field-${i}`]"
-                  placeholder="placeholder"
-                ></a-input>
-              </a-form-item>
-            </a-col>
-          </template>
-        </a-row>
-        <a-row>
-          <a-col :span="24" style="text-align: right">
-            <a-button type="primary" html-type="submit">Search</a-button>
-            <a-button style="margin: 0 8px" @click="() => formRef.resetFields()"
-              >Clear</a-button
-            >
-            <a style="font-size: 12px" @click="expand = !expand">
-              <template v-if="expand">
-                <UpOutlined />
-              </template>
-              <template v-else>
-                <DownOutlined />
-              </template>
-              Advanced
-            </a>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div>
+    <FormSearch
+      title="Filter"
+      :numBasicFilter="6"
+      :fields="searchFields"
+      @submit="handleSearch"
+      @handleClear="handleResetFilter"
+    />
     <!-- End Filter -->
     <div class="content-box">
       <!-- Table -->
@@ -99,6 +62,7 @@
           </template>
         </template>
       </a-table>
+      <!-- End Table -->
       <!-- pagination -->
       <Pagination
         :currentPageApp="currentPage"
@@ -107,6 +71,7 @@
         :perPageSize="pagePage"
         @onChangeSize="onChangePerPage"
       />
+      <!-- End Pagination -->
     </div>
   </div>
 </template>
@@ -118,7 +83,8 @@ import TitleScreen from "~/components/common/TitleScreen.vue";
 import { ref } from "vue";
 import Pagination from "~/components/common/Pagination.vue";
 import Breadcrumb from "~/components/common/Breadcrumb.vue";
-import type { FormInstance } from "ant-design-vue";
+import type { ItemBreadcrumb, ItemFormSearch } from "~/types/common/res";
+import FormSearch from "~/components/common/FormSearch.vue";
 
 definePageMeta({
   layout: "admin-dashboard",
@@ -131,9 +97,10 @@ export default defineComponent({
     TitleScreen,
     Pagination,
     Breadcrumb,
+    FormSearch,
   },
   setup() {
-    const itemBreadcrumbs = ref([
+    const itemBreadcrumbs = ref<ItemBreadcrumb[]>([
       {
         name: "Home",
         link: "/",
@@ -153,23 +120,134 @@ export default defineComponent({
     const onChangePage = (pageNumber: number) => {
       currentPage.value = pageNumber;
       console.log("currentPage", currentPage.value);
+      console.log("perPage", pagePage.value);
     };
     const pagePage = ref<number>(10);
     const onChangePerPage = (perPage: number) => {
-      currentPage.value = 1;
-      console.log("perPage", perPage);
-      console.log("currentPage", currentPage.value);
       pagePage.value = perPage;
     };
 
-    const expand = ref(false);
-    const formRef = ref<FormInstance>();
-    const formState = reactive({});
+    const expand = ref<boolean>(false);
 
-    const onFinish = (values: any) => {
-      console.log("Received values of form: ", values);
-      console.log("formState: ", formState);
+    const handleSearch = (formState: Record<string, any>) => {
+      console.log("formState", formState.keyword);
     };
+
+    const handleResetFilter = () => {
+      console.log("handleResetFilter");
+    };
+
+    const searchFields: ItemFormSearch[] = [
+      {
+        name: "name",
+        label: "Name",
+        type: "text",
+        placeholder: "Enter name",
+        md: 12,
+        lg: 8,
+        xl: 6,
+      },
+      {
+        name: "email",
+        label: "Email",
+        type: "text",
+        placeholder: "Enter email",
+        md: 12,
+        lg: 8,
+        xl: 6,
+      },
+      {
+        name: "gender",
+        label: "Gender",
+        type: "select",
+        placeholder: "Select gender",
+        options: [
+          { label: "Male", value: "male" },
+          { label: "Female", value: "female" },
+        ],
+        md: 12,
+        lg: 8,
+        xl: 6,
+      },
+      {
+        name: "joined",
+        label: "Joined Date",
+        type: "range-date",
+        md: 12,
+        lg: 8,
+        xl: 6,
+      },
+      {
+        name: "status",
+        label: "Status",
+        type: "radio",
+        options: [
+          { label: "Active", value: "active" },
+          { label: "Inactive", value: "inactive" },
+        ],
+        md: 12,
+        lg: 6,
+        xl: 3,
+      },
+      {
+        name: "birthdate",
+        label: "Birthdate",
+        type: "date",
+        placeholder: "Select birthdate",
+        md: 12,
+        lg: 6,
+        xl: 3,
+      },
+      {
+        name: "keyword",
+        label: "Keyword",
+        type: "text",
+        placeholder: "Enter keyword",
+        rules: [{ required: true, message: "Please input keyword" }],
+        md: 12,
+        lg: 8,
+        xl: 6,
+      },
+      {
+        name: "category",
+        label: "Category",
+        type: "select",
+        placeholder: "Select category",
+        options: [
+          { label: "Category 1", value: "1" },
+          { label: "Category 2", value: "2" },
+        ],
+        md: 12,
+        lg: 8,
+        xl: 6,
+      },
+      {
+        name: "date",
+        label: "Date",
+        type: "date",
+        placeholder: "Select date",
+        md: 12,
+        lg: 6,
+        xl: 3,
+      },
+      {
+        name: "agree",
+        label: "Agree to terms",
+        type: "checkbox",
+        md: 12,
+        lg: 6,
+        xl: 3,
+      },
+      {
+        name: "age",
+        label: "Age",
+        type: "number",
+        placeholder: "Enter age",
+        md: 12,
+        lg: 9,
+        xl: 6,
+      },
+    ];
 
     const data = [
       {
@@ -276,7 +354,7 @@ export default defineComponent({
       },
     ]);
 
-    const handleResizeColumn = (w, col) => {
+    const handleResizeColumn = (w: number, col: any) => {
       col.width = w;
     };
 
@@ -291,12 +369,12 @@ export default defineComponent({
       total,
       itemBreadcrumbs,
       expand,
-      formRef,
-      formState,
-      onFinish,
+      searchFields,
       onChangePage,
       onChangePerPage,
       handleResizeColumn,
+      handleSearch,
+      handleResetFilter,
     };
   },
 });

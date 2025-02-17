@@ -21,6 +21,6 @@ export default defineComponent({
 <style scoped>
 .title-screen {
   color: #000;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 </style>

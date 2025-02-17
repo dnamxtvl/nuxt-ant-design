@@ -25,6 +25,14 @@ import { notification } from "ant-design-vue";
 
 const [contextHolder] = notification.useNotification();
 const collapsed = ref<boolean>(false);
+const mobileWidth = 576;
+
+onMounted(() => {
+  let screenWidth = window.innerWidth;
+  if (screenWidth < mobileWidth) {
+    collapsed.value = true;
+  }
+});
 </script>
 
 <style scoped>
