@@ -1,7 +1,7 @@
 import helperApp from "~/utils/helper";
 import axios from 'axios';
-import { STATUS_CODE } from "~/constants/config/application";
 import type { ErrorResponse, ResponseData } from "~/types/common/res";
+import { StatusCodes } from "http-status-codes";
 
 export default class BaseService {
     private prefix: string;
@@ -21,11 +21,11 @@ export default class BaseService {
     private logError(e: any, error: (error: ErrorResponse) => void) {
         let errors: string[] = [];
         let errorMessages: string[] = [];
-        let codeError: number = STATUS_CODE.NETWORK_ERROR;
+        let codeError: number = StatusCodes.SERVICE_UNAVAILABLE;
 
         if (e.response?.hasOwnProperty('status')) {
             let errorsObject: Record<string, string[]>;
-            if (e.response.status === STATUS_CODE.VALIDATE_FAIL) {
+            if (e.response.status === StatusCodes.UNPROCESSABLE_ENTITY) {
                 errorsObject = e.response.data.errors;
                 Object.entries(errorsObject).map(([key, value]: [string, string[]]) => {
                     errorMessages.push(value[0]);

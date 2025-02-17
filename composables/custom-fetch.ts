@@ -2,7 +2,7 @@ import { ROUTE_APP } from "~/constants/config/route";
 import helperApp from "~/utils/helper";
 import { notification } from 'ant-design-vue';
 import type { NotificationPlacement } from 'ant-design-vue/lib/notification';
-import { STATUS_CODE } from "~/constants/config/application";
+import { StatusCodes } from "http-status-codes";
 
 export const customFetch = $fetch.create({
   onRequest({ options }) {
@@ -14,8 +14,8 @@ export const customFetch = $fetch.create({
       responseCode: 'SERVER_ERROR',
     };
 
-    if (error.code === STATUS_CODE.TOKEN_EXPIRED) logOut();
-    if (error.code === STATUS_CODE.NETWORK_ERROR) {
+    if (error.code === StatusCodes.UNAUTHORIZED) logOut();
+    if (error.code === StatusCodes.SERVICE_UNAVAILABLE) {
         const placement: NotificationPlacement = "topRight";
         notification.error({
             message: 'Server Error',
@@ -38,8 +38,8 @@ export function useCustomFetch<T>(url: string, options: any = {}) {
           responseCode: 'SERVER_ERROR',
         };
 
-        if (error.code === STATUS_CODE.TOKEN_EXPIRED) logOut();
-        if (error.code === STATUS_CODE.NETWORK_ERROR) {
+        if (error.code === StatusCodes.UNAUTHORIZED) logOut();
+        if (error.code === StatusCodes.SERVICE_UNAVAILABLE) {
             const placement: NotificationPlacement = "topRight";
             notification.error({
                 message: 'Server Error',
