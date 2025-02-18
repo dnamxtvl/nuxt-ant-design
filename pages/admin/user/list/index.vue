@@ -6,7 +6,7 @@
     <!-- Content -->
     <!-- Filter -->
     <FormSearch
-      title="Filter"
+      title="filter"
       :numBasicFilter="6"
       :fields="searchFields"
       @submit="handleSearch"
@@ -15,24 +15,26 @@
     <!-- End Filter -->
     <div class="content-box">
       <!-- Table -->
-      <h1 class="title-filter">Search Result</h1>
+      <h1 class="title-filter">{{ $t("search_result") }}</h1>
       <a-table
         :columns="columns"
         :data-source="data"
         :pagination="false"
-        @resizeColumn="handleResizeColumn"
         :scroll="{ x: true }"
       >
         <template #headerCell="{ column }">
           <template v-if="column.key === 'name'">
-            <span> Name </span>
+            <span> {{ $t("name") }} </span>
+          </template>
+          <template v-else>
+            <span> {{ $t(title) }} </span>
           </template>
         </template>
 
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'name'">
             <a>
-              {{ record.name }}
+              {{ $t(record.name) }}
             </a>
           </template>
           <template v-else-if="column.key === 'tags'">
@@ -102,19 +104,19 @@ export default defineComponent({
   setup() {
     const itemBreadcrumbs = ref<ItemBreadcrumb[]>([
       {
-        name: "Home",
+        name: "home",
         link: "/",
       },
       {
-        name: "User",
+        name: "user",
         link: "/user",
       },
       {
-        name: "List",
+        name: "list",
         link: "/user/list",
       },
     ]);
-    const title = ref<string>("List User");
+    const title = ref<string>("list_user");
     const currentPage = ref<number>(1);
     const total = ref<number>(500);
     const onChangePage = (pageNumber: number) => {
@@ -140,30 +142,30 @@ export default defineComponent({
     const searchFields: ItemFormSearch[] = [
       {
         name: "name",
-        label: "Name",
+        label: "name",
         type: "text",
-        placeholder: "Enter name",
+        placeholder: "enter_name",
         md: 12,
         lg: 8,
         xl: 6,
       },
       {
         name: "email",
-        label: "Email",
+        label: "email",
         type: "text",
-        placeholder: "Enter email",
+        placeholder: "enter_email",
         md: 12,
         lg: 8,
         xl: 6,
       },
       {
         name: "gender",
-        label: "Gender",
+        label: "gender",
         type: "select",
-        placeholder: "Select gender",
+        placeholder: "select_gender",
         options: [
-          { label: "Male", value: "male" },
-          { label: "Female", value: "female" },
+          { label: "male", value: "male" },
+          { label: "female", value: "female" },
         ],
         md: 12,
         lg: 8,
@@ -171,7 +173,7 @@ export default defineComponent({
       },
       {
         name: "joined",
-        label: "Joined Date",
+        label: "joined_date",
         type: "range-date",
         md: 12,
         lg: 8,
@@ -179,40 +181,40 @@ export default defineComponent({
       },
       {
         name: "status",
-        label: "Status",
+        label: "status",
         type: "radio",
         options: [
-          { label: "Active", value: "active" },
-          { label: "Inactive", value: "inactive" },
+          { label: "active", value: "active" },
+          { label: "inactive", value: "inactive" },
         ],
         md: 12,
-        lg: 6,
-        xl: 3,
+        lg: 9,
+        xl: 6,
       },
       {
         name: "birthdate",
-        label: "Birthdate",
+        label: "birthdate",
         type: "date",
-        placeholder: "Select birthdate",
+        placeholder: "select_birthdate",
         md: 12,
-        lg: 6,
-        xl: 3,
+        lg: 9,
+        xl: 6,
       },
       {
         name: "keyword",
-        label: "Keyword",
+        label: "keyword",
         type: "text",
-        placeholder: "Enter keyword",
-        rules: [{ required: true, message: "Please input keyword" }],
+        placeholder: "enter_keyword",
+        rules: [{ required: true, message: "please_enter_keyword" }],
         md: 12,
         lg: 8,
         xl: 6,
       },
       {
         name: "category",
-        label: "Category",
+        label: "category",
         type: "select",
-        placeholder: "Select category",
+        placeholder: "select_category",
         options: [
           { label: "Category 1", value: "1" },
           { label: "Category 2", value: "2" },
@@ -223,16 +225,16 @@ export default defineComponent({
       },
       {
         name: "date",
-        label: "Date",
+        label: "date",
         type: "date",
-        placeholder: "Select date",
+        placeholder: "select_date",
         md: 12,
         lg: 6,
         xl: 3,
       },
       {
         name: "agree",
-        label: "Agree to terms",
+        label: "agree_to_terms",
         type: "checkbox",
         md: 12,
         lg: 6,
@@ -240,9 +242,9 @@ export default defineComponent({
       },
       {
         name: "age",
-        label: "Age",
+        label: "age",
         type: "number",
-        placeholder: "Enter age",
+        placeholder: "enter_age",
         md: 12,
         lg: 9,
         xl: 6,
@@ -330,7 +332,7 @@ export default defineComponent({
         responsive: ["md"],
       },
       {
-        title: "Age",
+        title: "age",
         dataIndex: "age",
         key: "age",
         width: 100,
@@ -339,24 +341,20 @@ export default defineComponent({
         sorter: (a, b) => a.age - b.age,
       },
       {
-        title: "Address",
+        title: "address",
         dataIndex: "address",
         key: "address",
       },
       {
-        title: "Tags",
+        title: "tags",
         key: "tags",
         dataIndex: "tags",
       },
       {
-        title: "Action",
+        title: "action",
         key: "action",
       },
     ]);
-
-    const handleResizeColumn = (w: number, col: any) => {
-      col.width = w;
-    };
 
     onMounted(async () => {});
 
@@ -372,7 +370,6 @@ export default defineComponent({
       searchFields,
       onChangePage,
       onChangePerPage,
-      handleResizeColumn,
       handleSearch,
       handleResetFilter,
     };

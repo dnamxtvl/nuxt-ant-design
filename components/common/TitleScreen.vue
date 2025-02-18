@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-2xl font-semibold title-screen">{{ titleScreen }}</h1>
+  <h1 class="text-2xl font-semibold title-screen">{{ $t(titleScreen) }}</h1>
 </template>
 
 <script lang="ts">

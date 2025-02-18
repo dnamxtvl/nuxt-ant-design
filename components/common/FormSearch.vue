@@ -10,21 +10,21 @@
           >
             <a-form-item
               :name="field.name"
-              :label="field.label"
+              :label="$t(field.label)"
               :rules="field.rules || []"
             >
               <!-- Input text -->
               <a-input
                 v-if="field.type === 'text'"
                 v-model:value="formState[field.name]"
-                :placeholder="field.placeholder || ''"
+                :placeholder="$t(field.placeholder ?? '') || ''"
               />
 
               <!-- Select dropdown -->
               <a-select
                 v-else-if="field.type === 'select'"
                 v-model:value="formState[field.name]"
-                :placeholder="field.placeholder || ''"
+                :placeholder="$t(field.placeholder ?? '') || ''"
                 :options="field.options || []"
               />
 
@@ -32,7 +32,7 @@
               <a-date-picker
                 v-else-if="field.type === 'date'"
                 v-model:value="formState[field.name]"
-                :placeholder="field.placeholder || ''"
+                :placeholder="$t(field.placeholder ?? '') || ''"
               />
 
               <!-- Radio button -->
@@ -45,7 +45,7 @@
                   :key="option.value"
                   :value="option.value"
                 >
-                  {{ option.label }}
+                  {{ $t(option.label) }}
                 </a-radio>
               </a-radio-group>
 
@@ -54,14 +54,14 @@
                 v-else-if="field.type === 'checkbox'"
                 v-model:checked="formState[field.name]"
               >
-                {{ field.label }}
+                {{ $t(field.label) }}
               </a-checkbox>
 
               <!-- Number input -->
               <a-input-number
                 v-else-if="field.type === 'number'"
                 v-model:value="formState[field.name]"
-                :placeholder="field.placeholder || ''"
+                :placeholder="$t(field.placeholder ?? '') || ''"
               />
 
               <!-- Range date picker -->
@@ -69,8 +69,8 @@
                 v-else-if="field.type === 'range-date'"
                 v-model:value="formState[field.name]"
                 :placeholder="[
-                  field.placeholder || 'Start date',
-                  field.placeholder || 'End date',
+                  field.placeholder || $t('start_date'),
+                  field.placeholder || $t('end_date'),
                 ]"
               />
             </a-form-item>
@@ -80,8 +80,10 @@
 
       <a-row>
         <a-col :span="24" style="text-align: right">
-          <a-button type="primary" html-type="submit">Search</a-button>
-          <a-button style="margin: 0 8px" @click="handleClear">Reset</a-button>
+          <a-button type="primary" html-type="submit">{{ $t("search") }}</a-button>
+          <a-button style="margin: 0 8px" @click="handleClear">{{
+            $t("reset")
+          }}</a-button>
           <a
             v-if="fields.length > numBasicFilter"
             style="font-size: 12px"
@@ -93,7 +95,7 @@
             <template v-else>
               <DownOutlined />
             </template>
-            {{ expand ? "Basic" : "Advanced" }}
+            {{ expand ? $t("basic") : $t("advanced") }}
           </a>
         </a-col>
       </a-row>

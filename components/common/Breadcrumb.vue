@@ -1,10 +1,10 @@
 <template>
   <a-breadcrumb class="breadcrumb ant-breadcrumb-arrow-no-separator">
     <a-breadcrumb-item v-for="(item, index) in itemBreads" :key="index">
-      <nuxt-link :to="item.link" v-if="index < itemBreads.length - 1">{{
-        item.name
-      }}</nuxt-link>
-      <span v-else>{{ item.name }}</span>
+      <nuxt-link :to="item.link" v-if="index < itemBreads.length - 1">
+        {{ $t(item.name) }}</nuxt-link
+      >
+      <span v-else>{{ $t(item.name) }}</span>
     </a-breadcrumb-item>
   </a-breadcrumb>
 </template>

@@ -6,6 +6,7 @@
         show-quick-jumper
         :total="totalItem"
         :page-size="perPageSize"
+        :locale="{ items_per_page: $t('page'), jump_to: $t('go_to_page') }"
         @change="onChange"
         @show-size-change="onChangeSize"
       />

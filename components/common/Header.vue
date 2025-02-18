@@ -20,16 +20,16 @@
         <a-menu>
           <a-menu-item key="1">
             <user-outlined class="ant-dropdown-menu-title-content-custom" />
-            Profile
+            {{ $t("profile") }}
           </a-menu-item>
           <a-menu-item key="2">
             <setting-outlined class="ant-dropdown-menu-title-content-custom" />
-            Settings
+            {{ $t("settings") }}
           </a-menu-item>
           <a-menu-divider />
           <a-menu-item key="3" @click="logout">
             <logout-outlined class="ant-dropdown-menu-title-content-custom" />
-            Logout
+            {{ $t("logout") }}
           </a-menu-item>
         </a-menu>
       </template>

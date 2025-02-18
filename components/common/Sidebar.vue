@@ -93,10 +93,10 @@
           <a-sub-menu v-if="item.children && item.children.length" :key="item.key">
             <template #title>
               <component v-if="item.icon" :is="item.icon" />
-              <span v-if="!collapsedSideBar">{{ item.label }}</span>
+              <span v-if="!collapsedSideBar">{{ $t(item.label) }}</span>
             </template>
             <a-menu-item v-for="child in item.children" :key="child.key">
-              {{ child.label }}
+              {{ $t(child.label) }}
             </a-menu-item>
           </a-sub-menu>
           <a-menu-item v-else :key="item.key">
@@ -128,25 +128,25 @@ export default defineComponent({
       {
         key: "sub1",
         icon: UserOutlined,
-        label: "User",
-        children: [{ key: "1", label: "List" }],
+        label: "user",
+        children: [{ key: "1", label: "list" }],
       },
       {
         key: "sub2",
         icon: VideoCameraOutlined,
-        label: "Media",
+        label: "media",
         children: [
-          { key: "2", label: "Videos" },
-          { key: "3", label: "Images" },
+          { key: "2", label: "videos" },
+          { key: "3", label: "images" },
         ],
       },
       {
         key: "4",
         icon: UploadOutlined,
-        label: "Upload",
+        label: "upload",
         children: [
-          { key: "5", label: "Upload1" },
-          { key: "6", label: "Upload2" },
+          { key: "5", label: "videos" },
+          { key: "6", label: "images" },
         ],
       },
     ]);

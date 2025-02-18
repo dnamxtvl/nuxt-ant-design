@@ -95,10 +95,10 @@
           >
             <a-alert :message="error" type="error" show-icon />
           </div>
-          <a-form-item label="Email" name="email">
+          <a-form-item :label="$t('email')" name="email">
             <a-input
               v-model:value="formState.email"
-              placeholder="Please enter your email"
+              :placeholder="$t('please_enter_email')"
             >
               <template #prefix>
                 <UserOutlined class="text-gray-400" />
@@ -106,10 +106,10 @@
             </a-input>
           </a-form-item>
 
-          <a-form-item label="Password" name="password">
+          <a-form-item :label="$t('password')" name="password">
             <a-input-password
               v-model:value="formState.password"
-              placeholder="Please enter your password"
+              :placeholder="$t('please_enter_password')"
             >
               <template #prefix>
                 <LockOutlined class="text-gray-400" />
@@ -119,20 +119,24 @@
 
           <a-form-item>
             <div class="flex justify-between">
-              <a-checkbox v-model:checked="formState.remember">Remember me</a-checkbox>
-              <a class="text-blue-500">Forgot password?</a>
+              <a-checkbox v-model:checked="formState.remember">{{
+                $t("remember_me")
+              }}</a-checkbox>
+              <a class="text-blue-500">{{ $t("forgot_password") }}</a>
             </div>
           </a-form-item>
 
           <a-form-item>
-            <a-button type="primary" @click="onSubmit" class="w-full">Login</a-button>
+            <a-button type="primary" @click="onSubmit" class="w-full">{{
+              $t("login")
+            }}</a-button>
           </a-form-item>
         </a-form>
       </div>
 
       <!-- Other Login Methods -->
       <div class="text-center mt-4">
-        <p class="text-gray-500">Other login methods:</p>
+        <p class="text-gray-500">{{ $t("other_login") }}</p>
         <div class="flex justify-center gap-4 mt-2">
           <GoogleOutlined
             class="text-2xl bg-white cursor-pointer"
@@ -156,7 +160,9 @@ import type { LoginResponse } from "~/types/auth/res";
 import helperApp from "~/utils/helper";
 import { ROUTE_APP } from "~/constants/config/route";
 import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
+import { useI18n } from "vue-i18n";
 
+const i18n = useI18n();
 const loading = useState<boolean>("globalLoading", () => false);
 const formRef = ref();
 const formState = ref<FormInputLogin>({
@@ -169,7 +175,11 @@ const errorMsgs = ref<string[]>([]);
 
 const rules: Record<string, Rule[]> = {
   email: [
-    { required: true, message: "Email is required!", trigger: "change" },
+    {
+      required: true,
+      message: "Email is required!",
+      trigger: "change",
+    },
     {
       min: RULES_VALIDATION.EMAIL_LENGTH.MIN,
       message:
