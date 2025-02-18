@@ -160,9 +160,7 @@ import type { LoginResponse } from "~/types/auth/res";
 import helperApp from "~/utils/helper";
 import { ROUTE_APP } from "~/constants/config/route";
 import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
-import { useI18n } from "vue-i18n";
 
-const i18n = useI18n();
 const loading = useState<boolean>("globalLoading", () => false);
 const formRef = ref();
 const formState = ref<FormInputLogin>({

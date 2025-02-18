@@ -87,6 +87,7 @@ import Pagination from "~/components/common/Pagination.vue";
 import Breadcrumb from "~/components/common/Breadcrumb.vue";
 import type { ItemBreadcrumb, ItemFormSearch } from "~/types/common/res";
 import FormSearch from "~/components/common/FormSearch.vue";
+import { useI18n } from "vue-i18n";
 
 definePageMeta({
   layout: "admin-dashboard",
@@ -102,6 +103,7 @@ export default defineComponent({
     FormSearch,
   },
   setup() {
+    const i18n = useI18n();
     const itemBreadcrumbs = ref<ItemBreadcrumb[]>([
       {
         name: "home",
@@ -164,8 +166,8 @@ export default defineComponent({
         type: "select",
         placeholder: "select_gender",
         options: [
-          { label: "male", value: "male" },
-          { label: "female", value: "female" },
+          { label: i18n.t("male"), value: "male" },
+          { label: i18n.t("fermale"), value: "female" },
         ],
         md: 12,
         lg: 8,
