@@ -65,11 +65,6 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.custom-pagination {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: end;
-}
+<style scoped lang="scss">
+@use "~/assets/css/admin/pagination.scss";
 </style>

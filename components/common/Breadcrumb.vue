@@ -26,8 +26,6 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-.ant-breadcrumb-arrow-no-separator {
-  margin-bottom: 0.5rem;
-}
+<style scoped lang="scss">
+@use "~/assets/css/admin/breadcrumb.scss";
 </style>

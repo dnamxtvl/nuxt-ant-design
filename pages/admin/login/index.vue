@@ -176,9 +176,5 @@ onMounted(() => {
 });
 </script>
 <style scoped lang="scss">
-.app-logo-screen-login {
-  display: flex;
-  justify-content: center;
-  width: 150px;
-}
+@use "~/assets/css/admin/login.scss";
 </style>
