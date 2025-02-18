@@ -5,6 +5,7 @@
     collapsible
     width="250"
     class="custom-sider"
+    style="background: #fff"
   >
     <div class="ant-pro-sider-menu-logo flex items-center">
       <!-- Logo -->
@@ -86,7 +87,6 @@
       <a-menu
         v-model:selectedKeys="selectedKeys"
         v-model:openKeys="openKeys"
-        theme="dark"
         mode="inline"
       >
         <template v-for="item in items" :key="item.key">
@@ -175,6 +175,7 @@ export default defineComponent({
 }
 
 .ant-pro-sider-menu-logo {
+  height: 63px;
   padding-left: 24px;
   display: flex;
   align-items: center;
@@ -191,5 +192,9 @@ export default defineComponent({
   height: 2rem;
   width: 2rem;
   display: inline-block;
+}
+
+.ant-menu-submenu-title .anticon {
+  color: black;
 }
 </style>

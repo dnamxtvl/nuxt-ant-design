@@ -93,7 +93,7 @@
             <template v-else>
               <DownOutlined />
             </template>
-            {{ expand ? "Collapse" : "Advanced" }}
+            {{ expand ? "Basic" : "Advanced" }}
           </a>
         </a-col>
       </a-row>

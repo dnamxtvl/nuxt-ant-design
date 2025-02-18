@@ -6,7 +6,7 @@
 .content-box {
   background: white;
   padding: 24px;
-  border-radius: 8px;
+  border-radius: 3px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -33,4 +33,24 @@
   font-weight: 600;
   font-size:large;
   margin-bottom: 1rem;
+}
+
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-input,
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-select-single .ant-select-selector,
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-picker,
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-input-number,
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-btn,
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-tag,
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-pagination .ant-pagination-item,
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-pagination .ant-pagination-options-quick-jumper input,
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-menu .ant-menu-item,
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-menu .ant-menu-submenu,
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-menu .ant-menu-submenu-title {
+  border-radius: 3px;
+}
+
+:where(.css-dev-only-do-not-override-1p3hq3p).ant-menu-light .ant-menu-item-selected {
+  border-right: 4px solid #1890ff;
+  width: auto;
+  margin-right: 0;
 }
