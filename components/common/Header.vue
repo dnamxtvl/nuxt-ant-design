@@ -78,14 +78,6 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-.custom-header {
-  background: white;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  height: 64px;
-  justify-content: space-between;
-  border-bottom: 1px solid #ddd;
-}
+<style scoped lang="scss">
+@use "~/assets/css/admin/header.scss";
 </style>

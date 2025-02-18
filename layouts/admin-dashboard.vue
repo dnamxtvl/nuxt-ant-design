@@ -35,36 +35,6 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-#custom-layout {
-  height: 100vh;
-}
-
-.custom-sider {
-  height: 100vh;
-  background: #001529;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.trigger {
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.custom-content {
-  padding: 24px;
-  background: #f0f2f5;
-  min-height: calc(100vh - 64px);
-  padding-top: 1rem;
-  overflow: auto;
-}
+<style scoped lang="scss">
+@use "~/assets/css/admin/admin-dashboard.scss";
 </style>
