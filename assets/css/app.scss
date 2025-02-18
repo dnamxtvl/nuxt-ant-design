@@ -35,22 +35,22 @@
   margin-bottom: 1rem;
 }
 
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-input,
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-select-single .ant-select-selector,
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-picker,
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-input-number,
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-btn,
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-tag,
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-pagination .ant-pagination-item,
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-pagination .ant-pagination-options-quick-jumper input,
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-menu .ant-menu-item,
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-menu .ant-menu-submenu,
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-menu .ant-menu-submenu-title {
-  border-radius: 3px;
-}
-
-:where(.css-dev-only-do-not-override-1p3hq3p).ant-menu-light .ant-menu-item-selected {
-  border-right: 4px solid #1890ff;
+.ant-menu-light .ant-menu-item-selected {
+  border-right: 0.25rem solid #1890ff;
   width: auto;
   margin-right: 0;
+}
+
+.ant-input,
+.ant-select-single .ant-select-selector,
+.ant-picker,
+.ant-input-number,
+.ant-btn,
+.ant-tag,
+.ant-pagination .ant-pagination-item,
+.ant-pagination .ant-pagination-options-quick-jumper input,
+.ant-menu .ant-menu-item,
+.ant-menu .ant-menu-submenu,
+.ant-menu .ant-menu-submenu-title {
+  border-radius: 3px;
 }
