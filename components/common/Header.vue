@@ -40,7 +40,6 @@
 import { FETCH_API } from "~/constants/config/api";
 import helperApp from "~/utils/helper";
 import { ROUTE_APP } from "~/constants/config/route";
-import { customFetch } from "~/composables/custom-fetch";
 
 export default defineComponent({
   name: "Header",
