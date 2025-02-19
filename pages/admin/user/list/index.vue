@@ -27,6 +27,7 @@
       />
       <!-- End Pagination -->
     </div>
+    <!-- End Content -->
   </div>
 </template>
 
