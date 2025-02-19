@@ -2,7 +2,7 @@
   <div
     class="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-white"
   >
-    <div class="w-full max-w-md bg-white p-8 shadow-lg rounded-2xl">
+    <div class="w-full max-w-md bg-white p-8 shadow-lg">
       <!-- Logo -->
       <div class="text-center">
         <span class="app-logo app-logo-screen-login mx-auto">
