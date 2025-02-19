@@ -221,23 +221,11 @@ export default defineComponent({
 
     const columns: TableColumnsType = [
       {
-        title: "Name",
+        title: "name",
         dataIndex: "name",
         key: "name",
-        width: 100,
-        fixed: "left",
-        filters: [
-          {
-            text: "Joe",
-            value: "Joe",
-          },
-          {
-            text: "John",
-            value: "John",
-          },
-        ],
-        onFilter: (value: string, record: TableDataType) =>
-          record.name.indexOf(value) === 0,
+        width: 80,
+        fixed: "right",
       },
       {
         title: "Other",
@@ -247,7 +235,6 @@ export default defineComponent({
             dataIndex: "age",
             key: "age",
             width: 200,
-            sorter: (a: TableDataType, b: TableDataType) => a.age - b.age,
           },
           {
             title: "Address",
