@@ -67,6 +67,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    linkDetail: {
+      type: String,
+      required: false,
+    },
   },
   setup() {
     return {};
