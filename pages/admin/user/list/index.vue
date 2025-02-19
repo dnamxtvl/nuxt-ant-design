@@ -43,6 +43,18 @@ import FormSearch from "~/components/common/FormSearch.vue";
 import { useI18n } from "vue-i18n";
 import TableResult from "~/components/common/TableResult.vue";
 
+type TableDataType = {
+  key: number;
+  name: string;
+  age: number;
+  street: string;
+  building: string;
+  number: number;
+  companyAddress: string;
+  companyName: string;
+  gender: string;
+};
+
 definePageMeta({
   layout: "admin-dashboard",
 });
@@ -207,108 +219,101 @@ export default defineComponent({
       },
     ];
 
-    const data = [
+    const columns: TableColumnsType = [
       {
-        key: "1",
-        name: "John Brown",
-        age: 32,
-        address: "New York No. 1 Lake Park",
-        tags: ["nice", "developer"],
-      },
-      {
-        key: "2",
-        name: "Jim Green",
-        age: 42,
-        address: "London No. 1 Lake Park",
-        tags: ["loser"],
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        age: 32,
-        address: "Sidney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        age: 30,
-        address: "Sidney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        age: 10,
-        address: "Sidney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        age: 15,
-        address: "Sidney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        age: 29,
-        address: "Sidney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        age: 32,
-        address: "Sidney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        age: 32,
-        address: "Sidney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        age: 32,
-        address: "Sidney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
-      },
-    ];
-
-    const columns = ref<TableColumnsType>([
-      {
+        title: "Name",
         dataIndex: "name",
         key: "name",
-        responsive: ["md"],
+        width: 100,
+        fixed: "left",
+        filters: [
+          {
+            text: "Joe",
+            value: "Joe",
+          },
+          {
+            text: "John",
+            value: "John",
+          },
+        ],
+        onFilter: (value: string, record: TableDataType) =>
+          record.name.indexOf(value) === 0,
       },
       {
-        title: "age",
-        dataIndex: "age",
-        key: "age",
-        width: 150,
-        minWidth: 250,
-        maxWidth: 300,
+        title: "Other",
+        children: [
+          {
+            title: "Age",
+            dataIndex: "age",
+            key: "age",
+            width: 200,
+            sorter: (a: TableDataType, b: TableDataType) => a.age - b.age,
+          },
+          {
+            title: "Address",
+            children: [
+              {
+                title: "Street",
+                dataIndex: "street",
+                key: "street",
+                width: 200,
+              },
+              {
+                title: "Block",
+                children: [
+                  {
+                    title: "Building",
+                    dataIndex: "building",
+                    key: "building",
+                    width: 100,
+                  },
+                  {
+                    title: "Door No.",
+                    dataIndex: "number",
+                    key: "number",
+                    width: 100,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
       {
-        title: "address",
-        dataIndex: "address",
-        key: "address",
+        title: "Company",
+        children: [
+          {
+            title: "Company Address",
+            dataIndex: "companyAddress",
+            key: "companyAddress",
+            width: 200,
+          },
+          {
+            title: "Company Name",
+            dataIndex: "companyName",
+            key: "companyName",
+          },
+        ],
       },
       {
-        title: "tags",
-        key: "tags",
-        dataIndex: "tags",
+        title: "Gender",
+        dataIndex: "gender",
+        key: "gender",
+        width: 80,
+        fixed: "right",
       },
-      {
-        title: "action",
-        key: "action",
-      },
-    ]);
+    ];
+    const data = [...Array(10)].map((_, i) => ({
+      key: i,
+      name: "John Brown",
+      age: i + 1,
+      street: "Lake Park",
+      building: "C",
+      number: 2035,
+      companyAddress: "Lake Street 42",
+      companyName: "SoftLake Co",
+      gender: "M",
+    }));
 
     onMounted(async () => {});
 
