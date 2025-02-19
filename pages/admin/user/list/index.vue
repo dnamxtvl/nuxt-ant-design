@@ -2,7 +2,7 @@
   <div>
     <!-- Breadcrumb -->
     <Breadcrumb :itemBreads="itemBreadcrumbs" />
-    <TitleScreen :titleScreen="title" />
+    <TitleScreen titleScreen="list_user" />
     <!-- Content -->
     <!-- Filter -->
     <FormSearch
@@ -15,55 +15,7 @@
     <!-- End Filter -->
     <div class="content-box">
       <!-- Table -->
-      <h1 class="title-filter">{{ $t("search_result") }}</h1>
-      <a-table
-        :columns="columns"
-        :data-source="data"
-        :pagination="false"
-        :scroll="{ x: true }"
-      >
-        <template #headerCell="{ column }">
-          <template v-if="column.key === 'name'">
-            <span> {{ $t("name") }} </span>
-          </template>
-          <template v-else>
-            <span> {{ $t(title) }} </span>
-          </template>
-        </template>
-
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'name'">
-            <a>
-              {{ $t(record.name) }}
-            </a>
-          </template>
-          <template v-else-if="column.key === 'tags'">
-            <span>
-              <a-tag
-                v-for="tag in record.tags"
-                :key="tag"
-                :color="
-                  tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'
-                "
-              >
-                {{ tag.toUpperCase() }}
-              </a-tag>
-            </span>
-          </template>
-          <template v-else-if="column.key === 'action'">
-            <span>
-              <a>Invite 一 {{ record.name }}</a>
-              <a-divider type="vertical" />
-              <a>Delete</a>
-              <a-divider type="vertical" />
-              <a class="ant-dropdown-link">
-                More actions
-                <down-outlined />
-              </a>
-            </span>
-          </template>
-        </template>
-      </a-table>
+      <TableResult :columns="columns" :results="data" title="search_result" />
       <!-- End Table -->
       <!-- pagination -->
       <Pagination
@@ -88,6 +40,7 @@ import Breadcrumb from "~/components/common/Breadcrumb.vue";
 import type { ItemBreadcrumb, ItemFormSearch } from "~/types/common/res";
 import FormSearch from "~/components/common/FormSearch.vue";
 import { useI18n } from "vue-i18n";
+import TableResult from "~/components/common/TableResult.vue";
 
 definePageMeta({
   layout: "admin-dashboard",
@@ -101,6 +54,7 @@ export default defineComponent({
     Pagination,
     Breadcrumb,
     FormSearch,
+    TableResult,
   },
   setup() {
     const i18n = useI18n();
@@ -118,7 +72,6 @@ export default defineComponent({
         link: "/user/list",
       },
     ]);
-    const title = ref<string>("list_user");
     const currentPage = ref<number>(1);
     const total = ref<number>(500);
     const onChangePage = (pageNumber: number) => {
@@ -330,17 +283,15 @@ export default defineComponent({
       {
         dataIndex: "name",
         key: "name",
-        sorter: (a, b) => a.name.length - b.name.length,
         responsive: ["md"],
       },
       {
         title: "age",
         dataIndex: "age",
         key: "age",
-        width: 100,
-        minWidth: 100,
-        maxWidth: 200,
-        sorter: (a, b) => a.age - b.age,
+        width: 150,
+        minWidth: 250,
+        maxWidth: 300,
       },
       {
         title: "address",
@@ -361,7 +312,6 @@ export default defineComponent({
     onMounted(async () => {});
 
     return {
-      title,
       data,
       columns,
       currentPage,
