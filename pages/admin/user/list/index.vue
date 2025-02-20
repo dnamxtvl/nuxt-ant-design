@@ -226,81 +226,182 @@ export default defineComponent({
         key: "name",
         width: 80,
         fixed: "right",
+        align: "center",
       },
       {
-        title: "Other",
+        title: "Age",
+        dataIndex: "age",
+        key: "age",
+        width: 200,
+        fixed: "right",
+        align: "center",
         children: [
           {
-            title: "Age",
-            dataIndex: "age",
-            key: "age",
+            title: "Age Child",
+            dataIndex: "agechild",
+            key: "agechild",
             width: 200,
+            fixed: "right",
+            align: "center",
           },
+        ],
+      },
+      {
+        title: "Address",
+        children: [
           {
-            title: "Address",
+            title: "Street",
+            dataIndex: "street",
+            key: "street",
+            width: 200,
+            fixed: "right",
+            align: "center",
             children: [
               {
-                title: "Street",
-                dataIndex: "street",
-                key: "street",
+                title: "Street Child",
+                dataIndex: "streetchild",
+                key: "streetchild",
                 width: 200,
-              },
-              {
-                title: "Block",
-                children: [
-                  {
-                    title: "Building",
-                    dataIndex: "building",
-                    key: "building",
-                    width: 100,
-                  },
-                  {
-                    title: "Door No.",
-                    dataIndex: "number",
-                    key: "number",
-                    width: 100,
-                  },
-                ],
+                fixed: "right",
+                align: "center",
               },
             ],
           },
-        ],
-      },
-      {
-        title: "Company",
-        children: [
           {
-            title: "Company Address",
-            dataIndex: "companyAddress",
-            key: "companyAddress",
+            title: "Block",
+            children: [
+              {
+                title: "Building",
+                dataIndex: "building",
+                key: "building",
+                width: 100,
+                fixed: "right",
+                align: "center",
+              },
+            ],
+            fixed: "right",
+            align: "center",
+          },
+          {
+            title: "Etx",
+            dataIndex: "etx",
+            key: "etx",
             width: 200,
-          },
-          {
-            title: "Company Name",
-            dataIndex: "companyName",
-            key: "companyName",
+            fixed: "right",
+            align: "center",
           },
         ],
       },
       {
-        title: "Gender",
+        title: "gender1",
+        dataIndex: "gender1",
+        key: "gender1",
+        width: 80,
+        fixed: "right",
+        align: "center",
+      },
+      {
+        title: "gender",
         dataIndex: "gender",
         key: "gender",
         width: 80,
         fixed: "right",
+        align: "center",
       },
     ];
-    const data = [...Array(10)].map((_, i) => ({
-      key: i,
-      name: "John Brown",
-      age: i + 1,
-      street: "Lake Park",
-      building: "C",
-      number: 2035,
-      companyAddress: "Lake Street 42",
-      companyName: "SoftLake Co",
-      gender: "M",
-    }));
+
+    const data = [
+      {
+        key: "1",
+        name: "本体",
+        age: {
+          agechild: "未採番",
+        },
+        address: {
+          street: {
+            streetchild: "Dクラディア千種_中島 四郎様",
+          },
+          block: {
+            building: "契約締結",
+          },
+          etx: "2022/03/09",
+        },
+        gender1: "契約計上",
+        gender: "2023/02/25",
+      },
+      {
+        key: "2",
+        name: "本体",
+        age: {
+          agechild: "受注予定",
+        },
+        address: {
+          street: {
+            streetchild: "その他 中島 四郎",
+          },
+          block: {
+            building: "-",
+          },
+          etx: "2023/02/25",
+        },
+        gender1: "契約計上",
+        gender: "2023/02/25",
+      },
+      {
+        key: "3",
+        name: "本体",
+        age: {
+          agechild: "未採番",
+        },
+        address: {
+          street: {
+            streetchild: "Dクラディア千種_中島 四郎様",
+          },
+          block: {
+            building: "契約締結",
+          },
+          etx: "2022/08/18",
+        },
+        gender1: "契約計上",
+        gender: "2022/08/18",
+      },
+      {
+        key: "4",
+        name: "本体",
+        age: {
+          agechild: "未採番",
+        },
+        address: {
+          street: {
+            streetchild: "麻呂 明香",
+          },
+          block: {
+            building: "契約締結",
+          },
+          etx: "2022/08/10",
+        },
+        gender1: "契約計上",
+        gender: "2022/08/10",
+      },
+      {
+        key: "5",
+        name: "本体",
+        age: {
+          agechild: "未採番",
+        },
+        address: {
+          street: {
+            streetchild: "契約基本情報工事名称確認",
+          },
+          block: {
+            building: "契約締結",
+          },
+          etx: "2015/03/11",
+        },
+        gender1: "契約計上",
+        gender: "-",
+      },
+    ];
 
     onMounted(async () => {});
 

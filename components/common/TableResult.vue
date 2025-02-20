@@ -11,7 +11,7 @@
         <span> {{ $t("name") }} </span>
       </template>
       <template v-else>
-        <span> {{ $t(title) }} </span>
+        <span> {{ $t(column.title) }} </span>
       </template>
     </template>
 

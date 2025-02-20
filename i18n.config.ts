@@ -64,6 +64,7 @@ export default defineI18nConfig(() => ({
             page: 'Page',
             go_to_page: 'Go to page',
             loading: 'Loading',
+            other: 'Other',
             // end label & input
 
             // error message: string code 1000000 - 2000000
@@ -129,6 +130,7 @@ export default defineI18nConfig(() => ({
             page: 'ページ',
             go_to_page: 'ページに移動',
             loading: '読み込み中',
+            other: 'その他',
             // end label & input
 
             // error message: string code 1000000 - 2000000
