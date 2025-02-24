@@ -6,15 +6,6 @@
     :pagination="false"
     :scroll="{ x: true }"
   >
-    <template #headerCell="{ column }">
-      <template v-if="column.key === 'name'">
-        <span> {{ $t("name") }} </span>
-      </template>
-      <template v-else>
-        <span> {{ $t(column.title) }} </span>
-      </template>
-    </template>
-
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'name'">
         <a>

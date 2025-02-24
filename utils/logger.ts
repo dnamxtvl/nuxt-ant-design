@@ -16,8 +16,8 @@ const logToFile = (level: string, message: string | object) => {
     const logMessage = typeof message === 'object'
     ? `${timestamp} [${level.toUpperCase()}] ${JSON.stringify(message, null, 2)}\n`
     : `${timestamp} [${level.toUpperCase()}] ${message}\n`;
-    const date = new Date().toISOString().split('T')[0];
-    const logFile = path.join(logDir, `${date}.log`);
+    const fileDate = jstTime.toISOString().split('T')[0];
+    const logFile = path.join(logDir, `${fileDate}.log`);
 
     fs.appendFileSync(logFile, logMessage);
 };

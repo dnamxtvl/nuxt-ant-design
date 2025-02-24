@@ -1,5 +1,8 @@
 <template>
-  <h1 class="text-2xl font-semibold title-screen">{{ $t(titleScreen) }}</h1>
+  <div class="header-table-custom">
+    <h1 class="text-2xl font-semibold title-screen">{{ $t(titleScreen) }}</h1>
+    <span class="total-data" v-if="contractNumber">{{ contractNumber }}</span>
+  </div>
 </template>
 
 <script lang="ts">
@@ -11,6 +14,10 @@ export default defineComponent({
     titleScreen: {
       type: String,
       required: true,
+    },
+    contractNumber: {
+      type: String,
+      required: false,
     },
   },
   setup() {

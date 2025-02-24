@@ -2,20 +2,21 @@
   <div>
     <!-- Breadcrumb -->
     <Breadcrumb :itemBreads="itemBreadcrumbs" />
-    <TitleScreen titleScreen="list_user" />
+    <TitleScreen titleScreen="list_user" contractNumber="GCNT90013" />
     <!-- Content -->
     <!-- Filter -->
     <FormSearch
       title="filter"
       :numBasicFilter="6"
       :fields="searchFields"
+      :fieldsDisabledForm="fieldsDisabled"
       @submit="handleSearch"
       @handleClear="handleResetFilter"
     />
     <!-- End Filter -->
     <div class="content-box">
       <!-- Table -->
-      <TableResult :columns="columns" :results="data" title="search_result" />
+      <TableMergeCell title="search_result" :total="100" :results="data" />
       <!-- End Table -->
       <!-- pagination -->
       <Pagination
@@ -33,7 +34,6 @@
 
 <script lang="ts">
 import { DownOutlined, UpOutlined } from "@ant-design/icons-vue";
-import type { TableColumnsType } from "ant-design-vue";
 import TitleScreen from "~/components/common/TitleScreen.vue";
 import { ref } from "vue";
 import Pagination from "~/components/common/Pagination.vue";
@@ -42,18 +42,8 @@ import type { ItemBreadcrumb, ItemFormSearch } from "~/types/common/res";
 import FormSearch from "~/components/common/FormSearch.vue";
 import { useI18n } from "vue-i18n";
 import TableResult from "~/components/common/TableResult.vue";
-
-type TableDataType = {
-  key: number;
-  name: string;
-  age: number;
-  street: string;
-  building: string;
-  number: number;
-  companyAddress: string;
-  companyName: string;
-  gender: string;
-};
+import TableMergeCell from "~/components/contract/TableMergeCell.vue";
+import type { ItemListContract } from "~/types/contract/res";
 
 definePageMeta({
   layout: "admin-dashboard",
@@ -68,6 +58,7 @@ export default defineComponent({
     Breadcrumb,
     FormSearch,
     TableResult,
+    TableMergeCell,
   },
   setup() {
     const i18n = useI18n();
@@ -107,15 +98,16 @@ export default defineComponent({
       console.log("handleResetFilter");
     };
 
+    const fieldsDisabled = ref<string[]>(["email", "joined"]);
     const searchFields: ItemFormSearch[] = [
       {
         name: "name",
         label: "name",
         type: "text",
         placeholder: "enter_name",
-        md: 12,
-        lg: 8,
-        xl: 6,
+        md: 24,
+        lg: 12,
+        xl: 12,
       },
       {
         name: "email",
@@ -123,8 +115,8 @@ export default defineComponent({
         type: "text",
         placeholder: "enter_email",
         md: 12,
-        lg: 8,
-        xl: 6,
+        lg: 12,
+        xl: 12,
       },
       {
         name: "gender",
@@ -136,16 +128,16 @@ export default defineComponent({
           { label: i18n.t("fermale"), value: "female" },
         ],
         md: 12,
-        lg: 8,
-        xl: 6,
+        lg: 12,
+        xl: 12,
       },
       {
         name: "joined",
         label: "joined_date",
         type: "range-date",
         md: 12,
-        lg: 8,
-        xl: 6,
+        lg: 12,
+        xl: 12,
       },
       {
         name: "status",
@@ -156,8 +148,8 @@ export default defineComponent({
           { label: "inactive", value: "inactive" },
         ],
         md: 12,
-        lg: 9,
-        xl: 6,
+        lg: 12,
+        xl: 12,
       },
       {
         name: "birthdate",
@@ -165,8 +157,8 @@ export default defineComponent({
         type: "date",
         placeholder: "select_birthdate",
         md: 12,
-        lg: 9,
-        xl: 6,
+        lg: 12,
+        xl: 12,
       },
       {
         name: "keyword",
@@ -175,8 +167,8 @@ export default defineComponent({
         placeholder: "enter_keyword",
         rules: [{ required: true, message: "please_enter_keyword" }],
         md: 12,
-        lg: 8,
-        xl: 6,
+        lg: 12,
+        xl: 12,
       },
       {
         name: "category",
@@ -188,8 +180,9 @@ export default defineComponent({
           { label: "Category 2", value: "2" },
         ],
         md: 12,
-        lg: 8,
-        xl: 6,
+        lg: 12,
+        xl: 12,
+        specialFieldHandle: "category",
       },
       {
         name: "date",
@@ -197,16 +190,16 @@ export default defineComponent({
         type: "date",
         placeholder: "select_date",
         md: 12,
-        lg: 6,
-        xl: 3,
+        lg: 12,
+        xl: 12,
       },
       {
         name: "agree",
         label: "agree_to_terms",
         type: "checkbox",
         md: 12,
-        lg: 6,
-        xl: 3,
+        lg: 12,
+        xl: 12,
       },
       {
         name: "age",
@@ -214,160 +207,87 @@ export default defineComponent({
         type: "number",
         placeholder: "enter_age",
         md: 12,
-        lg: 9,
-        xl: 6,
+        lg: 12,
+        xl: 12,
       },
     ];
 
-    const columns: TableColumnsType = [
+    const data: ItemListContract[] = [
       {
-        title: "分類",
-        dataIndex: "category",
-        key: "category",
-        width: 80,
-        customCell: (record, index) => {
-          console.log("record", record);
-          console.log("index", index);
-          if (index === 0) {
-            return { rowSpan: 2 };
-          }
-        },
+        id: 1,
+        classification: "本体",
+        contract_number: "未採番",
+        status: "受注予定",
+        project_name: "Dクラディア千種、中島 四郎様",
+        contract_category: "その他",
+        scheduled_contract_month: "その他",
+        contractor: "中島1四郎",
+        contract_amount_tax_yen: 0,
+        approval_status: "未承認",
+        date_of_conclusion: "契約締結",
+        date_of_posting: "契約計上",
+        date_of_completion: "契約計上",
+        schedule: "予定",
+        start_date: "2022/03/09",
+        end_date: "2023/02/25",
+        completed_date: "2022/03/09",
       },
       {
-        title: "契約番号",
-        children: [
-          {
-            title: "ステータス",
-            dataIndex: "status",
-            key: "status",
-            width: 100,
-          },
-        ],
+        id: 2,
+        classification: "本体",
+        contract_number: "未採番",
+        status: "受注予定",
+        project_name: "Dクラディア千種、中島 四郎様",
+        contract_category: "その他",
+        scheduled_contract_month: "その他",
+        contractor: "中島1四郎",
+        contract_amount_tax_yen: 0,
+        approval_status: "未承認",
+        date_of_conclusion: "契約締結",
+        date_of_posting: "契約計上",
+        date_of_completion: "契約計上",
+        schedule: "予定",
+        start_date: "2022/03/09",
+        end_date: "2023/02/25",
+        completed_date: "2022/03/09",
       },
       {
-        title: "契約/工事名称",
-        children: [
-          {
-            title: "契約者",
-            dataIndex: "contractor",
-            key: "contractor",
-            width: 200,
-            children: [
-              {
-                title: "契約日",
-                dataIndex: "contractDate",
-                key: "contractDate",
-                width: 200,
-              },
-            ],
-          },
-          {
-            title: "税込契約金額(円)",
-            dataIndex: "amount",
-            key: "amount",
-            width: 150,
-            children: [
-              {
-                title: "契約金額ステータス",
-                dataIndex: "amountStatus",
-                key: "amountStatus",
-                width: 150,
-              },
-            ],
-          },
-          {
-            title: "承認状況",
-            dataIndex: "approvalStatus",
-            key: "approvalStatus",
-            width: 200,
-          },
-        ],
+        id: 3,
+        classification: "本体",
+        contract_number: "未採番",
+        status: "受注予定",
+        project_name: "Dクラディア千種、中島 四郎様",
+        contract_category: "その他",
+        scheduled_contract_month: "その他",
+        contractor: "中島1四郎",
+        contract_amount_tax_yen: 0,
+        approval_status: "未承認",
+        date_of_conclusion: "契約締結",
+        date_of_posting: "契約計上",
+        date_of_completion: "契約計上",
+        schedule: "予定",
+        start_date: "2022/03/09",
+        end_date: "2023/02/25",
+        completed_date: "2022/03/09",
       },
       {
-        title: "締結日",
-        dataIndex: "conclusionDate",
-        key: "conclusionDate",
-        width: 100,
-      },
-      {
-        title: "予定",
-        dataIndex: "plannedDate",
-        key: "plannedDate",
-        width: 50,
-      },
-      {
-        title: "実績",
-        dataIndex: "actualDate",
-        key: "actualDate",
-        width: 50,
-      },
-    ];
-
-    const data = [
-      {
-        key: "1",
-        category: "本体",
-        status: "未採番",
-        contractDate: "-",
-        contractor: "Dクラディア千種_中島 四郎様",
-        amount: "0",
-        amountStatus: "未設定",
-        approvalStatus: "未承認",
-        conclusionDate: "契約締結",
-        plannedDate: "2022/03/09",
-        actualDate: "",
-      },
-      {
-        key: "2",
-        category: "受注予定",
-        status: "-",
-        contractDate: "-",
-        contractor: "その他",
-        amount: "0",
-        amountStatus: "未設定",
-        approvalStatus: "未承認",
-        conclusionDate: "受注予定上",
-        plannedDate: "2023/02/25",
-        actualDate: "",
-      },
-      {
-        key: "3",
-        category: "本体",
-        status: "採番済み",
-        contractDate: "2022/01/01",
-        contractor: "Dクラディア千種_中島 五郎様",
-        amount: "1000000",
-        amountStatus: "設定済み",
-        approvalStatus: "承認済み",
-        conclusionDate: "契約締結",
-        plannedDate: "2022/04/01",
-        actualDate: "2022/04/01",
-      },
-      {
-        key: "4",
-        category: "追加",
-        status: "未採番",
-        contractDate: "-",
-        contractor: "Dクラディア千種_中島 六郎様",
-        amount: "500000",
-        amountStatus: "未設定",
-        approvalStatus: "未承認",
-        conclusionDate: "契約締結",
-        plannedDate: "2022/05/01",
-        actualDate: "",
-      },
-      {
-        key: "5",
-        category: "変更",
-        status: "採番済み",
-        contractDate: "2022/02/01",
-        contractor: "Dクラディア千種_中島 七郎様",
-        amount: "2000000",
-        amountStatus: "設定済み",
-        approvalStatus: "承認済み",
-        conclusionDate: "契約締結",
-        plannedDate: "2022/06/01",
-        actualDate: "2022/06/01",
+        id: 4,
+        classification: "本体",
+        contract_number: "未採番",
+        status: "受注予定",
+        project_name: "Dクラディア千種、中島 四郎様",
+        contract_category: "その他",
+        scheduled_contract_month: "その他",
+        contractor: "中島1四郎",
+        contract_amount_tax_yen: 0,
+        approval_status: "未承認",
+        date_of_conclusion: "契約締結",
+        date_of_posting: "契約計上",
+        date_of_completion: "契約計上",
+        schedule: "予定",
+        start_date: "2022/03/09",
+        end_date: "2023/02/25",
+        completed_date: "2022/03/09",
       },
     ];
 
@@ -375,12 +295,12 @@ export default defineComponent({
 
     return {
       data,
-      columns,
       currentPage,
       pagePage,
       total,
       itemBreadcrumbs,
       expand,
+      fieldsDisabled,
       searchFields,
       onChangePage,
       onChangePerPage,

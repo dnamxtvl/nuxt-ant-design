@@ -6,9 +6,11 @@ import type { LoginResponse } from '~/types/auth/res';
 
 export default class AuthService extends BaseService {
     login = async (params: FormInputLogin, success: (json: LoginResponse) => void, error: (error: ErrorResponse) => void) => {
-        await this.post(API_CONST.AUTH.LOGIN, params, success, error);
+        const endpoint = useRuntimeConfig().public.BACKEND_URL + 'api/' + API_CONST.AUTH.LOGIN;
+        await this.post(endpoint, params, success, error);
     };
     logout = async (params: {}, success: (json: ResponseData) => void, error: (error: ErrorResponse) => void, token: string) => {
-        await this.post(API_CONST.AUTH.LOGOUT, params, success, error, token);
+        const endpoint = useRuntimeConfig().public.BACKEND_URL + 'api/' + API_CONST.AUTH.LOGOUT;
+        await this.post(endpoint, params, success, error, token);
     };
 }

@@ -5,6 +5,7 @@ export default defineI18nConfig(() => ({
     locale: 'en',
     messages: {
         // label & input: string unique key
+        // table columns: string unique key
         // error message: string code 1000000 - 2000000
         en: {
             // label & input: string unique key
@@ -66,6 +67,24 @@ export default defineI18nConfig(() => ({
             loading: 'Loading',
             other: 'Other',
             // end label & input
+
+            // table columns: string unique key
+            classification: 'Classification',
+            contract: 'Contract',
+            contract_number: 'Contract Number',
+            project_name: 'Project Name',
+            date_of_conclusion: 'Date of Conclusion',
+            date_of_posting: 'Date of Posting',
+            schedule: 'Schedule',
+            achievements: 'Achievements',
+            contract_category: 'Contract Category',
+            contractor: 'Contractor',
+            approval_status: 'Approval Status',
+            scheduled_contract_month: 'Scheduled Contract Month',
+            contract_amount_tax_yen: 'Tax-included Contract Amount (Yen)',
+            item: 'Items',
+            no_data: 'No data',
+            // end table columns
 
             // error message: string code 1000000 - 2000000
             1001872: 'Wrong email or password!',
@@ -131,7 +150,25 @@ export default defineI18nConfig(() => ({
             go_to_page: 'ページに移動',
             loading: '読み込み中',
             other: 'その他',
+            items: '件',
             // end label & input
+
+            // table columns: string unique key
+            classification: '分類',
+            contract: '契約',
+            contract_number: '契約番号',
+            project_name: '工事名称',
+            date_of_conclusion: '締結日',
+            date_of_posting: '計上日',
+            schedule: '予定',
+            achievements: '実績',
+            contract_category: '契約区分',
+            contractor: '契約者',
+            approval_status: '承認状況',
+            scheduled_contract_month: '契約予定月',
+            contract_amount_tax_yen: '税込契約金額（円）',
+            no_data: 'データがありません',
+            // end table columns
 
             // error message: string code 1000000 - 2000000
             1001872: '間違ったメールアドレスまたはパスワードです！',

@@ -40,6 +40,9 @@
 import { FETCH_API } from "~/constants/config/api";
 import helperApp from "~/utils/helper";
 import { ROUTE_APP } from "~/constants/config/route";
+import { notification } from "ant-design-vue";
+import type { NotificationPlacement } from "ant-design-vue/lib/notification";
+import type { ErrorResponse } from "~/types/common/res";
 
 export default defineComponent({
   name: "Header",
@@ -52,6 +55,7 @@ export default defineComponent({
   },
   emits: ["update:collapsed"],
   setup(props, { emit }) {
+    const placement: NotificationPlacement = "topRight";
     const collapsedHeader = computed({
       get: () => props.collapsed,
       set: (value) => emit("update:collapsed", value),
@@ -64,8 +68,12 @@ export default defineComponent({
         });
         helperApp.logOutWhenTokenExpired();
         return navigateTo(ROUTE_APP.AUTH.LOGIN);
-      } catch (error) {
-        console.log(error);
+      } catch (err: any) {
+        notification.error({
+          message: "Error",
+          description: err.error.shift(),
+          placement,
+        });
       }
     };
     onMounted(() => {});

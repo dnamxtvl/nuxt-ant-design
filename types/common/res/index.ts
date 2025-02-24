@@ -25,4 +25,5 @@ export interface ItemFormSearch {
     md?: number;
     lg?: number;
     xl?: number;
+    specialFieldHandle?: string;
 }

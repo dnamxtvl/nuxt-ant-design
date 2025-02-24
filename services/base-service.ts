@@ -48,7 +48,7 @@ export default class BaseService {
 
     async get(endpoint: string, params: Object, success: (json: ResponseData) => void, error: (error: ErrorResponse) => void) {
         try {
-            const response = await this.getInstanceAxios().get(this.prefix + endpoint, { params });
+            const response = await this.getInstanceAxios().get(endpoint, { params });
             const json = this.processResponse(response);
             success(json);
         } catch (e) {
@@ -71,7 +71,7 @@ export default class BaseService {
 
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
-            const response = await this.getInstanceAxios().post(this.prefix + endpoint, params, { headers });
+            const response = await this.getInstanceAxios().post(endpoint, params, { headers });
             const json = this.processResponse(response);
             success(json);
         } catch (e) {
@@ -94,7 +94,7 @@ export default class BaseService {
 
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
-            const response = await this.getInstanceAxios().put(this.prefix + endpoint, params, { headers });
+            const response = await this.getInstanceAxios().put(endpoint, params, { headers });
             const json = this.processResponse(response);
             success(json);
         } catch (e) {
@@ -104,7 +104,7 @@ export default class BaseService {
 
     async delete(endpoint: string, data: Record<string, any> = {}, success: (json: any) => void, error: (error: ErrorResponse) => void) {
         try {
-            const response = await this.getInstanceAxios().delete(this.prefix + endpoint, { data });
+            const response = await this.getInstanceAxios().delete(endpoint, { data });
             const json = this.processResponse(response);
             success(json);
         } catch (e) {
@@ -119,7 +119,7 @@ export default class BaseService {
         error: (error: ErrorResponse) => void
     ) {
         try {
-            const response = await this.getInstanceAxios().patch(this.prefix + endpoint, params);
+            const response = await this.getInstanceAxios().patch(endpoint, params);
             const json = this.processResponse(response);
             success(json);
         } catch (e) {
@@ -143,9 +143,7 @@ export default class BaseService {
 
     getInstanceAxios = () => {
         const config = useRuntimeConfig();
-        const instance = axios.create({
-            baseURL: config.public.BACKEND_URL + 'api',
-        });
+        const instance = axios.create();
 
         // instance.defaults.headers.post['Content-Type'] = 'multipart/form-data';
         instance.defaults.headers.get['Content-Type'] = 'application/json';
