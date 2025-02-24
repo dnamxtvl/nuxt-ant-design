@@ -11,8 +11,8 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'Nuxt Ant Design Tailwind',
-      meta: [{ name: 'Nuxt app', content: 'Nuxt Ant Design Tailwind' }],
+      title: 'Nuxt Ant Design',
+      meta: [{ name: 'Nuxt app', content: 'Nuxt Ant Design' }],
     },
   },
   css: [

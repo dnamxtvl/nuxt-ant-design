@@ -1,0 +1,104 @@
+<template>
+  <div class="content-box content-box-filter">
+    <div class="title-contract-partner header-table-custom">
+      <h1 class="title-filter" v-if="title">{{ "<" + $t(title) + ">" }}</h1>
+      <span class="text-primary">
+        ※「主設定」ボタン:主の顧客として登録する
+        「副設定」ボタン:副の顧客として登録する</span
+      >
+    </div>
+    <a-form layout="horizontal">
+      <!-- Row 4 -->
+      <a-row :gutter="16">
+        <a-col :xs="24" :md="8">
+          <a-form-item
+            label="フリガナ"
+            :labelCol="{ span: 8 }"
+            :wrapperCol="{ span: 16 }"
+          >
+            <a-input disabled />
+          </a-form-item>
+        </a-col>
+      </a-row>
+
+      <!-- Row 5 - Sub Partner Info -->
+      <a-row :gutter="16" class="sub-partner-section">
+        <a-col :xs="24" :md="8">
+          <a-form-item
+            label="敷地所有者名"
+            :labelCol="{ span: 8 }"
+            :wrapperCol="{ span: 16 }"
+          >
+            <a-input disabled />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :md="8">
+          <a-form-item label="TEL" :labelCol="{ span: 8 }" :wrapperCol="{ span: 16 }">
+            <a-input disabled />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :md="4">
+          <a-form-item label="年齢" :labelCol="{ span: 8 }" :wrapperCol="{ span: 16 }">
+            <a-input disabled />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :md="4" class="text-right">
+          <a-button type="primary">主設定</a-button>
+          <a-button type="primary">副設定</a-button>
+        </a-col>
+      </a-row>
+      <!-- Row 4 -->
+      <a-row :gutter="16">
+        <a-col :xs="24" :md="8">
+          <a-form-item label="現住所" :labelCol="{ span: 8 }" :wrapperCol="{ span: 16 }">
+            <a-input v-model:value="siteOwnerInfo.current_address" />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="16">
+        <a-col :xs="24" :md="8">
+          <a-form-item
+            label="連名編集"
+            :labelCol="{ span: 8 }"
+            :wrapperCol="{ span: 16 }"
+          >
+            <a-input v-model:value="siteOwnerInfo.edited_by" />
+          </a-form-item>
+        </a-col>
+      </a-row>
+    </a-form>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref } from "vue";
+
+export default defineComponent({
+  name: "SiteOwner",
+  props: {
+    title: {
+      type: String,
+      required: false,
+    },
+  },
+  setup() {
+    const siteOwnerInfo = ref({
+      furigana: "テスト ヘンシュウテストニー",
+      tel: "",
+      age: 43,
+      land_owner_name: "DFCテスト 編集テスト02",
+      contract_name: "DFCテスト 編集テスト02",
+      address: "大阪府大阪市住吉区住吉2丁目0045",
+      permit_number: "001F-0001",
+      permit_number_edit: "",
+      current_address: "大阪府大阪市住吉区住吉2丁目00456765",
+      edited_by: "テスト ヘンシュウテストニー",
+    });
+
+    return {
+      siteOwnerInfo,
+    };
+  },
+});
+</script>
+<style scoped lang="scss"></style>

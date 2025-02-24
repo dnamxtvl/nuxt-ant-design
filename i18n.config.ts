@@ -4,10 +4,19 @@ export default defineI18nConfig(() => ({
     legacy: false,
     locale: 'en',
     messages: {
+        // title screen: string unique key
         // label & input: string unique key
         // table columns: string unique key
         // error message: string code 1000000 - 2000000
         en: {
+            // title screen: string unique key
+            list_user: 'List User',
+            contract_detail: 'Contract Detail',
+            contracting_party: 'Contracting Party',
+            contract_builder: 'Contract Builder',
+            site_owner: 'Site Owner',
+            // end title screen: string unique key
+
             // label & input: string unique key
             user: 'User',
             list: 'List',
@@ -51,7 +60,6 @@ export default defineI18nConfig(() => ({
             forgot_password: 'Forgot password?',
             login: 'Login',
             other_login: 'Other login methods',
-            list_user: 'List User',
             enter_name: 'Enter name',
             enter_email: 'Enter email',
             select_gender: 'Select gender',
@@ -92,6 +100,15 @@ export default defineI18nConfig(() => ({
             // end error message
         },
         jp: {
+            // title screen: string unique key
+            list_user: 'ユーザーリスト',
+            contract_detail: '[住宅] 契約カード(請負)',
+            contracting_party: '契約先',
+            contract_builder: '建築主',
+            site_owner: '敷地所有者',
+
+            // end title screen: string unique key
+
             // label & input: string unique key
             user: 'ユーザー',
             list: 'リスト',
@@ -135,7 +152,6 @@ export default defineI18nConfig(() => ({
             forgot_password: 'パスワードを忘れた場合',
             login: 'ログイン',
             other_login: '他のログイン方法',
-            list_user: 'ユーザーリスト',
             enter_name: '名前を入力',
             enter_email: 'メールアドレスを入力',
             select_gender: '性別を選択',

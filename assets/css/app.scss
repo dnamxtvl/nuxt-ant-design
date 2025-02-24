@@ -57,7 +57,11 @@
 }
 
 .ant-col {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.ant-row .ant-form-item {
+  margin-bottom: 0;
 }
 
 .ant-form-item-label {
@@ -68,4 +72,12 @@
 .header-table-custom {
   display: flex;
   justify-content: space-between;
+}
+
+.ant-table-cell {
+  padding: 0.625rem !important;
+}
+
+.text-primary {
+  color: #1B47D8;
 }

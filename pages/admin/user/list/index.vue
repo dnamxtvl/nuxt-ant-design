@@ -42,14 +42,14 @@ import type { ItemBreadcrumb, ItemFormSearch } from "~/types/common/res";
 import FormSearch from "~/components/common/FormSearch.vue";
 import { useI18n } from "vue-i18n";
 import TableResult from "~/components/common/TableResult.vue";
-import TableMergeCell from "~/components/contract/TableMergeCell.vue";
+import TableMergeCell from "~/components/contract/list/TableMergeCell.vue";
 import type { ItemListContract } from "~/types/contract/res";
 
 definePageMeta({
   layout: "admin-dashboard",
 });
 
-export default defineComponent({
+export default {
   components: {
     DownOutlined,
     UpOutlined,
@@ -308,6 +308,6 @@ export default defineComponent({
       handleResetFilter,
     };
   },
-});
+};
 </script>
 <style scoped></style>
