@@ -64,9 +64,11 @@
   margin-bottom: 0;
 }
 
-.ant-form-item-label {
+.ant-form-item-label, .title-contract-detail {
   text-align: left !important;
   padding-right: 0.5rem;
+  min-width: 6rem;
+  max-width: 10rem;
 }
 
 .header-table-custom {

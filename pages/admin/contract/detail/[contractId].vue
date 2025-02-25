@@ -25,6 +25,7 @@
           <!-- End Site owner -->
 
           <!-- Project name/project property -->
+          <!-- <ProjectInfo /> -->
           <!-- End Project name/project property -->
 
           <!-- Date of conclusion/recording -->
@@ -69,6 +70,7 @@ import MainContent from "~/components/contract/detail/MainContent.vue";
 import ContractPartner from "~/components/contract/detail/ContractPartner.vue";
 import ContractBuilder from "~/components/contract/detail/ContractBuilder.vue";
 import SiteOwner from "~/components/contract/detail/SiteOwner.vue";
+import ProjectInfo from "~/components/contract/detail/ProjectInfo.vue";
 
 definePageMeta({
   layout: "admin-dashboard",
@@ -82,6 +84,7 @@ export default {
     ContractPartner,
     ContractBuilder,
     SiteOwner,
+    ProjectInfo,
   },
   setup() {
     const route = useRoute();

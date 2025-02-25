@@ -1,20 +1,22 @@
 <template>
-  <div class="content-box content-box-filter">
-    <div class="title-contract-partner header-table-custom">
-      <h1 class="title-filter" v-if="title">{{ "<" + $t(title) + ">" }}</h1>
+  <div class="content-box-filter">
+    <a-row>
+      <h1 class="title-filter title-contract-detail" v-if="title">
+        {{ "<" + $t(title) + ">" }}
+      </h1>
       <span class="text-primary">
         ※「主設定」ボタン:主の顧客として登録する
         「副設定」ボタン:副の顧客として登録する</span
       >
-    </div>
+    </a-row>
     <a-form layout="horizontal">
       <!-- Row 2 -->
       <a-row :gutter="16">
         <a-col :xs="24" :md="8">
           <a-form-item
             label="フリガナ"
-            :labelCol="{ span: 8 }"
-            :wrapperCol="{ span: 16 }"
+            :labelCol="{ span: 10 }"
+            :wrapperCol="{ span: 14 }"
           >
             <a-input v-model:value="builderInfo.furigana" />
           </a-form-item>
@@ -22,19 +24,19 @@
         <a-col :xs="24" :md="8">
           <a-form-item
             label="契約先名"
-            :labelCol="{ span: 8 }"
-            :wrapperCol="{ span: 16 }"
+            :labelCol="{ span: 10 }"
+            :wrapperCol="{ span: 14 }"
           >
             <a-input v-model:value="builderInfo.contract_name" />
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="4">
-          <a-form-item label="TEL" :labelCol="{ span: 8 }" :wrapperCol="{ span: 16 }">
+          <a-form-item label="TEL" :labelCol="{ span: 10 }" :wrapperCol="{ span: 14 }">
             <a-input v-model:value="builderInfo.tel" />
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="4">
-          <a-form-item label="年齢" :labelCol="{ span: 8 }" :wrapperCol="{ span: 16 }">
+          <a-form-item label="年齢" :labelCol="{ span: 10 }" :wrapperCol="{ span: 14 }">
             <a-input-number
               v-model:value="builderInfo.age"
               :min="0"
@@ -49,14 +51,14 @@
         <a-col :xs="24" :md="8">
           <a-form-item
             label="現在住所"
-            :labelCol="{ span: 8 }"
-            :wrapperCol="{ span: 16 }"
+            :labelCol="{ span: 10 }"
+            :wrapperCol="{ span: 14 }"
           >
             <a-input v-model:value="builderInfo.address" />
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="8">
-          <a-form-item label="編集" :labelCol="{ span: 8 }" :wrapperCol="{ span: 16 }">
+          <a-form-item label="編集" :labelCol="{ span: 10 }" :wrapperCol="{ span: 14 }">
             <a-space direction="vertical">
               <a-switch
                 v-model:checked="builderInfo.checked1"
@@ -73,8 +75,8 @@
         <a-col :xs="24" :md="8">
           <a-form-item
             label="フリガナ"
-            :labelCol="{ span: 8 }"
-            :wrapperCol="{ span: 16 }"
+            :labelCol="{ span: 10 }"
+            :wrapperCol="{ span: 14 }"
           >
             <a-input disabled />
           </a-form-item>
@@ -86,8 +88,8 @@
         <a-col :xs="24" :md="8">
           <a-form-item
             label="契約先名"
-            :labelCol="{ span: 8 }"
-            :wrapperCol="{ span: 16 }"
+            :labelCol="{ span: 10 }"
+            :wrapperCol="{ span: 14 }"
           >
             <a-space style="width: 100%">
               <a-input disabled />
@@ -96,12 +98,12 @@
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="8">
-          <a-form-item label="TEL" :labelCol="{ span: 8 }" :wrapperCol="{ span: 16 }">
+          <a-form-item label="TEL" :labelCol="{ span: 10 }" :wrapperCol="{ span: 14 }">
             <a-input disabled />
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="4">
-          <a-form-item label="年齢" :labelCol="{ span: 8 }" :wrapperCol="{ span: 16 }">
+          <a-form-item label="年齢" :labelCol="{ span: 10 }" :wrapperCol="{ span: 14 }">
             <a-input disabled />
           </a-form-item>
         </a-col>
@@ -112,8 +114,8 @@
       </a-row>
       <!-- Row 4 -->
       <a-row :gutter="16">
-        <a-col :xs="24" :md="8">
-          <a-form-item label="現住所" :labelCol="{ span: 8 }" :wrapperCol="{ span: 16 }">
+        <a-col :xs="24" :md="19">
+          <a-form-item label="現住所" :labelCol="{ span: 4 }" :wrapperCol="{ span: 16 }">
             <a-input v-model:value="builderInfo.current_address" />
           </a-form-item>
         </a-col>
@@ -122,8 +124,8 @@
         <a-col :xs="24" :md="8">
           <a-form-item
             label="許可番号"
-            :labelCol="{ span: 8 }"
-            :wrapperCol="{ span: 16 }"
+            :labelCol="{ span: 10 }"
+            :wrapperCol="{ span: 14 }"
           >
             <a-input v-model:value="builderInfo.permit_number_edit" />
           </a-form-item>
@@ -133,10 +135,10 @@
         </a-col>
       </a-row>
       <a-row :gutter="16">
-        <a-col :xs="24" :md="8">
+        <a-col :xs="24" :md="19">
           <a-form-item
             label="連名編集"
-            :labelCol="{ span: 8 }"
+            :labelCol="{ span: 4 }"
             :wrapperCol="{ span: 16 }"
           >
             <a-input v-model:value="builderInfo.edited_by" />
