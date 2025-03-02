@@ -83,3 +83,18 @@
 .text-primary {
   color: #1B47D8;
 }
+
+.zipcode-detail-input {
+  display: flex;
+  align-items: center;
+}
+
+.zipcode-detail-label-space {
+  min-width: 10rem;
+}
+
+.zipcode-detail-label {
+  margin-right: 1.5rem;
+  white-space: nowrap;
+  min-width: 1.5rem;
+}

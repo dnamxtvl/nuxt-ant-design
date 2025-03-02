@@ -25,7 +25,7 @@
           <!-- End Site owner -->
 
           <!-- Project name/project property -->
-          <!-- <ProjectInfo /> -->
+          <ProjectInfo title="工事名称・物件名称" />
           <!-- End Project name/project property -->
 
           <!-- Date of conclusion/recording -->
@@ -89,7 +89,7 @@ export default {
   setup() {
     const route = useRoute();
     const contractId = route.params.contractId as string;
-    const activeTab = ref("1");
+    const activeTab = ref<string>("1");
     const i18n = useI18n();
     const itemBreadcrumbs = ref<ItemBreadcrumb[]>([
       {
