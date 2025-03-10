@@ -4,19 +4,19 @@
       <h1 class="title-filter" v-if="title">
         {{ "<" + $t(title) + ">" }}
       </h1>
-      <a-button type="primary">建設地選択</a-button>
+      <a-button type="primary">{{ $t("construction_site_selection") }}</a-button>
     </a-row>
     <a-form :model="formState" layout="horizontal">
       <a-row :gutter="16">
         <a-col :span="24">
-          <a-form-item label="名称ガナ" :labelCol="{ span: 3 }" required>
+          <a-form-item :label="$t('furigana')" :labelCol="{ span: 3 }" required>
             <a-input v-model:value="formState.nameKana" />
           </a-form-item>
         </a-col>
       </a-row>
       <a-row :gutter="16">
         <a-col :span="24">
-          <a-form-item label="名称" :labelCol="{ span: 3 }" required>
+          <a-form-item :label="$t('name')" :labelCol="{ span: 3 }" required>
             <a-input v-model:value="formState.name" />
           </a-form-item>
         </a-col>
@@ -36,10 +36,10 @@
 
       <a-row :gutter="16">
         <a-col :span="24">
-          <a-form-item label="所在地（住所）" :labelCol="{ span: 3 }" required>
+          <a-form-item :label="$t('location_address')" :labelCol="{ span: 3 }" required>
             <a-input
               type="number"
-              placeholder="〒 郵便番号"
+              :placeholder="$t('postal_code')"
               v-model:value="formState.zipcode"
             />
           </a-form-item>
@@ -51,13 +51,13 @@
           <a-form-item :labelCol="{ span: 3 }">
             <div class="zipcode-detail-input">
               <span class="zipcode-detail-label-space"></span>
-              <span class="zipcode-detail-label">番地</span>
+              <span class="zipcode-detail-label">{{ $t("street_address") }}</span>
               <a-input v-model:value="formState.address" />
             </div>
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="12">
-          <a-form-item label="ビル・マンション名">
+          <a-form-item :label="$t('apartment_name')">
             <a-input v-model:value="formState.buildingName" />
           </a-form-item>
         </a-col>
@@ -77,7 +77,7 @@
 
       <a-row :gutter="16">
         <a-col :span="24">
-          <a-form-item label="所在地（地番）" :labelCol="{ span: 3 }">
+          <a-form-item :label="$t('location_lot_number')" :labelCol="{ span: 3 }">
             <a-input v-model:value="formState.lotNumber" />
           </a-form-item>
         </a-col>
@@ -88,7 +88,7 @@
           <a-form-item :labelCol="{ span: 3 }">
             <div class="zipcode-detail-input">
               <span class="zipcode-detail-label-space"></span>
-              <span class="zipcode-detail-label">番地</span>
+              <span class="zipcode-detail-label">{{ $t("street_address") }}</span>
               <a-input v-model:value="formState.address2" />
             </div>
           </a-form-item>
@@ -97,7 +97,7 @@
 
       <a-row :gutter="16">
         <a-col :xs="24" :md="8">
-          <a-form-item label="土地契約番号" :labelCol="{ span: 10 }">
+          <a-form-item :label="$t('land_contract_number')" :labelCol="{ span: 10 }">
             <a-input v-model:value="formState.landContractNumber" />
           </a-form-item>
         </a-col>
@@ -106,7 +106,7 @@
       <a-row :gutter="16">
         <a-col :xs="24" :md="8">
           <a-form-item
-            label="用途地域1"
+            :label="$t('zoning') + '1'"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -115,7 +115,7 @@
         </a-col>
         <a-col :xs="24" :md="8">
           <a-form-item
-            label="用途地域2"
+            :label="$t('zoning') + '2'"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -124,7 +124,7 @@
         </a-col>
         <a-col :xs="24" :md="8">
           <a-form-item
-            label="用途地域3"
+            :label="$t('zoning') + '3'"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -136,7 +136,7 @@
       <a-row :gutter="16">
         <a-col :span="8">
           <a-form-item
-            label="建蔽率(法定) "
+            :label="$t('building_coverage_ratio')"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -145,7 +145,7 @@
         </a-col>
         <a-col :span="8">
           <a-form-item
-            label="容積率(法定)"
+            :label="$t('floor_area_ratio')"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -154,7 +154,7 @@
         </a-col>
         <a-col :span="8">
           <a-form-item
-            label="土地坪単価(実績価格)"
+            :label="$t('land_price_per_tsubo')"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >

@@ -9,7 +9,7 @@
               <a-form-item
                 :labelCol="{ span: 10 }"
                 :wrapperCol="{ span: 14 }"
-                label="契約番号"
+                :label="$t('contract_number')"
               >
                 <a-input v-model:value="contractNumber" disabled />
               </a-form-item>
@@ -17,9 +17,11 @@
             <a-col>
               <a-space>
                 <a-row>
-                  <a-button type="primary">コンプライアンス</a-button>
-                  <a-button style="margin: 0 8px" type="primary">整合性チェック</a-button>
-                  <a-button type="primary">承認</a-button>
+                  <a-button type="primary">{{ $t("compliance") }}</a-button>
+                  <a-button style="margin: 0 8px" type="primary">{{
+                    $t("consistency_check")
+                  }}</a-button>
+                  <a-button type="primary">{{ $t("approval") }}</a-button>
                 </a-row>
               </a-space>
             </a-col>
@@ -30,7 +32,7 @@
               <a-form-item
                 :labelCol="{ span: 10 }"
                 :wrapperCol="{ span: 14 }"
-                label="作成区分"
+                :label="$t('creation_category')"
               >
                 <a-input v-model:value="createType" />
               </a-form-item>
@@ -39,7 +41,7 @@
               <a-form-item
                 :labelCol="{ span: 10 }"
                 :wrapperCol="{ span: 14 }"
-                label="契約区分"
+                :label="$t('contract_category')"
                 required
               >
                 <client-only>
@@ -54,7 +56,7 @@
               <a-form-item
                 :labelCol="{ span: 10 }"
                 :wrapperCol="{ span: 14 }"
-                label="取扱区分"
+                :label="$t('handling_classification')"
               >
                 <a-input v-model:value="affiliation" />
               </a-form-item>
@@ -66,7 +68,7 @@
               <a-form-item
                 :labelCol="{ span: 10 }"
                 :wrapperCol="{ span: 14 }"
-                label="受注営業所"
+                :label="$t('ordering_office')"
                 required
               >
                 <a-space style="width: 100%">
@@ -79,7 +81,7 @@
               <a-form-item
                 :labelCol="{ span: 10 }"
                 :wrapperCol="{ span: 14 }"
-                label="売上営業所"
+                :label="$t('sales_office')"
                 required
               >
                 <a-space>
@@ -92,7 +94,7 @@
               <a-form-item
                 :labelCol="{ span: 10 }"
                 :wrapperCol="{ span: 14 }"
-                label="特約店名"
+                :label="$t('dealer_name')"
               >
                 <a-input v-model:value="affiliation" />
               </a-form-item>
@@ -103,7 +105,7 @@
               <a-form-item
                 :labelCol="{ span: 10 }"
                 :wrapperCol="{ span: 14 }"
-                label="営業担当者"
+                :label="$t('sales_representative')"
                 required
               >
                 <a-space style="width: 100%">
@@ -116,7 +118,7 @@
               <a-form-item
                 :labelCol="{ span: 10 }"
                 :wrapperCol="{ span: 14 }"
-                label="所属拠点"
+                :label="$t('location')"
               >
                 <a-input v-model:value="affiliation" />
               </a-form-item>
@@ -125,7 +127,7 @@
               <a-form-item
                 :labelCol="{ span: 10 }"
                 :wrapperCol="{ span: 14 }"
-                label="設計担当者"
+                :label="$t('designer')"
               >
                 <a-space>
                   <a-input v-model:value="salesOffice" disabled />
@@ -140,9 +142,11 @@
       <a-row justify="end">
         <a-space>
           <a-row>
-            <a-button type="primary">契約書印刷</a-button>
-            <a-button style="margin: 0 8px" type="primary">契約書(謄)印刷</a-button>
-            <a-button type="primary">ご契約者カード</a-button>
+            <a-button type="primary">{{ $t("contract_printing") }}</a-button>
+            <a-button style="margin: 0 8px" type="primary">{{
+              $t("contract_copy_printing")
+            }}</a-button>
+            <a-button type="primary">{{ $t("contractor_card") }}</a-button>
           </a-row>
         </a-space>
       </a-row>
@@ -166,13 +170,13 @@ export default defineComponent({
     },
   },
   setup() {
-    const contractNumber = ref("（未採番）");
-    const createType = ref("新規");
-    const orderOffice = ref("本社");
-    const salesRep = ref("渡辺晴樹");
+    const contractNumber = ref<string>("（未採番）");
+    const createType = ref<string>("新規");
+    const orderOffice = ref<string>("本社");
+    const salesRep = ref<string>("渡辺晴樹");
     const contractType = ref<string>("請負");
-    const salesOffice = ref("本社");
-    const affiliation = ref("");
+    const salesOffice = ref<string>("本社");
+    const affiliation = ref<string>("");
 
     return {
       contractNumber,

@@ -11,7 +11,7 @@
     <div class="content-box">
       <!-- Tab -->
       <a-tabs v-model:activeKey="activeTab">
-        <a-tab-pane key="1" tab="工程計画">
+        <a-tab-pane key="1" :tab="$t('process_planning')">
           <!-- Contract partner -->
           <ContractPartner title="contracting_party" />
           <!-- End contract partner -->
@@ -25,7 +25,7 @@
           <!-- End Site owner -->
 
           <!-- Project name/project property -->
-          <ProjectInfo title="工事名称・物件名称" />
+          <ProjectInfo title="property_name" />
           <!-- End Project name/project property -->
 
           <!-- Date of conclusion/recording -->
@@ -43,15 +43,18 @@
           <!-- Construction Business Law -->
           <!-- End Construction Business Law -->
         </a-tab-pane>
-        <a-tab-pane key="2" tab="契約基本情報"></a-tab-pane>
-        <a-tab-pane key="3" tab="契約者補足情報"></a-tab-pane>
-        <a-tab-pane key="4" tab="経理登録用"></a-tab-pane>
-        <a-tab-pane key="5" tab="取消情報"></a-tab-pane>
-        <a-tab-pane key="6" tab="ローン・公庫"></a-tab-pane>
-        <a-tab-pane key="7" tab="回収条件"></a-tab-pane>
-        <a-tab-pane key="8" tab="諸費用・特約事項"></a-tab-pane>
-        <a-tab-pane key="9" tab="阻害要因"></a-tab-pane>
-        <a-tab-pane key="10" tab="本体受注"></a-tab-pane>
+        <a-tab-pane key="2" :tab="$t('basic_contract_information')"></a-tab-pane>
+        <a-tab-pane
+          key="3"
+          :tab="$t('contractor_supplementary_information')"
+        ></a-tab-pane>
+        <a-tab-pane key="4" :tab="$t('for_accounting_registration')"></a-tab-pane>
+        <a-tab-pane key="5" :tab="$t('cancel_information')"></a-tab-pane>
+        <a-tab-pane key="6" :tab="$t('loan_government_finance')"></a-tab-pane>
+        <a-tab-pane key="7" :tab="$t('collection_conditions')"></a-tab-pane>
+        <a-tab-pane key="8" :tab="$t('expenses_and_special_terms')"></a-tab-pane>
+        <a-tab-pane key="9" :tab="$t('obstacles')"></a-tab-pane>
+        <a-tab-pane key="10" :tab="$t('main_unit_order')"></a-tab-pane>
       </a-tabs>
       <!-- End Tab -->
     </div>

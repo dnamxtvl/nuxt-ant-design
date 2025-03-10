@@ -14,7 +14,7 @@
       <a-row :gutter="16">
         <a-col :xs="24" :md="8">
           <a-form-item
-            label="フリガナ"
+            :label="$t('furigana')"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -23,7 +23,7 @@
         </a-col>
         <a-col :xs="24" :md="8">
           <a-form-item
-            label="契約先名"
+            :label="$t('contracting_party_name')"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -36,7 +36,11 @@
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="4">
-          <a-form-item label="年齢" :labelCol="{ span: 10 }" :wrapperCol="{ span: 14 }">
+          <a-form-item
+            :label="$t('age')"
+            :labelCol="{ span: 10 }"
+            :wrapperCol="{ span: 14 }"
+          >
             <a-input-number
               v-model:value="builderInfo.age"
               :min="0"
@@ -50,7 +54,7 @@
       <a-row :gutter="16">
         <a-col :xs="24" :md="8">
           <a-form-item
-            label="現在住所"
+            :label="$t('current_address')"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -58,12 +62,16 @@
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="8">
-          <a-form-item label="編集" :labelCol="{ span: 10 }" :wrapperCol="{ span: 14 }">
+          <a-form-item
+            :label="$t('edit')"
+            :labelCol="{ span: 10 }"
+            :wrapperCol="{ span: 14 }"
+          >
             <a-space direction="vertical">
               <a-switch
                 v-model:checked="builderInfo.checked1"
-                checked-children="編集"
-                un-checked-children="削除"
+                :checked-children="$t('edit')"
+                :un-checked-children="$t('delete')"
               />
             </a-space>
           </a-form-item>
@@ -74,7 +82,7 @@
       <a-row :gutter="16">
         <a-col :xs="24" :md="8">
           <a-form-item
-            label="フリガナ"
+            :label="$t('furigana')"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -87,7 +95,7 @@
       <a-row :gutter="16" class="sub-partner-section">
         <a-col :xs="24" :md="8">
           <a-form-item
-            label="契約先名"
+            :label="$t('contracting_party_name')"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -103,19 +111,27 @@
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="4">
-          <a-form-item label="年齢" :labelCol="{ span: 10 }" :wrapperCol="{ span: 14 }">
+          <a-form-item
+            :label="$t('age')"
+            :labelCol="{ span: 10 }"
+            :wrapperCol="{ span: 14 }"
+          >
             <a-input disabled />
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="4" class="text-right">
-          <a-button type="primary">主設定</a-button>
-          <a-button type="primary">副設定</a-button>
+          <a-button type="primary">{{ $t("main_setting") }}</a-button>
+          <a-button type="primary">{{ $t("sub_setting") }}</a-button>
         </a-col>
       </a-row>
       <!-- Row 4 -->
       <a-row :gutter="16">
         <a-col :xs="24" :md="19">
-          <a-form-item label="現住所" :labelCol="{ span: 4 }" :wrapperCol="{ span: 16 }">
+          <a-form-item
+            :label="$t('builder_current_address')"
+            :labelCol="{ span: 4 }"
+            :wrapperCol="{ span: 16 }"
+          >
             <a-input v-model:value="builderInfo.current_address" />
           </a-form-item>
         </a-col>
@@ -123,7 +139,7 @@
       <a-row :gutter="16">
         <a-col :xs="24" :md="8">
           <a-form-item
-            label="許可番号"
+            :label="$t('license_number')"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -137,7 +153,7 @@
       <a-row :gutter="16">
         <a-col :xs="24" :md="19">
           <a-form-item
-            label="連名編集"
+            :label="$t('edited_by')"
             :labelCol="{ span: 4 }"
             :wrapperCol="{ span: 16 }"
           >

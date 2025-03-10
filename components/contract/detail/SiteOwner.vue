@@ -14,7 +14,7 @@
       <a-row :gutter="16">
         <a-col :xs="24" :md="8">
           <a-form-item
-            label="フリガナ"
+            :label="$t('furigana')"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -27,7 +27,7 @@
       <a-row :gutter="16" class="sub-partner-section">
         <a-col :xs="24" :md="8">
           <a-form-item
-            label="敷地所有者名"
+            :label="$t('land_owner_name')"
             :labelCol="{ span: 10 }"
             :wrapperCol="{ span: 14 }"
           >
@@ -40,19 +40,27 @@
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="4">
-          <a-form-item label="年齢" :labelCol="{ span: 10 }" :wrapperCol="{ span: 14 }">
+          <a-form-item
+            :label="$t('age')"
+            :labelCol="{ span: 10 }"
+            :wrapperCol="{ span: 14 }"
+          >
             <a-input disabled />
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="4" class="text-right">
-          <a-button type="primary">主設定</a-button>
-          <a-button type="primary">副設定</a-button>
+          <a-button type="primary">{{ $t("main_setting") }}</a-button>
+          <a-button type="primary">{{ $t("sub_setting") }}</a-button>
         </a-col>
       </a-row>
       <!-- Row 4 -->
       <a-row :gutter="16">
         <a-col :xs="24" :md="19">
-          <a-form-item label="現住所" :labelCol="{ span: 4 }" :wrapperCol="{ span: 16 }">
+          <a-form-item
+            :label="$t('builder_current_address')"
+            :labelCol="{ span: 4 }"
+            :wrapperCol="{ span: 16 }"
+          >
             <a-input v-model:value="siteOwnerInfo.current_address" />
           </a-form-item>
         </a-col>
@@ -60,7 +68,7 @@
       <a-row :gutter="16">
         <a-col :xs="24" :md="19">
           <a-form-item
-            label="連名編集"
+            :label="$t('edited_by')"
             :labelCol="{ span: 4 }"
             :wrapperCol="{ span: 16 }"
           >
