@@ -16,14 +16,14 @@
     <!-- End Filter -->
     <div class="content-box">
       <!-- Table -->
-      <TableMergeCell title="search_result" :total="100" :results="data" />
+      <TableMergeCell title="search_result" :total="100" :results="listContract?.data" />
       <!-- End Table -->
       <!-- pagination -->
       <Pagination
-        :currentPageApp="currentPage"
+        :currentPageApp="searchParams.page"
         :totalItem="total"
         @onChange="onChangePage"
-        :perPageSize="pagePage"
+        :perPageSize="searchParams.limit"
         @onChangeSize="onChangePerPage"
       />
       <!-- End Pagination -->
@@ -43,7 +43,10 @@ import FormSearch from "~/components/common/FormSearch.vue";
 import { useI18n } from "vue-i18n";
 import TableResult from "~/components/common/TableResult.vue";
 import TableMergeCell from "~/components/contract/list/TableMergeCell.vue";
-import type { ItemListContract } from "~/types/contract/res";
+import { RULES_VALIDATION } from "~/constants/config/validation";
+import type { ListContract } from "~/types/contract/res";
+import { FETCH_API } from "~/constants/config/api";
+import type { SearchContractReq } from "~/types/contract/req";
 
 definePageMeta({
   layout: "admin-dashboard",
@@ -69,22 +72,24 @@ export default {
       },
       {
         name: "list",
-        link: "/user/list",
+        link: "/contract/list",
       },
     ]);
-    const currentPage = ref<number>(1);
+    const fieldsDisabled = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"]);
+    const listContract = ref<ListContract>();
     const total = ref<number>(500);
-    const onChangePage = (pageNumber: number) => {
-      currentPage.value = pageNumber;
-      console.log("currentPage", currentPage.value);
-      console.log("perPage", pagePage.value);
-    };
-    const pagePage = ref<number>(10);
+    const searchParams = ref<SearchContractReq>({
+      page: 1,
+      limit: 10,
+    });
+
     const onChangePerPage = (perPage: number) => {
-      pagePage.value = perPage;
+      searchParams.value.limit = perPage;
     };
 
-    const expand = ref<boolean>(false);
+    const onChangePage = (pageNumber: number) => {
+      searchParams.value.page = pageNumber;
+    };
 
     const handleSearch = (formState: Record<string, any>) => {
       console.log("formState", formState.keyword);
@@ -94,16 +99,27 @@ export default {
       console.log("handleResetFilter");
     };
 
-    const fieldsDisabled = ref<string[]>([
-      "email",
-      "jyutyu_jigyousyo_name",
-      "syoukai_card_syutoku",
-    ]);
+    const getListContract = async () => {
+      try {
+        listContract.value = await customFetch(FETCH_API.CONTRACT.LIST, {
+          method: "get",
+          params: searchParams.value,
+        });
+      } catch (error) {}
+    };
+
     const searchFields: ItemFormSearch[] = [
       {
         name: "keiyaku_no",
         label: "contract_number",
         type: "text",
+        rules: [
+          {
+            max: RULES_VALIDATION.CONTRACT_NUMBER.MAX_LENGTH,
+            message:
+              RULES_VALIDATION.CONTRACT_NUMBER.MAX_LENGTH + i18n.t("input_max_length"),
+          },
+        ],
         md: 24,
         lg: 12,
         xl: 12,
@@ -112,6 +128,13 @@ export default {
         name: "kouji_name",
         label: "project_name",
         type: "text",
+        rules: [
+          {
+            max: RULES_VALIDATION.PROJECT_NAME.MAX_LENGTH,
+            message:
+              RULES_VALIDATION.PROJECT_NAME.MAX_LENGTH + i18n.t("input_max_length"),
+          },
+        ],
         md: 24,
         lg: 12,
         xl: 12,
@@ -146,7 +169,6 @@ export default {
         name: "jyutyu_jigyousyo_name",
         label: "business_location",
         type: "text",
-        rules: [{ required: true, message: "please_enter_keyword" }],
         defaultValue: "本社",
         md: 24,
         lg: 12,
@@ -156,6 +178,13 @@ export default {
         name: "keiyakusya_name",
         label: "prime_contructor",
         type: "text",
+        rules: [
+          {
+            max: RULES_VALIDATION.PRIME_CONTRUCTOR.MAX_LENGTH,
+            message:
+              RULES_VALIDATION.PRIME_CONTRUCTOR.MAX_LENGTH + i18n.t("input_max_length"),
+          },
+        ],
         md: 24,
         lg: 12,
         xl: 12,
@@ -182,7 +211,7 @@ export default {
         xl: 12,
       },
       {
-        name: "syoukai_card_syutoku",
+        name: "eigyo_tantousya",
         label: "sales_representative",
         type: "sub-modal",
         md: 24,
@@ -190,112 +219,36 @@ export default {
         xl: 12,
       },
       {
-        name: "agree",
-        label: "agree_to_terms",
-        type: "checkbox",
-        md: 12,
+        name: "keiyaku_keijyou_date",
+        label: "scheduled_contract_recording_date",
+        type: "range-date",
+        md: 24,
         lg: 12,
         xl: 12,
       },
       {
-        name: "age",
-        label: "age",
-        type: "number",
-        placeholder: "enter_age",
-        md: 12,
+        name: "syoukai_card_syutoku",
+        label: "get_a_referral_card",
+        type: "select",
+        options: [
+          { label: i18n.t("male"), value: "male" },
+          { label: i18n.t("fermale"), value: "female" },
+        ],
+        md: 24,
         lg: 12,
         xl: 12,
       },
     ];
 
-    const data: ItemListContract[] = [
-      {
-        id: 1,
-        classification: "本体",
-        contract_number: "未採番",
-        status: "受注予定",
-        project_name: "Dクラディア千種、中島 四郎様",
-        contract_category: "その他",
-        scheduled_contract_month: "その他",
-        contractor: "中島1四郎",
-        contract_amount_tax_yen: 0,
-        approval_status: "未承認",
-        date_of_conclusion: "契約締結",
-        date_of_posting: "契約計上",
-        date_of_completion: "契約計上",
-        schedule: "予定",
-        start_date: "2022/03/09",
-        end_date: "2023/02/25",
-        completed_date: "2022/03/09",
-      },
-      {
-        id: 2,
-        classification: "本体",
-        contract_number: "未採番",
-        status: "受注予定",
-        project_name: "Dクラディア千種、中島 四郎様",
-        contract_category: "その他",
-        scheduled_contract_month: "その他",
-        contractor: "中島1四郎",
-        contract_amount_tax_yen: 0,
-        approval_status: "未承認",
-        date_of_conclusion: "契約締結",
-        date_of_posting: "契約計上",
-        date_of_completion: "契約計上",
-        schedule: "予定",
-        start_date: "2022/03/09",
-        end_date: "2023/02/25",
-        completed_date: "2022/03/09",
-      },
-      {
-        id: 3,
-        classification: "本体",
-        contract_number: "未採番",
-        status: "受注予定",
-        project_name: "Dクラディア千種、中島 四郎様",
-        contract_category: "その他",
-        scheduled_contract_month: "その他",
-        contractor: "中島1四郎",
-        contract_amount_tax_yen: 0,
-        approval_status: "未承認",
-        date_of_conclusion: "契約締結",
-        date_of_posting: "契約計上",
-        date_of_completion: "契約計上",
-        schedule: "予定",
-        start_date: "2022/03/09",
-        end_date: "2023/02/25",
-        completed_date: "2022/03/09",
-      },
-      {
-        id: 4,
-        classification: "本体",
-        contract_number: "未採番",
-        status: "受注予定",
-        project_name: "Dクラディア千種、中島 四郎様",
-        contract_category: "その他",
-        scheduled_contract_month: "その他",
-        contractor: "中島1四郎",
-        contract_amount_tax_yen: 0,
-        approval_status: "未承認",
-        date_of_conclusion: "契約締結",
-        date_of_posting: "契約計上",
-        date_of_completion: "契約計上",
-        schedule: "予定",
-        start_date: "2022/03/09",
-        end_date: "2023/02/25",
-        completed_date: "2022/03/09",
-      },
-    ];
-
-    onMounted(async () => {});
+    onMounted(async () => {
+      await getListContract();
+    });
 
     return {
-      data,
-      currentPage,
-      pagePage,
+      listContract,
+      searchParams,
       total,
       itemBreadcrumbs,
-      expand,
       fieldsDisabled,
       searchFields,
       onChangePage,

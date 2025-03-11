@@ -28,3 +28,9 @@ export interface ItemFormSearch {
     xl?: number;
     specialFieldHandle?: string;
 }
+
+export interface Pagination {
+    current_page: number;
+    total_page: number;
+    records: number;
+}

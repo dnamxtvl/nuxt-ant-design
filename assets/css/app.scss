@@ -81,7 +81,7 @@
 }
 
 .text-primary {
-  color: #1B47D8;
+  color: #1677ff;
 }
 
 .zipcode-detail-input {
@@ -99,6 +99,7 @@
   min-width: 1.5rem;
 }
 
-.ant-space .ant-space-item {
+.sub-modal-selected .ant-space-item {
+  display: contents;
   width: 100%;
 }

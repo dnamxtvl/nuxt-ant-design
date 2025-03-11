@@ -32,12 +32,30 @@
       <tbody class="ant-table-tbody">
         <template v-for="(item, index) in results" :key="index" v-if="results.length > 0">
           <tr>
-            <td rowspan="3" class="ant-table-cell">{{ item.classification }}</td>
-            <td rowspan="2" class="ant-table-cell">{{ item.contract_number }}</td>
-            <td colspan="3" class="ant-table-cell">{{ item.project_name }}</td>
-            <td class="ant-table-cell">{{ item.date_of_conclusion }}</td>
-            <td class="ant-table-cell">{{ item.start_date }}</td>
-            <td class="ant-table-cell"></td>
+            <td rowspan="3" class="ant-table-cell">
+              {{ item.tuika_kbn == 0 ? $t("other_label") : $t("scorpion") }}
+            </td>
+            <td rowspan="2" class="ant-table-cell text-primary">
+              <nuxt-link :to="item.keiyaku_card_url">{{
+                item.keiyaku_no ?? $t("unnumbered")
+              }}</nuxt-link>
+            </td>
+            <td colspan="3" class="ant-table-cell">{{ item.keiyakusya_name }}</td>
+            <td class="ant-table-cell">{{ $t("contract_conclusion") }}</td>
+            <td class="ant-table-cell">
+              {{
+                item.keiyaku_teiketsu_yotei_date
+                  ? formatDate(item.keiyaku_teiketsu_yotei_date)
+                  : ""
+              }}
+            </td>
+            <td class="ant-table-cell">
+              {{
+                item.jyutyu_keijyou_yotei_date
+                  ? formatDate(item.jyutyu_keijyou_yotei_date)
+                  : ""
+              }}
+            </td>
           </tr>
           <tr>
             <td class="ant-table-cell">{{ item.contract_category }}</td>
@@ -69,6 +87,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { ItemListContract } from "~/types/contract/res";
+import moment from "moment";
 
 export default defineComponent({
   name: "TableMergeCell",

@@ -10,14 +10,6 @@ export default class BaseService {
         this.prefix = prefix;
     }
 
-    private processResponse(response: ResponseData) {
-        let data = response.data;
-        if (data.hasOwnProperty('data')) {
-            return data.data;
-        }
-        return data;
-    }
-
     private logError(e: any, error: (error: ErrorResponse) => void) {
         let errors: string[] = [];
         let errorMessages: string[] = [];
@@ -46,11 +38,14 @@ export default class BaseService {
         });
     }
 
-    async get(endpoint: string, params: Object, success: (json: ResponseData) => void, error: (error: ErrorResponse) => void) {
+    async get(endpoint: string, params: Object, success: (json: ResponseData) => void, error: (error: ErrorResponse) => void, token: string = '') {
         try {
+            let headers: Record<string, string> = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
             const response = await this.getInstanceAxios().get(endpoint, { params });
-            const json = this.processResponse(response);
-            success(json);
+            console.log(response);
+            success(response.data);
         } catch (e) {
             this.logError(e, error);
         }
@@ -72,8 +67,7 @@ export default class BaseService {
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
             const response = await this.getInstanceAxios().post(endpoint, params, { headers });
-            const json = this.processResponse(response);
-            success(json);
+            success(response.data);
         } catch (e) {
             this.logError(e, error);
         }
@@ -95,8 +89,7 @@ export default class BaseService {
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
             const response = await this.getInstanceAxios().put(endpoint, params, { headers });
-            const json = this.processResponse(response);
-            success(json);
+            success(response.data);
         } catch (e) {
             this.logError(e, error);
         }
@@ -105,8 +98,7 @@ export default class BaseService {
     async delete(endpoint: string, data: Record<string, any> = {}, success: (json: any) => void, error: (error: ErrorResponse) => void) {
         try {
             const response = await this.getInstanceAxios().delete(endpoint, { data });
-            const json = this.processResponse(response);
-            success(json);
+            success(response.data);
         } catch (e) {
             this.logError(e, error);
         }
@@ -120,8 +112,7 @@ export default class BaseService {
     ) {
         try {
             const response = await this.getInstanceAxios().patch(endpoint, params);
-            const json = this.processResponse(response);
-            success(json);
+            success(response.data);
         } catch (e) {
             this.logError(e, error);
         }

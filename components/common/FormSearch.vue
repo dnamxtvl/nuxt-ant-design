@@ -40,7 +40,11 @@
               />
 
               <!-- Sub Modal -->
-              <a-space v-else-if="field.type === 'sub-modal'" style="width: 100%">
+              <a-space
+                class="sub-modal-selected"
+                v-else-if="field.type === 'sub-modal'"
+                style="width: 100%"
+              >
                 <a-input :disabled="fieldsDisabledState.includes(field.name)" />
                 <a-button :disabled="fieldsDisabledState.includes(field.name)"
                   >...</a-button

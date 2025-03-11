@@ -8,6 +8,7 @@ export default defineI18nConfig(() => ({
         // label & input: string unique key
         // button: string unique key
         // table columns: string unique key
+        // validate message: string unique key
         // error message: string code 1000000 - 2000000
         en: {
             // title screen: string unique key
@@ -120,7 +121,13 @@ export default defineI18nConfig(() => ({
             business_location: 'Business location',
             prime_contructor: 'Prime contructor',
             contract_signing_date: 'Contract signing date',
+            scheduled_contract_recording_date: 'Scheduled contract recording date',
+            get_a_referral_card: 'Get a referral card',
             // end label & input
+
+            // validate message: string unique key
+            input_max_length: 'Please enter within characters',
+            // end validate message
 
             // button: string unique key
             compliance: 'Compliance',
@@ -148,6 +155,10 @@ export default defineI18nConfig(() => ({
             contract_amount_tax_yen: 'Tax-included Contract Amount (Yen)',
             item: 'Items',
             no_data: 'No data',
+            other_label: 'Other',
+            scorpion: 'Scorpion',
+            unnumbered: 'Unnumbered',
+            contract_conclusion: 'Contract Conclusion',
             // end table columns
 
             // error message: string code 1000000 - 2000000
@@ -268,7 +279,13 @@ export default defineI18nConfig(() => ({
             business_location: '事業所',
             prime_contructor: '主契約者',
             contract_signing_date: '契約締結日',
+            scheduled_contract_recording_date: '契約計上予定日',
+            get_a_referral_card: '紹介カード取得',
             // end label & input
+
+            // validate message: string unique key
+            input_max_length: '文字以内で入力してください',
+            // end validate message
 
             // button: string unique key
             compliance: 'コンプライアンス',
@@ -295,6 +312,10 @@ export default defineI18nConfig(() => ({
             scheduled_contract_month: '契約予定月',
             contract_amount_tax_yen: '税込契約金額（円）',
             no_data: 'データがありません',
+            other_label: '本体',
+            scorpion: '追加',
+            unnumbered: '未採番',
+            contract_conclusion: '契約締結',
             // end table columns
 
             // error message: string code 1000000 - 2000000

@@ -43,5 +43,14 @@ export const RULES_VALIDATION = {
     AVATAR: {
         MAX_SIZE_UPLOAD: 2048000,
         FILE_TYPES: ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'],
-    }
+    },
+    CONTRACT_NUMBER: {
+        MAX_LENGTH: 13,
+    },
+    PROJECT_NAME: {
+        MAX_LENGTH: 30,
+    },
+    PRIME_CONTRUCTOR: {
+        MAX_LENGTH: 20,
+    },
 }

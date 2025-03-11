@@ -83,7 +83,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { UserOutlined, LockOutlined, GoogleOutlined } from "@ant-design/icons-vue";
-import type { FormInputLogin } from "~/types/auth/input";
+import type { FormInputLogin } from "~/types/auth/req";
 import type { Rule } from "ant-design-vue/es/form";
 import { RULES_VALIDATION } from "~/constants/config/validation";
 import { FETCH_API } from "~/constants/config/api";
