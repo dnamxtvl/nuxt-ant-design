@@ -1,6 +1,6 @@
 export type ResponseData = any;
 import type { Rule } from "ant-design-vue/es/form";
-type InputType = "text" | "select" | "date" | "radio" | "checkbox" | "number" | "range-date";
+type InputType = "text" | "select" | "date" | "radio" | "checkbox" | "number" | "range-date" | "sub-modal";
 
 export interface ErrorResponse {
     code: number;
@@ -19,6 +19,7 @@ export interface ItemFormSearch {
     type: InputType;
     placeholder?: string | null;
     options?: Array<{ label: string; value: string }>;
+    defaultValue?: number | string | null,
     rules?: Rule[];
     xs?: number;
     sm?: number;

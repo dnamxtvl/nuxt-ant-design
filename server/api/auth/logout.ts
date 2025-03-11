@@ -15,6 +15,7 @@ export default defineEventHandler(async (event: H3Event) => {
     (err: ErrorResponse) => {
       logger.error(err);
       throw createError({
+        status: err.code,
         data: err,
       });
     },

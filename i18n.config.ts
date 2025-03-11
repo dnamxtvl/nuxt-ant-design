@@ -115,6 +115,11 @@ export default defineI18nConfig(() => ({
             floor_area_ratio: 'Floor area ratio (legal)',
             land_price_per_tsubo: 'Land price per tsubo (actual price)',
             land_owner_name: 'Land owner name',
+            contract_status: 'Contract status',
+            contract_card_type: 'Contract card type',
+            business_location: 'Business location',
+            prime_contructor: 'Prime contructor',
+            contract_signing_date: 'Contract signing date',
             // end label & input
 
             // button: string unique key
@@ -258,6 +263,11 @@ export default defineI18nConfig(() => ({
             floor_area_ratio: '容積率(法定)',
             land_price_per_tsubo: '土地坪単価(実績価格)',
             land_owner_name: '敷地所有者名',
+            contract_status: '契約ステータス',
+            contract_card_type: '契約カード種別',
+            business_location: '事業所',
+            prime_contructor: '主契約者',
+            contract_signing_date: '契約締結日',
             // end label & input
 
             // button: string unique key

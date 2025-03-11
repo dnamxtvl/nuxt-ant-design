@@ -41,15 +41,15 @@ export function useCustomFetch<T>(url: string, options: any = {}) {
 }
 
 const logOut = () => {
-    const placement: NotificationPlacement = "topRight";
-    notification.error({
-        message: 'Token Expired',
-        description: 'Your token has expired. Please log in again.',
-        placement,
-    });
-    helperApp.logOutWhenTokenExpired();
-    const router = useRouter();
-    router.push(ROUTE_APP.AUTH.LOGIN);
+  const placement: NotificationPlacement = "topRight";
+  notification.error({
+    message: 'Token Expired',
+    description: 'Your token has expired. Please log in again.',
+    placement,
+  });
+  helperApp.logOutWhenTokenExpired();
+  const router = useRouter();
+  router.push(ROUTE_APP.AUTH.LOGIN);
 }
 
 const handleError = (error: ErrorResponse, placement: NotificationPlacement) => {

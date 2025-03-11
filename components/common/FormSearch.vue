@@ -39,6 +39,14 @@
                 :disabled="fieldsDisabledState.includes(field.name)"
               />
 
+              <!-- Sub Modal -->
+              <a-space v-else-if="field.type === 'sub-modal'" style="width: 100%">
+                <a-input :disabled="fieldsDisabledState.includes(field.name)" />
+                <a-button :disabled="fieldsDisabledState.includes(field.name)"
+                  >...</a-button
+                >
+              </a-space>
+
               <!-- Date picker -->
               <a-date-picker
                 v-else-if="field.type === 'date'"
@@ -123,7 +131,6 @@
 </template>
 
 <script lang="ts">
-import { reactive, ref } from "vue";
 import { UpOutlined, DownOutlined } from "@ant-design/icons-vue";
 import type { ItemFormSearch } from "~/types/common/res";
 
@@ -174,6 +181,17 @@ export default defineComponent({
         fieldsDisabledState.value.push(fieldName);
       }
     };
+
+    onMounted(() => {
+      props.fields.forEach((field) => {
+        if (field.type === "select" && field.options?.length && field.defaultValue) {
+          formState.value[field.name] = field.defaultValue || field.options[0].value;
+        }
+        if (field.type === "text" && field.defaultValue) {
+          formState.value[field.name] = field.defaultValue;
+        }
+      });
+    });
 
     const handleClear = () => {
         formRef.value.resetFields();

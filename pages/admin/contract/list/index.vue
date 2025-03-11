@@ -7,7 +7,7 @@
     <!-- Filter -->
     <FormSearch
       title="filter"
-      :numBasicFilter="6"
+      :numBasicFilter="12"
       :fields="searchFields"
       :fieldsDisabledForm="fieldsDisabled"
       @submit="handleSearch"
@@ -68,10 +68,6 @@ export default {
         link: "/",
       },
       {
-        name: "user",
-        link: "/user",
-      },
-      {
         name: "list",
         link: "/user/list",
       },
@@ -98,98 +94,98 @@ export default {
       console.log("handleResetFilter");
     };
 
-    const fieldsDisabled = ref<string[]>(["email", "joined"]);
+    const fieldsDisabled = ref<string[]>([
+      "email",
+      "jyutyu_jigyousyo_name",
+      "syoukai_card_syutoku",
+    ]);
     const searchFields: ItemFormSearch[] = [
       {
-        name: "name",
-        label: "name",
+        name: "keiyaku_no",
+        label: "contract_number",
         type: "text",
-        placeholder: "enter_name",
         md: 24,
         lg: 12,
         xl: 12,
       },
       {
-        name: "email",
-        label: "email",
+        name: "kouji_name",
+        label: "project_name",
         type: "text",
-        placeholder: "enter_email",
-        md: 12,
+        md: 24,
         lg: 12,
         xl: 12,
       },
       {
-        name: "gender",
-        label: "gender",
+        name: "keiyaku_status",
+        label: "contract_status",
         type: "select",
-        placeholder: "select_gender",
         options: [
           { label: i18n.t("male"), value: "male" },
           { label: i18n.t("fermale"), value: "female" },
         ],
-        md: 12,
+        defaultValue: "male",
+        md: 24,
         lg: 12,
         xl: 12,
       },
       {
-        name: "joined",
-        label: "joined_date",
-        type: "range-date",
-        md: 12,
-        lg: 12,
-        xl: 12,
-      },
-      {
-        name: "status",
-        label: "status",
-        type: "radio",
-        options: [
-          { label: "active", value: "active" },
-          { label: "inactive", value: "inactive" },
-        ],
-        md: 12,
-        lg: 12,
-        xl: 12,
-      },
-      {
-        name: "birthdate",
-        label: "birthdate",
-        type: "date",
-        placeholder: "select_birthdate",
-        md: 12,
-        lg: 12,
-        xl: 12,
-      },
-      {
-        name: "keyword",
-        label: "keyword",
-        type: "text",
-        placeholder: "enter_keyword",
-        rules: [{ required: true, message: "please_enter_keyword" }],
-        md: 12,
-        lg: 12,
-        xl: 12,
-      },
-      {
-        name: "category",
-        label: "category",
+        name: "keiyaku_card_syubetsu",
+        label: "contract_card_type",
         type: "select",
-        placeholder: "select_category",
         options: [
-          { label: "Category 1", value: "1" },
-          { label: "Category 2", value: "2" },
+          { label: i18n.t("male"), value: "male" },
+          { label: i18n.t("fermale"), value: "female" },
         ],
-        md: 12,
+        defaultValue: "male",
+        md: 24,
         lg: 12,
         xl: 12,
-        specialFieldHandle: "category",
       },
       {
-        name: "date",
-        label: "date",
-        type: "date",
-        placeholder: "select_date",
-        md: 12,
+        name: "jyutyu_jigyousyo_name",
+        label: "business_location",
+        type: "text",
+        rules: [{ required: true, message: "please_enter_keyword" }],
+        defaultValue: "本社",
+        md: 24,
+        lg: 12,
+        xl: 12,
+      },
+      {
+        name: "keiyakusya_name",
+        label: "prime_contructor",
+        type: "text",
+        md: 24,
+        lg: 12,
+        xl: 12,
+      },
+      {
+        name: "jyutyu_eigyousyo",
+        label: "ordering_office",
+        type: "select",
+        options: [
+          { label: i18n.t("male"), value: "male" },
+          { label: i18n.t("fermale"), value: "female" },
+        ],
+        defaultValue: "male",
+        md: 24,
+        lg: 12,
+        xl: 12,
+      },
+      {
+        name: "keiyaku_teiketsu_date",
+        label: "contract_signing_date",
+        type: "range-date",
+        md: 24,
+        lg: 12,
+        xl: 12,
+      },
+      {
+        name: "syoukai_card_syutoku",
+        label: "sales_representative",
+        type: "sub-modal",
+        md: 24,
         lg: 12,
         xl: 12,
       },

@@ -29,9 +29,9 @@ export default defineNuxtConfig({
     public: {
       SSR: process.env.SSR === 'true',
       APP_ENV: process.env.APP_ENV,
-      BACKEND_URL: process.env.BACKEND_URL,
       FRONTEND_URL: process.env.FRONTEND_URL,
-    }
+    },
+    BACKEND_URL: process.env.BACKEND_URL,
   },
   modules: [
     '@pinia/nuxt',
