@@ -58,20 +58,50 @@
             </td>
           </tr>
           <tr>
-            <td class="ant-table-cell">{{ item.contract_category }}</td>
-            <td class="ant-table-cell">{{ item.contractor }}</td>
-            <td rowspan="2" class="ant-table-cell">{{ item.approval_status }}</td>
-            <td class="ant-table-cell">{{ item.date_of_posting }}</td>
-            <td class="ant-table-cell">{{ item.end_date }}</td>
-            <td class="ant-table-cell"></td>
+            <td class="ant-table-cell">{{ item.keiyaku_kbn_name }}</td>
+            <td class="ant-table-cell">{{ item.kouji_bukken_name }}</td>
+            <td rowspan="2" class="ant-table-cell">{{ item.syounin_zyoukyou }}</td>
+            <td class="ant-table-cell">{{ $t("contract_accounting") }}</td>
+            <td class="ant-table-cell">
+              {{
+                item.keiyaku_keijyou_yotei_date
+                  ? formatDate(item.keiyaku_keijyou_yotei_date)
+                  : ""
+              }}
+            </td>
+            <td class="ant-table-cell">
+              {{ item.keiyaku_keijyou_date ? formatDate(item.keiyaku_keijyou_date) : "" }}
+            </td>
           </tr>
           <tr>
-            <td class="ant-table-cell">{{ item.status }}</td>
-            <td class="ant-table-cell">-</td>
-            <td class="ant-table-cell">{{ item.contract_amount_tax_yen }}</td>
-            <td class="ant-table-cell">{{ item.date_of_posting }}</td>
-            <td class="ant-table-cell"></td>
-            <td class="ant-table-cell"></td>
+            <td class="ant-table-cell">{{ item.keiyaku_status_name }}</td>
+            <td
+              class="ant-table-cell"
+              v-if="
+                item.keiyaku_card_syubetsu_cd == KEIYAKU_CARD_SYUBETSU_CD.KENCHIKU ||
+                item.keiyaku_card_syubetsu_cd == KEIYAKU_CARD_SYUBETSU_CD.MANSION ||
+                item.keiyaku_card_syubetsu_cd == KEIYAKU_CARD_SYUBETSU_CD.TSUIKA
+              "
+            >
+              {{
+                item.jyutyu_yotei_tsuki_sekininsya
+                  ? formatDate(item.jyutyu_yotei_tsuki_sekininsya, "YYYY/MM")
+                  : ""
+              }}
+            </td>
+            <td class="ant-table-cell" v-else>-</td>
+            <td class="ant-table-cell">{{ item.zeikomi_keiyaku_kingaku }}</td>
+            <td class="ant-table-cell">{{ $t("order_booking") }}</td>
+            <td class="ant-table-cell">
+              {{
+                item.jyutyu_keijyou_yotei_date
+                  ? formatDate(item.jyutyu_keijyou_yotei_date)
+                  : ""
+              }}
+            </td>
+            <td class="ant-table-cell">
+              {{ item.jyutyu_keijyou_date ? formatDate(item.jyutyu_keijyou_date) : "" }}
+            </td>
           </tr>
         </template>
         <tr v-else>
@@ -86,8 +116,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { KEIYAKU_CARD_SYUBETSU_CD } from "~/constants/enums/contract";
 import type { ItemListContract } from "~/types/contract/res";
-import moment from "moment";
 
 export default defineComponent({
   name: "TableMergeCell",
@@ -108,7 +138,9 @@ export default defineComponent({
     },
   },
   setup() {
-    return {};
+    return {
+      KEIYAKU_CARD_SYUBETSU_CD,
+    };
   },
 });
 </script>

@@ -12,7 +12,6 @@ export default defineEventHandler(async (event: H3Event) => {
   await api.contract.list(
     params,
     (res: ResponseData) => {
-        console.log(res);
       data = res;
     },
     (err: ErrorResponse) => {

@@ -44,7 +44,6 @@ export default class BaseService {
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
             const response = await this.getInstanceAxios().get(endpoint, { params });
-            console.log(response);
             success(response.data);
         } catch (e) {
             this.logError(e, error);

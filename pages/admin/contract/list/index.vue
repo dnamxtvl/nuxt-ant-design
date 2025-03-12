@@ -4,24 +4,30 @@
     <Breadcrumb :itemBreads="itemBreadcrumbs" />
     <TitleScreen titleScreen="list_user" contractNumber="GCNT90013" />
     <!-- Content -->
+    <FullScreenLoader :loading="loading" />
     <!-- Filter -->
     <FormSearch
       title="filter"
       :numBasicFilter="12"
       :fields="searchFields"
       :fieldsDisabledForm="fieldsDisabled"
+      ref="formSearchRef"
       @submit="handleSearch"
       @handleClear="handleResetFilter"
     />
     <!-- End Filter -->
     <div class="content-box">
       <!-- Table -->
-      <TableMergeCell title="search_result" :total="100" :results="listContract?.data" />
+      <TableMergeCell
+        title="search_result"
+        :total="listContract?.pagination.records"
+        :results="listContract?.data"
+      />
       <!-- End Table -->
       <!-- pagination -->
       <Pagination
         :currentPageApp="searchParams.page"
-        :totalItem="total"
+        :totalItem="listContract?.pagination.records"
         @onChange="onChangePage"
         :perPageSize="searchParams.limit"
         @onChangeSize="onChangePerPage"
@@ -47,6 +53,7 @@ import { RULES_VALIDATION } from "~/constants/config/validation";
 import type { ListContract } from "~/types/contract/res";
 import { FETCH_API } from "~/constants/config/api";
 import type { SearchContractReq } from "~/types/contract/req";
+import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
 
 definePageMeta({
   layout: "admin-dashboard",
@@ -62,9 +69,18 @@ export default {
     FormSearch,
     TableResult,
     TableMergeCell,
+    FullScreenLoader,
   },
   setup() {
+    const loading = useState<boolean>("globalLoading", () => false);
     const i18n = useI18n();
+    const fieldsDisabled = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"]);
+    const listContract = ref<ListContract>();
+    const searchParams = ref<SearchContractReq>({
+      page: 1,
+      limit: 10,
+    });
+
     const itemBreadcrumbs = ref<ItemBreadcrumb[]>([
       {
         name: "home",
@@ -75,38 +91,6 @@ export default {
         link: "/contract/list",
       },
     ]);
-    const fieldsDisabled = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"]);
-    const listContract = ref<ListContract>();
-    const total = ref<number>(500);
-    const searchParams = ref<SearchContractReq>({
-      page: 1,
-      limit: 10,
-    });
-
-    const onChangePerPage = (perPage: number) => {
-      searchParams.value.limit = perPage;
-    };
-
-    const onChangePage = (pageNumber: number) => {
-      searchParams.value.page = pageNumber;
-    };
-
-    const handleSearch = (formState: Record<string, any>) => {
-      console.log("formState", formState.keyword);
-    };
-
-    const handleResetFilter = () => {
-      console.log("handleResetFilter");
-    };
-
-    const getListContract = async () => {
-      try {
-        listContract.value = await customFetch(FETCH_API.CONTRACT.LIST, {
-          method: "get",
-          params: searchParams.value,
-        });
-      } catch (error) {}
-    };
 
     const searchFields: ItemFormSearch[] = [
       {
@@ -240,14 +224,53 @@ export default {
       },
     ];
 
+    const formSearchRef = ref();
+
+    const onChangePerPage = (perPage: number) => {
+      searchParams.value.limit = perPage;
+    };
+
+    const onChangePage = (pageNumber: number) => {
+      searchParams.value.page = pageNumber;
+      getListContract();
+    };
+
+    const handleSearch = async (formState: Record<string, any>) => {
+      searchParams.value = { ...searchParams.value, ...formState, page: 1 };
+      console.log("searchParams", searchParams.value);
+      getListContract();
+    };
+
+    const handleResetFilter = (formState: Record<string, any>) => {
+      searchParams.value = { ...searchParams.value, ...formState, page: 1, limit: 10 };
+      console.log("searchParams", searchParams.value);
+      getListContract();
+    };
+
+    const getListContract = async () => {
+      loading.value = true;
+
+      try {
+        listContract.value = await customFetch(FETCH_API.CONTRACT.LIST, {
+          method: "get",
+          params: searchParams.value,
+        });
+      } catch (error) {}
+
+      loading.value = false;
+    };
+
     onMounted(async () => {
+      if (formSearchRef.value) {
+        searchParams.value = { ...searchParams.value, ...formSearchRef.value.formState };
+      }
+
       await getListContract();
     });
 
     return {
       listContract,
       searchParams,
-      total,
       itemBreadcrumbs,
       fieldsDisabled,
       searchFields,
@@ -255,6 +278,8 @@ export default {
       onChangePerPage,
       handleSearch,
       handleResetFilter,
+      formSearchRef,
+      loading,
     };
   },
 };

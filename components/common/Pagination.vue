@@ -2,7 +2,7 @@
   <div class="custom-pagination">
     <ClientOnly>
       <a-pagination
-        v-model:current="localPage"
+        :current="currentPageApp"
         show-quick-jumper
         :total="totalItem"
         :page-size="perPageSize"
@@ -35,12 +35,10 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const localPage = ref<number>(props.currentPageApp);
     const isChangingPageSize = ref<boolean>(false);
 
     const onChange = (page: number) => {
       if (!isChangingPageSize.value) {
-        localPage.value = page;
         emit("onChange", page);
       }
       isChangingPageSize.value = false;
@@ -48,7 +46,6 @@ export default defineComponent({
 
     const onChangeSize = (current: number, size: number) => {
       isChangingPageSize.value = true;
-      localPage.value = 1;
       emit("onChangeSize", size);
       emit("onChange", 1);
     };
@@ -58,7 +55,6 @@ export default defineComponent({
     });
 
     return {
-      localPage,
       onChange,
       onChangeSize,
     };

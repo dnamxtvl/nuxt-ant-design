@@ -23,7 +23,7 @@ const props = defineProps({
 
 const appLoaded = ref(false);
 const handleError = () => {
-  navigateTo(ROUTE_APP.USER.LIST);
+  navigateTo(ROUTE_APP.CONTRACT.LIST);
 };
 
 const getMsgError = (statusCode: number) => {

@@ -1,3 +1,4 @@
+import { ROUTE_APP } from "~/constants/config/route";
 import { useMainStore } from "~/store";
 
 export default defineNuxtRouteMiddleware((to, from) => {
@@ -11,6 +12,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     }
 
     if (to.path === '/admin/login' || to.path.includes('/auth')) {
-        return navigateTo("/admin/user/list");
+        return navigateTo(ROUTE_APP.CONTRACT.LIST);
     }
 });

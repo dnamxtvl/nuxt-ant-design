@@ -159,6 +159,8 @@ export default defineI18nConfig(() => ({
             scorpion: 'Scorpion',
             unnumbered: 'Unnumbered',
             contract_conclusion: 'Contract Conclusion',
+            contract_accounting: 'Contract Accounting',
+            order_booking: 'Order Booking',
             // end table columns
 
             // error message: string code 1000000 - 2000000
@@ -316,6 +318,8 @@ export default defineI18nConfig(() => ({
             scorpion: '追加',
             unnumbered: '未採番',
             contract_conclusion: '契約締結',
+            contract_accounting: '契約計上',
+            order_booking: '受注計上',
             // end table columns
 
             // error message: string code 1000000 - 2000000

@@ -137,6 +137,7 @@
 <script lang="ts">
 import { UpOutlined, DownOutlined } from "@ant-design/icons-vue";
 import type { ItemFormSearch } from "~/types/common/res";
+import { defineExpose } from "vue";
 
 export default defineComponent({
   name: "FormSearch",
@@ -165,25 +166,17 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const formState = ref<Record<string, any>>({});
+    const defaultFormState = ref<Record<string, any>>({});
     const formRef = ref();
     const expand = ref(false);
     const fieldsDisabledState = ref<String[]>(props.fieldsDisabledForm);
 
     const handleSubmit = () => {
-        formRef.value
-        .validate()
-        .then(() => {
-            console.log("formState", formState.value);
-            emit("submit", formState.value);
-        })
-    };
-
-    const toggleDisabled = (fieldName: string) => {
-      if (fieldsDisabledState.value.includes(fieldName)) {
-        fieldsDisabledState.value = fieldsDisabledState.value.filter(f => f !== fieldName);
-      } else {
-        fieldsDisabledState.value.push(fieldName);
-      }
+      formRef.value
+      .validate()
+      .then(() => {
+        emit("submit", formState.value);
+      })
     };
 
     onMounted(() => {
@@ -195,26 +188,29 @@ export default defineComponent({
           formState.value[field.name] = field.defaultValue;
         }
       });
+
+      defaultFormState.value = { ...formState.value };
     });
 
+    defineExpose({ formState });
+
     const handleClear = () => {
-        formRef.value.resetFields();
-        toggleDisabled("email");
-        emit("handleClear", {});
+      formState.value = { ...defaultFormState.value };
+      emit("handleClear", {});
     };
 
     const changeSelect = (item: ItemFormSearch) => {
-      console.log("item", item);
+
     }
 
     const getResponsiveProps = (field: ItemFormSearch) => {
-        return {
-            xs: field.xs || 24,
-            sm: field.sm || 12,
-            md: field.md || 8,
-            lg: field.lg || 6,
-            xl: field.xl || 4,
-        };
+      return {
+        xs: field.xs || 24,
+        sm: field.sm || 12,
+        md: field.md || 8,
+        lg: field.lg || 6,
+        xl: field.xl || 4,
+      };
     };
 
     return {

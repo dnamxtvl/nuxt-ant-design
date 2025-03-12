@@ -83,7 +83,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { UserOutlined, LockOutlined, GoogleOutlined } from "@ant-design/icons-vue";
-import type { FormInputLogin } from "~/types/auth/req";
+import type { FormInputReq } from "~/types/auth/req";
 import type { Rule } from "ant-design-vue/es/form";
 import { RULES_VALIDATION } from "~/constants/config/validation";
 import { FETCH_API } from "~/constants/config/api";
@@ -95,7 +95,7 @@ import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
 
 const loading = useState<boolean>("globalLoading", () => false);
 const formRef = ref();
-const formState = ref<FormInputLogin>({
+const formState = ref<FormInputReq>({
   email: "",
   password: "",
   remember: true,
@@ -157,15 +157,16 @@ const onSubmit = () => {
     .validate()
     .then(async () => {
       loading.value = true;
-      const res: LoginResponse = await customFetch(FETCH_API.AUTH.LOGIN, {
+      const res: { data: LoginResponse } = await customFetch(FETCH_API.AUTH.LOGIN, {
         method: "post",
         body: formState.value,
       });
-      helperApp.setValueStoreLogin(res);
+      helperApp.setValueStoreLogin(res.data);
 
-      return navigateTo(ROUTE_APP.USER.LIST);
+      return navigateTo(ROUTE_APP.CONTRACT.LIST);
     })
     .catch((error: ErrorResponse) => {
+      console.log(error);
       loading.value = false;
       errorMsgs.value = error.error;
     });
