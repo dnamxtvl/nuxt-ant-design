@@ -2,7 +2,7 @@
   <div class="custom-pagination">
     <ClientOnly>
       <a-pagination
-        :current="currentPageApp"
+        :current="currentPage"
         show-quick-jumper
         :total="totalItem"
         :page-size="perPageSize"
@@ -21,7 +21,7 @@ import { defineComponent, ref, watch } from "vue";
 export default defineComponent({
   name: "Pagination",
   props: {
-    currentPageApp: {
+    currentPage: {
       type: Number,
       default: 1,
     },

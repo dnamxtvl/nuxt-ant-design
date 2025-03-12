@@ -168,7 +168,7 @@ export default defineComponent({
     const formState = ref<Record<string, any>>({});
     const defaultFormState = ref<Record<string, any>>({});
     const formRef = ref();
-    const expand = ref(false);
+    const expand = ref<boolean>(false);
     const fieldsDisabledState = ref<String[]>(props.fieldsDisabledForm);
 
     const handleSubmit = () => {
@@ -177,6 +177,11 @@ export default defineComponent({
       .then(() => {
         emit("submit", formState.value);
       })
+    };
+
+    const handleClear = () => {
+      formState.value = { ...defaultFormState.value };
+      emit("handleClear", {});
     };
 
     onMounted(() => {
@@ -193,11 +198,6 @@ export default defineComponent({
     });
 
     defineExpose({ formState });
-
-    const handleClear = () => {
-      formState.value = { ...defaultFormState.value };
-      emit("handleClear", {});
-    };
 
     const changeSelect = (item: ItemFormSearch) => {
 

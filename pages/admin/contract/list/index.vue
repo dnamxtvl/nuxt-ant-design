@@ -26,7 +26,7 @@
       <!-- End Table -->
       <!-- pagination -->
       <Pagination
-        :currentPageApp="searchParams.page"
+        :currentPage="searchParams.page"
         :totalItem="listContract?.pagination.records"
         @onChange="onChangePage"
         :perPageSize="searchParams.limit"
@@ -187,7 +187,7 @@ export default {
         xl: 12,
       },
       {
-        name: "keiyaku_teiketsu_date",
+        name: "keiyaku_teiketsu",
         label: "contract_signing_date",
         type: "range-date",
         md: 24,
@@ -203,7 +203,7 @@ export default {
         xl: 12,
       },
       {
-        name: "keiyaku_keijyou_date",
+        name: "keiyaku_keijyou",
         label: "scheduled_contract_recording_date",
         type: "range-date",
         md: 24,
@@ -236,14 +236,44 @@ export default {
     };
 
     const handleSearch = async (formState: Record<string, any>) => {
-      searchParams.value = { ...searchParams.value, ...formState, page: 1 };
-      console.log("searchParams", searchParams.value);
+      serializeDate(formState);
+
+      searchParams.value = {
+        ...searchParams.value,
+        ...formState,
+        page: 1,
+      };
+
       getListContract();
+    };
+
+    const serializeDate = (formState: Record<string, any>) => {
+      const signingDate = formState.keiyaku_teiketsu;
+      const recordingDate = formState.keiyaku_keijyou;
+
+      if (signingDate) {
+        delete formState.keiyaku_teiketsu;
+        searchParams.value = {
+          ...searchParams.value,
+          keiyaku_teiketsu_date_from: formatDate(signingDate[0]),
+          keiyaku_teiketsu_date_to: formatDate(signingDate[1]),
+        };
+      }
+
+      if (recordingDate) {
+        delete formState.keiyaku_keijyou;
+        searchParams.value = {
+          ...searchParams.value,
+          keiyaku_keijyou_date_from: formatDate(recordingDate[0]),
+          keiyaku_keijyou_date_to: formatDate(recordingDate[1]),
+        };
+      }
+
+      return formState;
     };
 
     const handleResetFilter = (formState: Record<string, any>) => {
       searchParams.value = { ...searchParams.value, ...formState, page: 1, limit: 10 };
-      console.log("searchParams", searchParams.value);
       getListContract();
     };
 
@@ -262,6 +292,7 @@ export default {
 
     onMounted(async () => {
       if (formSearchRef.value) {
+        console.log("formSearchRef", formSearchRef.value.formState);
         searchParams.value = { ...searchParams.value, ...formSearchRef.value.formState };
       }
 

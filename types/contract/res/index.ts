@@ -15,7 +15,7 @@ export interface ItemListContract {
     keiyaku_keijyou_yotei_date: string;
     keiyaku_keijyou_date: string;
     keiyaku_status_name: string;
-    jyutyu_yotei_tsuki_sekininsya: number;
+    jyutyu_yotei_tsuki_sekininsya: string;
     zeikomi_keiyaku_kingaku: string;
     jyutyu_keijyou_yotei_date: string;
     keiyaku_no?: string | null;

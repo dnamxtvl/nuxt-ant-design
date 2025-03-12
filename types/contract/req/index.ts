@@ -6,9 +6,11 @@ export interface SearchContractReq {
     jyutyu_jigyousyo_name?: string;
     keiyakusya_name?: string;
     jyutyu_eigyousyo?: string;
-    keiyaku_teiketsu_date?: Array<string>;
+    keiyaku_teiketsu_date_from?: string;
+    keiyaku_teiketsu_date_to?: string;
     eigyo_tantousya?: string;
-    keiyaku_keijyou_date?: Array<string>;
+    keiyaku_keijyou_date_from?: string;
+    keiyaku_keijyou_date_to?: string;
     syoukai_card_syutoku?: string;
     jyutyu_jigyousyo?: string;
     page: number;
