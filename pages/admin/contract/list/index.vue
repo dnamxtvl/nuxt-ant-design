@@ -128,10 +128,10 @@ export default {
         label: "contract_status",
         type: "select",
         options: [
-          { label: i18n.t("male"), value: "male" },
-          { label: i18n.t("fermale"), value: "female" },
+          { label: i18n.t("male"), value: "01" },
+          { label: i18n.t("fermale"), value: "02" },
         ],
-        defaultValue: "male",
+        defaultValue: "01",
         md: 24,
         lg: 12,
         xl: 12,
@@ -141,10 +141,10 @@ export default {
         label: "contract_card_type",
         type: "select",
         options: [
-          { label: i18n.t("male"), value: "male" },
-          { label: i18n.t("fermale"), value: "female" },
+          { label: i18n.t("male"), value: "01" },
+          { label: i18n.t("fermale"), value: "02" },
         ],
-        defaultValue: "male",
+        defaultValue: "01",
         md: 24,
         lg: 12,
         xl: 12,
@@ -178,18 +178,19 @@ export default {
         label: "ordering_office",
         type: "select",
         options: [
-          { label: i18n.t("male"), value: "male" },
-          { label: i18n.t("fermale"), value: "female" },
+          { label: i18n.t("male"), value: "01" },
+          { label: i18n.t("fermale"), value: "02" },
         ],
-        defaultValue: "male",
+        defaultValue: "01",
         md: 24,
         lg: 12,
         xl: 12,
       },
       {
-        name: "keiyaku_teiketsu",
+        name: "keiyaku_teiketsu_date",
         label: "contract_signing_date",
         type: "range-date",
+        formatDate: "YYYY/MM/DD",
         md: 24,
         lg: 12,
         xl: 12,
@@ -203,9 +204,10 @@ export default {
         xl: 12,
       },
       {
-        name: "keiyaku_keijyou",
+        name: "keiyaku_keijyou_date",
         label: "scheduled_contract_recording_date",
         type: "range-date",
+        formatDate: "YYYY/MM/DD",
         md: 24,
         lg: 12,
         xl: 12,
@@ -215,8 +217,8 @@ export default {
         label: "get_a_referral_card",
         type: "select",
         options: [
-          { label: i18n.t("male"), value: "male" },
-          { label: i18n.t("fermale"), value: "female" },
+          { label: i18n.t("male"), value: "01" },
+          { label: i18n.t("fermale"), value: "02" },
         ],
         md: 24,
         lg: 12,
@@ -236,8 +238,7 @@ export default {
     };
 
     const handleSearch = async (formState: Record<string, any>) => {
-      serializeDate(formState);
-
+      serializeRangeDate(["keiyaku_teiketsu_date", "keiyaku_keijyou_date"], formState);
       searchParams.value = {
         ...searchParams.value,
         ...formState,
@@ -245,31 +246,6 @@ export default {
       };
 
       getListContract();
-    };
-
-    const serializeDate = (formState: Record<string, any>) => {
-      const signingDate = formState.keiyaku_teiketsu;
-      const recordingDate = formState.keiyaku_keijyou;
-
-      if (signingDate) {
-        delete formState.keiyaku_teiketsu;
-        searchParams.value = {
-          ...searchParams.value,
-          keiyaku_teiketsu_date_from: formatDate(signingDate[0]),
-          keiyaku_teiketsu_date_to: formatDate(signingDate[1]),
-        };
-      }
-
-      if (recordingDate) {
-        delete formState.keiyaku_keijyou;
-        searchParams.value = {
-          ...searchParams.value,
-          keiyaku_keijyou_date_from: formatDate(recordingDate[0]),
-          keiyaku_keijyou_date_to: formatDate(recordingDate[1]),
-        };
-      }
-
-      return formState;
     };
 
     const handleResetFilter = (formState: Record<string, any>) => {

@@ -97,6 +97,8 @@
               <a-range-picker
                 v-else-if="field.type === 'range-date'"
                 v-model:value="formState[field.name]"
+                :format="field.formatDate ?? 'YYYY/MM/DD'"
+                :value-format="field.formatDate ?? 'YYYY/MM/DD'"
                 style="width: 100%"
                 :placeholder="[
                   field.placeholder || $t('start_date'),
@@ -138,6 +140,7 @@
 import { UpOutlined, DownOutlined } from "@ant-design/icons-vue";
 import type { ItemFormSearch } from "~/types/common/res";
 import { defineExpose } from "vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "FormSearch",
@@ -165,6 +168,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const route = useRoute();
     const formState = ref<Record<string, any>>({});
     const defaultFormState = ref<Record<string, any>>({});
     const formRef = ref();
@@ -184,20 +188,46 @@ export default defineComponent({
       emit("handleClear", {});
     };
 
-    onMounted(() => {
+    const fillFormStateFromUrl = () => {
+      const params = route.query;
+      Object.keys(params).forEach((key) => {
+        let param = params[key] as string;
+        if (param !== undefined && !props.fieldsDisabledForm.includes(key)) {
+          let field = props.fields.find((field) => field.name === key);
+          if (field?.type === "select" && field?.options?.some(option => option.value === param)) {
+            formState.value[key] = param;
+          } else if (field?.type === "text" || field?.type === "number" || field?.type === "date" || field?.type === "sub-modal" ||
+            field?.type === "checkbox" || field?.type === "radio") {
+            formState.value[key] = param;
+          } else if (field?.type === "range-date") {
+            formState.value[key] = param.split(",");
+          }
+        }
+      });
+    };
+
+    const setDefaultFormState = () => {
       props.fields.forEach((field) => {
-        if (field.type === "select" && field.options?.length && field.defaultValue) {
+        if (field.type === "select" && field.options?.length && field.defaultValue && !formState.value[field.name]) {
           formState.value[field.name] = field.defaultValue || field.options[0].value;
         }
         if (field.type === "text" && field.defaultValue) {
           formState.value[field.name] = field.defaultValue;
         }
       });
+    };
 
+    defineExpose({ formState });
+
+    onBeforeMount(() => {
+      setDefaultFormState();
+      fillFormStateFromUrl();
       defaultFormState.value = { ...formState.value };
     });
 
-    defineExpose({ formState });
+    onMounted(() => {
+
+    });
 
     const changeSelect = (item: ItemFormSearch) => {
 
