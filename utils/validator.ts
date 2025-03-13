@@ -40,6 +40,17 @@ export const useValidator = () => {
       }
 
       return code.length == RULES_VALIDATION.CODE.LENGTH;
+    },
+
+    isValidRangeDate(dateString: string, format: string = "YYYY/MM/DD") {
+      const dates = dateString.split(",");
+      if (dates.length !== 2) return false;
+    
+      return dates.every(date => validator.isDate(date, { format, strictMode: true }));
+    },
+
+    isValidDate(dateString: string, format: string = "YYYY/MM/DD") {
+      return validator.isDate(dateString, { format, strictMode: true });
     }
   }
 }

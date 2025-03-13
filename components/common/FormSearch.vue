@@ -139,8 +139,10 @@
 <script lang="ts">
 import { UpOutlined, DownOutlined } from "@ant-design/icons-vue";
 import type { ItemFormSearch } from "~/types/common/res";
-import { defineExpose } from "vue";
+import { defineExpose, toRaw } from "vue";
 import { useRoute } from "vue-router";
+import { useValidator } from "#imports";
+import { cloneDeep } from "lodash";
 
 export default defineComponent({
   name: "FormSearch",
@@ -179,7 +181,8 @@ export default defineComponent({
       formRef.value
       .validate()
       .then(() => {
-        emit("submit", formState.value);
+        const formStateSubmit = cloneDeep(formState);
+        emit("submit", formStateSubmit.value);
       })
     };
 
@@ -190,17 +193,32 @@ export default defineComponent({
 
     const fillFormStateFromUrl = () => {
       const params = route.query;
-      Object.keys(params).forEach((key) => {
-        let param = params[key] as string;
-        if (param !== undefined && !props.fieldsDisabledForm.includes(key)) {
-          let field = props.fields.find((field) => field.name === key);
-          if (field?.type === "select" && field?.options?.some(option => option.value === param)) {
-            formState.value[key] = param;
-          } else if (field?.type === "text" || field?.type === "number" || field?.type === "date" || field?.type === "sub-modal" ||
-            field?.type === "checkbox" || field?.type === "radio") {
-            formState.value[key] = param;
-          } else if (field?.type === "range-date") {
-            formState.value[key] = param.split(",");
+      const validator = useValidator();
+      const isFieldValid = (field: any, param: string) => {
+        switch (field?.type) {
+          case "select":
+            return field?.options?.some((option: { label: string; value: string }) => option.value === param);
+          case "text":
+          case "number":
+          case "sub-modal":
+          case "checkbox":
+          case "radio":
+            return true;
+          case "range-date":
+            return validator.isValidRangeDate(param, field.formatDate ?? "YYYY/MM/DD");
+          case "date":
+            return validator.isValidDate(param, field.formatDate ?? "YYYY/MM/DD");
+          default:
+            return false;
+        }
+      };
+
+      Object.keys(params).forEach((key: string) => {
+        const param = params[key] as string;
+        if (param !== undefined && !fieldsDisabledState.value.includes(key)) {
+          const field = props.fields.find((field) => field.name === key);
+          if (isFieldValid(field, param)) {
+            formState.value[key] = field?.type === "range-date" ? param.split(",") : param;
           }
         }
       });
@@ -221,12 +239,11 @@ export default defineComponent({
 
     onBeforeMount(() => {
       setDefaultFormState();
-      fillFormStateFromUrl();
       defaultFormState.value = { ...formState.value };
     });
 
     onMounted(() => {
-
+      fillFormStateFromUrl();
     });
 
     const changeSelect = (item: ItemFormSearch) => {

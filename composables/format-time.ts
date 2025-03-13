@@ -4,9 +4,10 @@ export const formatDate = (time: string, format: string = 'YYYY/MM/DD') => {
   return moment(time).format(format);
 };
 
-export const serializeRangeDate = (fields: Array<string>, formState: Record<string, any>) => {
+export const serializeRangeDate = (fields: Array<string>, formValue: Record<string, any>) => {
   fields.forEach((key) => {
-    if (formState[key]) formState[key] = formState[key].join(",");
+    if (formValue[key]) formValue[key] = formValue[key].join(",");
   });
-  return formState;
+  
+  return formValue;
 };

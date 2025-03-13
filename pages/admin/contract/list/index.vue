@@ -54,6 +54,7 @@ import type { ListContract } from "~/types/contract/res";
 import { FETCH_API } from "~/constants/config/api";
 import type { SearchContractReq } from "~/types/contract/req";
 import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
+import { useRouter, useRoute } from "nuxt/app";
 
 definePageMeta({
   layout: "admin-dashboard",
@@ -72,6 +73,8 @@ export default {
     FullScreenLoader,
   },
   setup() {
+    const router = useRouter();
+    const route = useRoute();
     const loading = useState<boolean>("globalLoading", () => false);
     const i18n = useI18n();
     const fieldsDisabled = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"]);
@@ -238,14 +241,24 @@ export default {
     };
 
     const handleSearch = async (formState: Record<string, any>) => {
+      let formStateSerialize = formState;
       serializeRangeDate(["keiyaku_teiketsu_date", "keiyaku_keijyou_date"], formState);
+      //console.log("formStateSerialize", formStateSerialize);
       searchParams.value = {
         ...searchParams.value,
         ...formState,
         page: 1,
       };
 
+      updateUrl();
       getListContract();
+    };
+
+    const updateUrl = () => {
+      router.push({
+        path: route.path,
+        query: { ...searchParams.value },
+      });
     };
 
     const handleResetFilter = (formState: Record<string, any>) => {
