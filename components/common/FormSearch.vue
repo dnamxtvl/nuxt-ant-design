@@ -139,7 +139,7 @@
 <script lang="ts">
 import { UpOutlined, DownOutlined } from "@ant-design/icons-vue";
 import type { ItemFormSearch } from "~/types/common/res";
-import { defineExpose, toRaw } from "vue";
+import { defineExpose } from "vue";
 import { useRoute } from "vue-router";
 import { useValidator } from "#imports";
 import { cloneDeep } from "lodash";
@@ -176,13 +176,14 @@ export default defineComponent({
     const formRef = ref();
     const expand = ref<boolean>(false);
     const fieldsDisabledState = ref<String[]>(props.fieldsDisabledForm);
+    // const formStateChild = ref<Record<string, any>>(cloneDeep(formState.value));
 
     const handleSubmit = () => {
       formRef.value
       .validate()
       .then(() => {
-        const formStateSubmit = cloneDeep(formState);
-        emit("submit", formStateSubmit.value);
+        const formStateSubmit = cloneDeep(formState.value);
+        emit("submit", formStateSubmit);
       })
     };
 

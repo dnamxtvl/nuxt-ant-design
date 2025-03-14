@@ -241,9 +241,7 @@ export default {
     };
 
     const handleSearch = async (formState: Record<string, any>) => {
-      let formStateSerialize = formState;
       serializeRangeDate(["keiyaku_teiketsu_date", "keiyaku_keijyou_date"], formState);
-      //console.log("formStateSerialize", formStateSerialize);
       searchParams.value = {
         ...searchParams.value,
         ...formState,
@@ -281,8 +279,14 @@ export default {
 
     onMounted(async () => {
       if (formSearchRef.value) {
-        console.log("formSearchRef", formSearchRef.value.formState);
-        searchParams.value = { ...searchParams.value, ...formSearchRef.value.formState };
+        serializeRangeDate(
+          ["keiyaku_teiketsu_date", "keiyaku_keijyou_date"],
+          formSearchRef.value.formState
+        );
+        searchParams.value = {
+          ...searchParams.value,
+          ...formSearchRef.value.formState,
+        };
       }
 
       await getListContract();
