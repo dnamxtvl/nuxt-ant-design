@@ -111,9 +111,12 @@ const displayNotification = (error: ErrorResponse) => {
 };
 
 const fillFormStateFromUrl = (searchFields: ItemFormSearch[], disabedFields: String[]) => {
+  let invalidParams: string[] = [];
   const route = useRoute();
   const params = route.query;
   const validator = useValidator();
+  const rangeDateFields = searchFields.filter((field) => field.type === "range-date");
+
   const isFieldValid = (field: any, param: string) => {
     switch (field?.type) {
       case "select":
@@ -135,23 +138,22 @@ const fillFormStateFromUrl = (searchFields: ItemFormSearch[], disabedFields: Str
 
   Object.keys(params).forEach((key: string) => {
     const param = params[key] as string;
-    if (param !== undefined && param != "" && param != null && !fieldsDisabledState.value.includes(key) && key !== "page" && key !== "limit") {
-      const field = props.fields.find((field) => field.name === key);
-      if (isFieldValid(field, param)) {
-        formState.value[key] = field?.type === "range-date" ? param.split(",") : param;
+    if (param !== undefined && param != "" && param != null && !disabedFields.includes(key) && key !== "page" && key !== "limit") {
+      const field = searchFields.find((field) => field.name === key);
+      if (isFieldValid(field, param) && field) {
+        field.defaultValue = field.type === "range-date" ? (param.split(",") as unknown as string) : param;
       } else {
-        invalidParams.value.push(key);
+        invalidParams.push(key);
       }
     } else if (key !== "page" && key !== "limit") {
-      invalidParams.value.push(key);
+      invalidParams.push(key);
     }
   });
 
-  defaultFormState.value = cloneDeep(formState.value);
-  defaultFormState.value = Object.fromEntries(
-    Object.entries(defaultFormState.value).filter(([_, value]) => value !== null && value !== "" && value !== undefined)
-  );
-  if (rangeDateFields.value.length > 0) serializeRangeDate(rangeDateFields.value, defaultFormState.value);
+  if (rangeDateFields.length > 0) {
+    const rangeDateFieldNames = rangeDateFields.map(field => field.name);
+    serializeRangeDate(rangeDateFieldNames, params);
+  }
 };
 
 const removeInvalidParams = () => {
