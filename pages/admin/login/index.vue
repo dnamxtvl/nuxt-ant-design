@@ -12,7 +12,13 @@
       <!-- Tabs -->
       <FullScreenLoader :loading="loading" />
       <div class="mt-2">
-        <a-form ref="formRef" :model="formState" layout="vertical" autocomplete="off">
+        <a-form
+          ref="formRef"
+          :model="formState"
+          :rules="rules"
+          layout="vertical"
+          autocomplete="off"
+        >
           <div
             v-if="errorMsgs.length > 0"
             class="mb-2"
@@ -80,7 +86,6 @@ import { UserOutlined, LockOutlined, GoogleOutlined } from "@ant-design/icons-vu
 import type { FormInputReq } from "~/types/auth/req";
 import type { Rule } from "ant-design-vue/es/form";
 import { RULES_VALIDATION } from "~/constants/config/validation";
-import { FETCH_API } from "~/constants/config/api";
 import type { ErrorResponse } from "~/types/common/res";
 import type { LoginResponse } from "~/types/auth/res";
 import helperApp from "~/utils/helper";
@@ -158,7 +163,6 @@ const onSubmit = () => {
       return navigateTo(ROUTE_APP.CONTRACT.LIST);
     })
     .catch((error: ErrorResponse) => {
-      console.log(error);
       loading.value = false;
     });
 };

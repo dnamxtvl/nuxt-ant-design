@@ -49,11 +49,11 @@ import { useI18n } from "vue-i18n";
 import TableMergeCell from "~/components/contract/list/TableMergeCell.vue";
 import { RULES_VALIDATION } from "~/constants/config/validation";
 import type { ListContract } from "~/types/contract/res";
-import { FETCH_API } from "~/constants/config/api";
-import type { SearchContractReq } from "~/types/contract/req";
+import type { SearchContract } from "~/types/contract/req";
 import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
 import { useRoute as useRouteNuxt } from "nuxt/app";
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "~/constants/config/application";
+import api from "~/api";
 
 definePageMeta({
   layout: "admin-dashboard",
@@ -64,8 +64,7 @@ const loading = useState<boolean>("globalLoading", () => false);
 const i18n = useI18n();
 const fieldsDisabled = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"]);
 const listContract = ref<ListContract>();
-const searchParams = ref<SearchContractReq>({});
-
+const searchParams = ref<SearchContract>({});
 const page = ref<number>(
   useValidator().isValidPage(useRoute.query.page)
     ? Number(useRoute.query.page)
@@ -87,6 +86,21 @@ const itemBreadcrumbs = ref<ItemBreadcrumb[]>([
     link: "/contract/list",
   },
 ]);
+
+const getListContract = async () => {
+  console.log(searchParams.value);
+  loading.value = true;
+  const { data } = await api.contract.list({
+    page: page.value,
+    limit: limit.value,
+    ...searchParams.value,
+  });
+
+  listContract.value = (data.value as unknown) as ListContract;
+  loading.value = false;
+};
+
+await getListContract();
 
 const searchFields: ItemFormSearch[] = [
   {
@@ -246,27 +260,9 @@ const handleResetFilter = (formState: Record<string, any>) => {
   getListContract();
 };
 
-const getListContract = async () => {
-  loading.value = true;
-
-  try {
-    listContract.value = await useCustomFetch(FETCH_API.CONTRACT.LIST, {
-      method: "GET",
-      params: {
-        page: page.value,
-        limit: limit.value,
-        ...searchParams.value,
-      },
-    });
-  } catch (error) {}
-
-  loading.value = false;
-};
-
 onMounted(async () => {
-  if (formSearchRef.value) searchParams.value = formSearchRef.value.defaultFormState;
-
-  await getListContract();
+  //if (formSearchRef.value) searchParams.value = formSearchRef.value.defaultFormState;
+  if (formSearchRef.value) formSearchRef.value.defaultFormState;
 });
 </script>
 <style scoped></style>

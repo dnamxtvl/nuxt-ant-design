@@ -14,7 +14,6 @@
             v-show="expand || index < numBasicFilter"
             v-bind="getResponsiveProps(field)"
           >
-            <!-- <ClientOnly> -->
             <a-form-item
               :name="field.name"
               :labelCol="{ span: 8 }"
@@ -108,7 +107,6 @@
                 :disabled="fieldsDisabledState.includes(field.name)"
               />
             </a-form-item>
-            <!-- </ClientOnly> -->
           </a-col>
         </template>
       </a-row>
@@ -141,7 +139,6 @@
 <script lang="ts">
 import { UpOutlined, DownOutlined } from "@ant-design/icons-vue";
 import type { ItemFormSearch } from "~/types/common/res";
-import { defineExpose } from "vue";
 import { useRouter, useRoute } from "nuxt/app";
 import { cloneDeep } from "lodash";
 
@@ -203,6 +200,19 @@ export default defineComponent({
       emit("handleClear", formState.value);
     };
 
+    const setDefaultFormState = () => {
+      props.fields.forEach((field) => {
+        if (field.type === "select" && field.options?.length && field.defaultValue && !formState.value[field.name]) {
+          formState.value[field.name] = field.defaultValue || field.options[0].value;
+        }
+        if (field.type === "text" && field.defaultValue) {
+          formState.value[field.name] = field.defaultValue;
+        }
+      });
+
+      resetFormState.value = cloneDeep(formState.value);
+    };
+
     const fillFormStateFromUrl = () => {
       const params = route.query;
       const validator = useValidator();
@@ -244,19 +254,6 @@ export default defineComponent({
         Object.entries(defaultFormState.value).filter(([_, value]) => value !== null && value !== "" && value !== undefined)
       );
       if (rangeDateFields.value.length > 0) serializeRangeDate(rangeDateFields.value, defaultFormState.value);
-    };
-
-    const setDefaultFormState = () => {
-      props.fields.forEach((field) => {
-        if (field.type === "select" && field.options?.length && field.defaultValue && !formState.value[field.name]) {
-          formState.value[field.name] = field.defaultValue || field.options[0].value;
-        }
-        if (field.type === "text" && field.defaultValue) {
-          formState.value[field.name] = field.defaultValue;
-        }
-      });
-
-      resetFormState.value = cloneDeep(formState.value);
     };
 
     const removeInvalidParams = () => {

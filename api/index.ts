@@ -3,7 +3,7 @@ import ContractService from "~/services/contract-service";
 
 const api = {
   auth: new AuthService(),
-  contract: new ContractService('/'),
+  contract: new ContractService(),
 };
 
 export default api;

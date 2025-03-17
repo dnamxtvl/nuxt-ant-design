@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   routeRules: {
     "/api/**": {
       proxy: {
-        to: 'http://192.168.0.181/api/**',
+        to: process.env.BACKEND_URL_PROXY,
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -20,7 +20,6 @@ export default defineNuxtConfig({
       },
     },
   },
-  
   app: {
     head: {
       title: 'Nuxt Ant Design',
@@ -35,7 +34,7 @@ export default defineNuxtConfig({
     "~/assets/css/app.scss",
   ],
   experimental: {
-    payloadExtraction: false,
+    payloadExtraction: true,
   },
   runtimeConfig: {
     public: {

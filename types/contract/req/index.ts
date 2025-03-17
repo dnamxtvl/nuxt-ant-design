@@ -1,4 +1,4 @@
-export interface SearchContractReq {
+export interface SearchContract {
     keiyaku_no?: string;
     kouji_name?: string;
     keiyaku_status?: string;
@@ -13,4 +13,9 @@ export interface SearchContractReq {
     keiyaku_keijyou_date_to?: string;
     syoukai_card_syutoku?: string;
     jyutyu_jigyousyo?: string;
+}
+
+export interface SearchContractParams extends SearchContract {
+    page: number;
+    limit: number;
 }
