@@ -1,6 +1,6 @@
 import { H3Event } from 'h3'
 import logger from '~/utils/logger';
-import api from '~/api/axios';
+import api from '~/api';
 import { ErrorResponse, ResponseData } from '~/types/common/res';
 import { JWT_KEY_ACEESS_TOKEN_NAME } from '~/constants/config/application';
 import { SearchContractReq } from '~/types/contract/req';

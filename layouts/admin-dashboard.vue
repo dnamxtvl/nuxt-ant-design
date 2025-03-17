@@ -7,9 +7,6 @@
       <!-- Header -->
       <Header v-model:collapsed="collapsed" />
       <!-- Main Content -->
-      <ClientOnly>
-        <contextHolder />
-      </ClientOnly>
       <a-layout-content class="custom-content">
         <slot />
       </a-layout-content>
@@ -21,9 +18,7 @@
 import { ref } from "vue";
 import Sidebar from "~/components/common/Sidebar.vue";
 import Header from "~/components/common/Header.vue";
-import { notification } from "ant-design-vue";
 
-const [contextHolder] = notification.useNotification();
 const collapsed = ref<boolean>(false);
 const mobileWidth = 576;
 

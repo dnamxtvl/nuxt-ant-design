@@ -13,6 +13,4 @@ export interface SearchContractReq {
     keiyaku_keijyou_date_to?: string;
     syoukai_card_syutoku?: string;
     jyutyu_jigyousyo?: string;
-    page: number;
-    limit: number;
 }

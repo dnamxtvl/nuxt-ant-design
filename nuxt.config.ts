@@ -9,6 +9,18 @@ export default defineNuxtConfig({
     host: '0.0.0.0',
     port: 3000
   },
+  routeRules: {
+    "/api/**": {
+      proxy: {
+        to: 'http://192.168.0.181/api/**',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      },
+    },
+  },
+  
   app: {
     head: {
       title: 'Nuxt Ant Design',
@@ -31,7 +43,6 @@ export default defineNuxtConfig({
       APP_ENV: process.env.APP_ENV,
       FRONTEND_URL: process.env.FRONTEND_URL,
     },
-    BACKEND_URL: process.env.BACKEND_URL,
   },
   modules: [
     '@pinia/nuxt',
@@ -40,7 +51,12 @@ export default defineNuxtConfig({
   ],
   i18n: {
     vueI18n: './i18n.config.ts',
-    defaultLocale: process.env.APP_LOCATE ?? 'en',
+    defaultLocale: process.env.APP_LOCATE as "en" | "jp" | undefined ?? 'en',
+    locales: [
+      { code: 'en', name: 'English' },
+      { code: 'jp', name: 'Japanese' },
+    ],
+
   },
   antd:{
     extractStyle: true,

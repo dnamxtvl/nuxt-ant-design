@@ -1,5 +1,6 @@
 import { RULES_VALIDATION } from "~/constants/config/validation";
 import validator from 'validator';
+import { PER_PAGE } from "~/constants/config/application";
 
 export const useValidator = () => {
   return {
@@ -51,6 +52,22 @@ export const useValidator = () => {
 
     isValidDate(dateString: string, format: string = "YYYY/MM/DD") {
       return validator.isDate(dateString, { format, strictMode: true });
+    },
+
+    isValidPage(page: any) {
+      if (page == undefined || page == null || page == '') return false;
+      if (!validator.isNumeric(page)) return false;
+      if (page <= 0) return false;
+
+      return true;
+    },
+
+    isValidPerPage(perPage: any) {
+      if (perPage == undefined || perPage == null || perPage == '') return false;
+      if (!validator.isNumeric(perPage)) return false;
+      if (!PER_PAGE.includes(Number(perPage))) return false;
+
+      return true;
     }
   }
 }

@@ -7,7 +7,7 @@ type FormatDateType = "YYYY/MM/DD" | "YYYY/MM/DD HH:mm:ss" | "YYYY/MM/DD HH:mm" 
     "DD-MM-YYY HH:mm:ss.SSS" | "MM/DD/YYYY" | "MM/DD/YYYY HH:mm:ss" | "MM/DD/YYYY HH:mm" | "MM/DD/YYYY HH" | "MM/DD/YYYY HH:mm:ss.SSS";
 
 export interface ErrorResponse {
-    code: number;
+    status: number;
     error: string[];
     responseCode: string;
 }

@@ -11,9 +11,9 @@ export const useMainStore = defineStore('store-pinia', {
     token: CookieManager.getCookie(JWT_KEY_ACEESS_TOKEN_NAME) ?? null,
   }),
   getters: {
-    isLoggedIn: (state: any) => state.isLoggedIn,
-    user: (state: any) => state.user,
-    token: (state: any) => state.token,
+    getIsLoggedIn: (state: any) => state.isLoggedIn,
+    getUser: (state: any) => state.user,
+    getToken: (state: any) => state.token,
   },
   actions: {
     login(state: any, user: UserInfo, token: string){

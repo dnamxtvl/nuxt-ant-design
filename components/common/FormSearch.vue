@@ -14,6 +14,7 @@
             v-show="expand || index < numBasicFilter"
             v-bind="getResponsiveProps(field)"
           >
+            <!-- <ClientOnly> -->
             <a-form-item
               :name="field.name"
               :labelCol="{ span: 8 }"
@@ -25,7 +26,7 @@
               <a-input
                 v-if="field.type === 'text'"
                 v-model:value="formState[field.name]"
-                :placeholder="$t(field.placeholder ?? '') || ''"
+                :placeholder="field.placeholder ? $t(field.placeholder) : ''"
                 :disabled="fieldsDisabledState.includes(field.name)"
               />
 
@@ -33,7 +34,7 @@
               <a-select
                 v-else-if="field.type === 'select'"
                 v-model:value="formState[field.name]"
-                :placeholder="$t(field.placeholder ?? '') || ''"
+                :placeholder="field.placeholder ? $t(field.placeholder) : ''"
                 :options="field.options || []"
                 @change="() => changeSelect(field)"
                 :disabled="fieldsDisabledState.includes(field.name)"
@@ -55,7 +56,7 @@
               <a-date-picker
                 v-else-if="field.type === 'date'"
                 v-model:value="formState[field.name]"
-                :placeholder="$t(field.placeholder ?? '') || ''"
+                :placeholder="field.placeholder ? $t(field.placeholder) : ''"
                 style="width: 100%"
                 :disabled="fieldsDisabledState.includes(field.name)"
               />
@@ -107,6 +108,7 @@
                 :disabled="fieldsDisabledState.includes(field.name)"
               />
             </a-form-item>
+            <!-- </ClientOnly> -->
           </a-col>
         </template>
       </a-row>
@@ -140,8 +142,7 @@
 import { UpOutlined, DownOutlined } from "@ant-design/icons-vue";
 import type { ItemFormSearch } from "~/types/common/res";
 import { defineExpose } from "vue";
-import { useRoute } from "vue-router";
-import { useValidator } from "#imports";
+import { useRouter, useRoute } from "nuxt/app";
 import { cloneDeep } from "lodash";
 
 export default defineComponent({
@@ -167,29 +168,39 @@ export default defineComponent({
     title: {
       type: String,
       required: false,
-    }
+    },
   },
   setup(props, { emit }) {
+    const router = useRouter();
     const route = useRoute();
     const formState = ref<Record<string, any>>({});
+    const resetFormState = ref<Record<string, any>>({});
     const defaultFormState = ref<Record<string, any>>({});
     const formRef = ref();
     const expand = ref<boolean>(false);
     const fieldsDisabledState = ref<String[]>(props.fieldsDisabledForm);
-    // const formStateChild = ref<Record<string, any>>(cloneDeep(formState.value));
+    const rangeDateFields = ref<Array<string>>(props.fields.filter((field) => field.type === "range-date").map((field) => field.name));
+    const invalidParams = ref<string[]>([]);
 
     const handleSubmit = () => {
-      formRef.value
-      .validate()
-      .then(() => {
+      formRef.value.validate().then(() => {
         const formStateSubmit = cloneDeep(formState.value);
-        emit("submit", formStateSubmit);
-      })
+        if (rangeDateFields.value.length) serializeRangeDate(rangeDateFields.value, formStateSubmit);
+
+        const formStateEmit = Object.fromEntries(
+          Object.entries(formStateSubmit).filter(([_, value]) => value !== null && value !== "" && value !== undefined)
+        );
+        const queryParamUpdates = Object.fromEntries(Object.entries(formStateEmit).filter(([key]) => !fieldsDisabledState.value.includes(key)));
+
+        updateUrl({ ...queryParamUpdates, page: 1, limit: route.query.limit || 10 });
+        emit("submit", formStateEmit);
+      });
     };
 
     const handleClear = () => {
-      formState.value = { ...defaultFormState.value };
-      emit("handleClear", {});
+      formState.value = cloneDeep(resetFormState.value);
+      updateUrl({});
+      emit("handleClear", formState.value);
     };
 
     const fillFormStateFromUrl = () => {
@@ -216,13 +227,23 @@ export default defineComponent({
 
       Object.keys(params).forEach((key: string) => {
         const param = params[key] as string;
-        if (param !== undefined && !fieldsDisabledState.value.includes(key)) {
+        if (param !== undefined && param != "" && param != null && !fieldsDisabledState.value.includes(key) && key !== "page" && key !== "limit") {
           const field = props.fields.find((field) => field.name === key);
           if (isFieldValid(field, param)) {
             formState.value[key] = field?.type === "range-date" ? param.split(",") : param;
+          } else {
+            invalidParams.value.push(key);
           }
+        } else if (key !== "page" && key !== "limit") {
+          invalidParams.value.push(key);
         }
       });
+
+      defaultFormState.value = cloneDeep(formState.value);
+      defaultFormState.value = Object.fromEntries(
+        Object.entries(defaultFormState.value).filter(([_, value]) => value !== null && value !== "" && value !== undefined)
+      );
+      if (rangeDateFields.value.length > 0) serializeRangeDate(rangeDateFields.value, defaultFormState.value);
     };
 
     const setDefaultFormState = () => {
@@ -234,17 +255,37 @@ export default defineComponent({
           formState.value[field.name] = field.defaultValue;
         }
       });
+
+      resetFormState.value = cloneDeep(formState.value);
     };
 
-    defineExpose({ formState });
+    const removeInvalidParams = () => {
+      if (invalidParams.value.length > 0) {
+        const queryParams = { ...route.query };
+        const uniqueInvalidParams = [...new Set(invalidParams.value)];
 
-    onBeforeMount(() => {
-      setDefaultFormState();
-      defaultFormState.value = { ...formState.value };
-    });
+        uniqueInvalidParams.forEach((key) => {
+          delete queryParams[key];
+        });
+
+        router.replace({
+          path: route.path,
+          query: { ...queryParams }
+        });
+      }
+    };
+
+    const updateUrl = (query: Record<string, any>) => {
+      router.push({
+        path: route.path,
+        query: query,
+      });
+    };
 
     onMounted(() => {
+      setDefaultFormState();
       fillFormStateFromUrl();
+      removeInvalidParams();
     });
 
     const changeSelect = (item: ItemFormSearch) => {
@@ -266,6 +307,7 @@ export default defineComponent({
       formRef,
       expand,
       fieldsDisabledState,
+      defaultFormState,
       handleSubmit,
       handleClear,
       emit,
