@@ -26,7 +26,7 @@
                 v-if="field.type === 'text'"
                 v-model:value="formState[field.name]"
                 :placeholder="field.placeholder ? $t(field.placeholder) : ''"
-                :disabled="fieldsDisabledState.includes(field.name)"
+                :disabled="disabledFields.includes(field.name)"
               />
 
               <!-- Select dropdown -->
@@ -36,7 +36,7 @@
                 :placeholder="field.placeholder ? $t(field.placeholder) : ''"
                 :options="field.options || []"
                 @change="() => changeSelect(field)"
-                :disabled="fieldsDisabledState.includes(field.name)"
+                :disabled="disabledFields.includes(field.name)"
               />
 
               <!-- Sub Modal -->
@@ -45,10 +45,8 @@
                 v-else-if="field.type === 'sub-modal'"
                 style="width: 100%"
               >
-                <a-input :disabled="fieldsDisabledState.includes(field.name)" />
-                <a-button :disabled="fieldsDisabledState.includes(field.name)"
-                  >...</a-button
-                >
+                <a-input :disabled="disabledFields.includes(field.name)" />
+                <a-button :disabled="disabledFields.includes(field.name)">...</a-button>
               </a-space>
 
               <!-- Date picker -->
@@ -57,14 +55,14 @@
                 v-model:value="formState[field.name]"
                 :placeholder="field.placeholder ? $t(field.placeholder) : ''"
                 style="width: 100%"
-                :disabled="fieldsDisabledState.includes(field.name)"
+                :disabled="disabledFields.includes(field.name)"
               />
 
               <!-- Radio button -->
               <a-radio-group
                 v-else-if="field.type === 'radio'"
                 v-model:value="formState[field.name]"
-                :disabled="fieldsDisabledState.includes(field.name)"
+                :disabled="disabledFields.includes(field.name)"
               >
                 <a-radio
                   v-for="option in field.options"
@@ -79,7 +77,7 @@
               <a-checkbox
                 v-else-if="field.type === 'checkbox'"
                 v-model:checked="formState[field.name]"
-                :disabled="fieldsDisabledState.includes(field.name)"
+                :disabled="disabledFields.includes(field.name)"
               >
                 {{ $t(field.label) }}
               </a-checkbox>
@@ -90,7 +88,7 @@
                 v-model:value="formState[field.name]"
                 style="width: 100%"
                 :placeholder="$t(field.placeholder ?? '') || ''"
-                :disabled="fieldsDisabledState.includes(field.name)"
+                :disabled="disabledFields.includes(field.name)"
               />
 
               <!-- Range date picker -->
@@ -104,7 +102,7 @@
                   field.placeholder || $t('start_date'),
                   field.placeholder || $t('end_date'),
                 ]"
-                :disabled="fieldsDisabledState.includes(field.name)"
+                :disabled="disabledFields.includes(field.name)"
               />
             </a-form-item>
           </a-col>
@@ -141,6 +139,7 @@ import { UpOutlined, DownOutlined } from "@ant-design/icons-vue";
 import type { ItemFormSearch } from "~/types/common/res";
 import { useRouter, useRoute } from "nuxt/app";
 import { cloneDeep } from "lodash";
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "~/constants/config/application";
 
 export default defineComponent({
   name: "FormSearch",
@@ -153,7 +152,7 @@ export default defineComponent({
       type: Array<ItemFormSearch>,
       required: true,
     },
-    fieldsDisabledForm: {
+    disabledFields: {
       type: Array<String>,
       required: false,
       default: [],
@@ -175,9 +174,8 @@ export default defineComponent({
     const defaultFormState = ref<Record<string, any>>({});
     const formRef = ref();
     const expand = ref<boolean>(false);
-    const fieldsDisabledState = ref<String[]>(props.fieldsDisabledForm);
+    const disabledFields = ref<String[]>(props.disabledFields);
     const rangeDateFields = ref<Array<string>>(props.fields.filter((field) => field.type === "range-date").map((field) => field.name));
-    const invalidParams = ref<string[]>([]);
 
     const handleSubmit = () => {
       formRef.value.validate().then(() => {
@@ -187,9 +185,9 @@ export default defineComponent({
         const formStateEmit = Object.fromEntries(
           Object.entries(formStateSubmit).filter(([_, value]) => value !== null && value !== "" && value !== undefined)
         );
-        const queryParamUpdates = Object.fromEntries(Object.entries(formStateEmit).filter(([key]) => !fieldsDisabledState.value.includes(key)));
+        const queryParamUpdates = Object.fromEntries(Object.entries(formStateEmit).filter(([key]) => !disabledFields.value.includes(key)));
 
-        updateUrl({ ...queryParamUpdates, page: 1, limit: route.query.limit || 10 });
+        updateUrl({ ...queryParamUpdates, page: DEFAULT_PAGE, limit: route.query.limit || DEFAULT_PER_PAGE });
         emit("submit", formStateEmit);
       });
     };
@@ -203,7 +201,7 @@ export default defineComponent({
     const setDefaultFormState = () => {
       props.fields.forEach((field) => {
         if (field.type === "select" && field.options?.length && field.defaultValue && !formState.value[field.name]) {
-          formState.value[field.name] = field.defaultValue || field.options[0].value;
+          formState.value[field.name] = field.defaultValue;
         }
         if (field.type === "text" && field.defaultValue) {
           formState.value[field.name] = field.defaultValue;
@@ -215,61 +213,16 @@ export default defineComponent({
 
     const fillFormStateFromUrl = () => {
       const params = route.query;
-      const validator = useValidator();
-      const isFieldValid = (field: any, param: string) => {
-        switch (field?.type) {
-          case "select":
-            return field?.options?.some((option: { label: string; value: string }) => option.value === param);
-          case "text":
-          case "number":
-          case "sub-modal":
-          case "checkbox":
-          case "radio":
-            return true;
-          case "range-date":
-            return validator.isValidRangeDate(param, field.formatDate ?? "YYYY/MM/DD");
-          case "date":
-            return validator.isValidDate(param, field.formatDate ?? "YYYY/MM/DD");
-          default:
-            return false;
-        }
-      };
 
       Object.keys(params).forEach((key: string) => {
         const param = params[key] as string;
-        if (param !== undefined && param != "" && param != null && !fieldsDisabledState.value.includes(key) && key !== "page" && key !== "limit") {
+        if (param !== undefined && param != "" && param != null && !disabledFields.value.includes(key) && key !== "page" && key !== "limit") {
           const field = props.fields.find((field) => field.name === key);
-          if (isFieldValid(field, param)) {
+          if (useValidator().isFieldValid(field, param)) {
             formState.value[key] = field?.type === "range-date" ? param.split(",") : param;
-          } else {
-            invalidParams.value.push(key);
           }
-        } else if (key !== "page" && key !== "limit") {
-          invalidParams.value.push(key);
         }
       });
-
-      defaultFormState.value = cloneDeep(formState.value);
-      defaultFormState.value = Object.fromEntries(
-        Object.entries(defaultFormState.value).filter(([_, value]) => value !== null && value !== "" && value !== undefined)
-      );
-      if (rangeDateFields.value.length > 0) serializeRangeDate(rangeDateFields.value, defaultFormState.value);
-    };
-
-    const removeInvalidParams = () => {
-      if (invalidParams.value.length > 0) {
-        const queryParams = { ...route.query };
-        const uniqueInvalidParams = [...new Set(invalidParams.value)];
-
-        uniqueInvalidParams.forEach((key) => {
-          delete queryParams[key];
-        });
-
-        router.replace({
-          path: route.path,
-          query: { ...queryParams }
-        });
-      }
     };
 
     const updateUrl = (query: Record<string, any>) => {
@@ -282,7 +235,6 @@ export default defineComponent({
     onMounted(() => {
       setDefaultFormState();
       fillFormStateFromUrl();
-      removeInvalidParams();
     });
 
     const changeSelect = (item: ItemFormSearch) => {
@@ -303,7 +255,7 @@ export default defineComponent({
       formState,
       formRef,
       expand,
-      fieldsDisabledState,
+      disabledFields,
       defaultFormState,
       handleSubmit,
       handleClear,

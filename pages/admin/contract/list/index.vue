@@ -10,8 +10,7 @@
       title="filter"
       :numBasicFilter="12"
       :fields="searchFields"
-      :fieldsDisabledForm="fieldsDisabled"
-      ref="formSearchRef"
+      :disabledFields="disabledFields"
       @submit="handleSearch"
       @handleClear="handleResetFilter"
     />
@@ -62,9 +61,9 @@ definePageMeta({
 const useRoute = useRouteNuxt();
 const loading = useState<boolean>("globalLoading", () => false);
 const i18n = useI18n();
-const fieldsDisabled = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"]);
+const disabledFields = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"]);
 const listContract = ref<ListContract>();
-const searchParams = ref<SearchContract>({});
+
 const page = ref<number>(
   useValidator().isValidPage(useRoute.query.page)
     ? Number(useRoute.query.page)
@@ -86,21 +85,6 @@ const itemBreadcrumbs = ref<ItemBreadcrumb[]>([
     link: "/contract/list",
   },
 ]);
-
-const getListContract = async () => {
-  console.log(searchParams.value);
-  loading.value = true;
-  const { data } = await api.contract.list({
-    page: page.value,
-    limit: limit.value,
-    ...searchParams.value,
-  });
-
-  listContract.value = (data.value as unknown) as ListContract;
-  loading.value = false;
-};
-
-await getListContract();
 
 const searchFields: ItemFormSearch[] = [
   {
@@ -234,35 +218,47 @@ const searchFields: ItemFormSearch[] = [
   },
 ];
 
-const formSearchRef = ref();
+const searchParams = ref<SearchContract>(
+  clearInvalidParams(searchFields, disabledFields.value)
+);
+
+const getListContract = async () => {
+  loading.value = true;
+  const data = await api.contract.list({
+    page: page.value,
+    limit: limit.value,
+    ...searchParams.value,
+  });
+
+  listContract.value = data as ListContract;
+
+  loading.value = false;
+};
+
+await getListContract();
 
 const onChangePerPage = (perPage: number) => {
   limit.value = perPage;
 };
 
-const onChangePage = (pageNumber: number) => {
+const onChangePage = async (pageNumber: number) => {
   page.value = pageNumber;
-  getListContract();
+  await getListContract();
 };
 
 const handleSearch = async (formState: Record<string, any>) => {
   page.value = DEFAULT_PAGE;
   searchParams.value = formState;
 
-  getListContract();
+  await getListContract();
 };
 
-const handleResetFilter = (formState: Record<string, any>) => {
+const handleResetFilter = async (formState: Record<string, any>) => {
   page.value = DEFAULT_PAGE;
   limit.value = DEFAULT_PER_PAGE;
   searchParams.value = formState;
 
-  getListContract();
+  await getListContract();
 };
-
-onMounted(async () => {
-  //if (formSearchRef.value) searchParams.value = formSearchRef.value.defaultFormState;
-  if (formSearchRef.value) formSearchRef.value.defaultFormState;
-});
 </script>
 <style scoped></style>

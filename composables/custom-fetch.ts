@@ -5,19 +5,22 @@ import type { NotificationPlacement } from 'ant-design-vue/lib/notification';
 import { StatusCodes } from "http-status-codes";
 import type { ErrorResponse, ItemFormSearch } from "~/types/common/res";
 import type { UseFetchOptions } from "#app";
-import { JWT_KEY_ACEESS_TOKEN_NAME } from '~/constants/config/application';
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE, JWT_KEY_ACEESS_TOKEN_NAME } from '~/constants/config/application';
 import CookieManager from "~/utils/cookies";
 import { useRouter, useRoute } from "nuxt/app";
 
 export const customFetch = $fetch.create({
   onRequest({ options }) {
+    options.baseURL = useRuntimeConfig().public.BACKEND_URL;
     const token = CookieManager.getCookie(JWT_KEY_ACEESS_TOKEN_NAME);
+    options.headers.set('Accept', 'application/json');
+    options.headers.set('Content-Type', options.method === 'POST' ? 'multipart/form-data' : 'application/json');
     if (token) {
       options.headers.set('Authorization', `Bearer ${token}`);
     }
   },
-  onRequestError({ request, options, error }) {
-    
+  onRequestError({ error }) {
+    handleFetchError(error);
   },
   onResponseError({ response }) {
     handleFetchError(response);
@@ -28,30 +31,47 @@ export async function useCustomFetch<T>(url: string, options: UseFetchOptions<T>
   const optionFetch = 
     {
       ...options,
+      baseURL: useRuntimeConfig().public.BACKEND_URL,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': options.method === 'POST' ? 'multipart/form-data' : 'application/json',
+      },
       immediate: true,
+      debug: true,
       onRequest({ options }) {
         const tokenFetch = CookieManager.getCookie(JWT_KEY_ACEESS_TOKEN_NAME);
         if (tokenFetch) {
           options.headers.set('Authorization', `Bearer ${tokenFetch}`);
         }
       },
+      onRequestError({ error }) {
+        handleFetchError(error);
+      },
       onResponseError({ response }) {
         handleFetchError(response);
       },
     } as UseFetchOptions<T>
 
-    return await useFetch<T>(url, optionFetch);
+    const { data, error } = await useFetch<T>(url, optionFetch);
+
+    if (error.value && options.server) {
+      const errorServer = {
+        status: error.value.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
+        error: error.value?.message || "An error occurred",
+        responseCode: typeof error.value?.data?.errors?.code === 'number' ? error.value?.data?.errors?.code : 0,
+      }
+      
+      throw errorServer;
+    }
+
+    return data.value;
 }
 
 const logOut = () => {
-  const placement: NotificationPlacement = "topRight";
-  notification.error({
-    message: 'Token Expired',
-    description: 'Your token has expired. Please log in again.',
-    placement,
-  });
+  pushNotification("Token Expired", "Your token has expired. Please log in again.");
   helperApp.logOutWhenTokenExpired();
   const router = useRouter();
+
   router.push(ROUTE_APP.AUTH.LOGIN);
 }
 
@@ -65,7 +85,7 @@ const handleFetchError = (response: any) => {
     
     if (response.status === StatusCodes.UNPROCESSABLE_ENTITY) {
       errorsObject = response._data.errors;
-      Object.entries(errorsObject).forEach(([key, value]: [string, string[]]) => {
+      Object.entries(errorsObject).forEach(([_, value]: [string, string[]]) => {
         errorMessages.push(value[0]);
       });
 
@@ -88,60 +108,61 @@ const handleFetchError = (response: any) => {
   throw errorData;
 };
 
-const displayNotification = (error: ErrorResponse) => {
-  const placement: NotificationPlacement = "topRight";
-
+export const displayNotification = (error: ErrorResponse) => {
   if (error.status === StatusCodes.UNAUTHORIZED) {
     logOut();
   } else if (error.status === StatusCodes.SERVICE_UNAVAILABLE) {
-    notification.error({
-      message: 'Server Error',
-      description: 'The server is not working. Please try again later.',
-      placement,
-    });
+    pushNotification("Server Error", "The server is not working. Please try again later.");
   } else {
     error.error.forEach((message: string) => {
-      notification.error({
-        message: 'Error',
-        description: message,
-        placement,
-      });
+      pushNotification("Error", message);
     })
   }
 };
 
-const fillFormStateFromUrl = (searchFields: ItemFormSearch[], disabedFields: String[]) => {
+
+export const pushNotification = (message: string, description: string) => {
+  if (process.client) {
+    const placement: NotificationPlacement = "topRight";
+    notification.error({
+      message: message,
+      description: description,
+      placement,
+    });
+  }
+};
+
+export const clearInvalidParams = (searchFields: ItemFormSearch[], disabedFields: string[] = []) => {
   let invalidParams: string[] = [];
+  let validParams = Object.fromEntries(
+    searchFields
+      .filter(({ defaultValue }) => defaultValue)
+      .map(({ name, defaultValue, type }) => {
+        if (defaultValue === null || defaultValue === undefined) {
+          throw new Error("defaultValue is null or undefined");
+        }
+
+        let defaultValueString = defaultValue.toString();
+
+        return [
+          name,
+          type === "range-date" && useValidator().isFieldValid({ type: "range-date" }, defaultValueString) ? defaultValueString.split(",") : defaultValue,
+        ];
+      })
+  );
   const route = useRoute();
   const params = route.query;
-  const validator = useValidator();
-  const rangeDateFields = searchFields.filter((field) => field.type === "range-date");
-
-  const isFieldValid = (field: any, param: string) => {
-    switch (field?.type) {
-      case "select":
-        return field?.options?.some((option: { label: string; value: string }) => option.value === param);
-      case "text":
-      case "number":
-      case "sub-modal":
-      case "checkbox":
-      case "radio":
-        return true;
-      case "range-date":
-        return validator.isValidRangeDate(param, field.formatDate ?? "YYYY/MM/DD");
-      case "date":
-        return validator.isValidDate(param, field.formatDate ?? "YYYY/MM/DD");
-      default:
-        return false;
-    }
-  };
 
   Object.keys(params).forEach((key: string) => {
     const param = params[key] as string;
-    if (param !== undefined && param != "" && param != null && !disabedFields.includes(key) && key !== "page" && key !== "limit") {
+
+    if (key == "page" || key == "limit") {
+      serializePageParam();
+    } else if (param !== undefined && param != "" && param != null && !disabedFields.includes(key) && key !== "page" && key !== "limit") {
       const field = searchFields.find((field) => field.name === key);
-      if (isFieldValid(field, param) && field) {
-        field.defaultValue = field.type === "range-date" ? (param.split(",") as unknown as string) : param;
+
+      if (useValidator().isFieldValid(field, param) && field) {
+        validParams[key] = param;
       } else {
         invalidParams.push(key);
       }
@@ -150,16 +171,17 @@ const fillFormStateFromUrl = (searchFields: ItemFormSearch[], disabedFields: Str
     }
   });
 
-  if (rangeDateFields.length > 0) {
-    const rangeDateFieldNames = rangeDateFields.map(field => field.name);
-    serializeRangeDate(rangeDateFieldNames, params);
-  }
+  if (invalidParams.length > 0) removeInvalidParams(invalidParams);
+
+  return validParams;
 };
 
-const removeInvalidParams = () => {
-  if (invalidParams.value.length > 0) {
+const removeInvalidParams = (invalidParams: string[]) => {
+  if (invalidParams.length > 0) {
+    const router = useRouter();
+    const route = useRoute();
     const queryParams = { ...route.query };
-    const uniqueInvalidParams = [...new Set(invalidParams.value)];
+    const uniqueInvalidParams = [...new Set(invalidParams)];
 
     uniqueInvalidParams.forEach((key) => {
       delete queryParams[key];
@@ -172,12 +194,22 @@ const removeInvalidParams = () => {
   }
 };
 
-const updateUrl = (query: Record<string, any>) => {
+const serializePageParam = () => {
   const router = useRouter();
   const route = useRoute();
+  if (route.query.page && !useValidator().isValidPage(route.query.page)) {
+    const newPageQuery = { ...route.query, page: DEFAULT_PAGE };
+    router.push({
+      path: route.path,
+      query: newPageQuery,
+    });
+  }
 
-  router.push({
-    path: route.path,
-    query: query,
-  });
+  if (route.query.limit && !useValidator().isValidPerPage(route.query.limit)) {
+    const newOffsetQuery = { ...route.query, limit: DEFAULT_PER_PAGE };
+    router.push({
+      path: route.path,
+      query: newOffsetQuery,
+    });
+  }
 };

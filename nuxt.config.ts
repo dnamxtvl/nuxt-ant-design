@@ -9,22 +9,16 @@ export default defineNuxtConfig({
     host: '0.0.0.0',
     port: 3000
   },
-  routeRules: {
-    "/api/**": {
-      proxy: {
-        to: process.env.BACKEND_URL_PROXY,
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      },
-    },
-  },
   app: {
     head: {
       title: 'Nuxt Ant Design',
       meta: [{ name: 'Nuxt app', content: 'Nuxt Ant Design' }],
     },
+  },
+  nitro: {
+    debug: true,
+    devErrorHandler: true,
+    logLevel: 5
   },
   css: [
     "~/assets/css/tailwind/main.css",
@@ -41,6 +35,7 @@ export default defineNuxtConfig({
       SSR: process.env.SSR === 'true',
       APP_ENV: process.env.APP_ENV,
       FRONTEND_URL: process.env.FRONTEND_URL,
+      BACKEND_URL: process.env.BACKEND_URL
     },
   },
   modules: [

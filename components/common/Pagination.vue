@@ -46,24 +46,16 @@ export default defineComponent({
         updateUrl({ ...route.query, page });
         emit("onChange", page);
       }
+
       isChangingPageSize.value = false;
     };
 
     const onChangeSize = (current: number, size: number) => {
       isChangingPageSize.value = true;
       updateUrl({ ...route.query, page: DEFAULT_PAGE, limit: size });
+
       emit("onChangeSize", size);
       emit("onChange", DEFAULT_PAGE);
-    };
-
-    const serializeParams = () => {
-      if (route.query.page && !useValidator().isValidPage(route.query.page)) {
-        updateUrl({ ...route.query, page: props.currentPage });
-      }
-
-      if (route.query.limit && !useValidator().isValidPerPage(route.query.limit)) {
-        updateUrl({ ...route.query, limit: props.perPageSize });
-      }
     };
 
     const updateUrl = (query: Record<string, any>) => {
@@ -75,7 +67,6 @@ export default defineComponent({
 
     onMounted(() => {
       isChangingPageSize.value = false;
-      serializeParams();
     });
 
     return {

@@ -68,6 +68,25 @@ export const useValidator = () => {
       if (!PER_PAGE.includes(Number(perPage))) return false;
 
       return true;
+    },
+
+    isFieldValid(field: any, param: string) {
+      switch (field?.type) {
+        case "select":
+          return field?.options?.some((option: { label: string; value: string }) => option.value === param);
+        case "text":
+        case "number":
+        case "sub-modal":
+        case "checkbox":
+        case "radio":
+          return true;
+        case "range-date":
+          return useValidator().isValidRangeDate(param, field.formatDate ?? "YYYY/MM/DD");
+        case "date":
+          return useValidator().isValidDate(param, field.formatDate ?? "YYYY/MM/DD");
+        default:
+          return false;
+      }
     }
   }
 }
