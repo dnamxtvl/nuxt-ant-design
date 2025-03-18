@@ -53,7 +53,7 @@ import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
 import { useRoute as useRouteNuxt } from "nuxt/app";
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "~/constants/config/application";
 import api from "~/api";
-import helperApp from "~/utils/helper";
+import Helper from "~/utils/helper";
 
 definePageMeta({
   layout: "admin-dashboard",
@@ -67,16 +67,8 @@ const disabledFields = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"
 const listContract = ref<ListContract>();
 const onSsr = ref<boolean>(true);
 
-const page = ref<number>(
-  useValidator().isValidPage(useRoute.query.page)
-    ? Number(useRoute.query.page)
-    : DEFAULT_PAGE
-);
-const limit = ref<number>(
-  useValidator().isValidPerPage(useRoute.query.limit)
-    ? Number(useRoute.query.limit)
-    : DEFAULT_PER_PAGE
-);
+const page = ref<number>(Helper.getDefaultPage());
+const limit = ref<number>(Helper.getDefaultPerPage());
 
 const itemBreadcrumbs = ref<ItemBreadcrumb[]>([
   {
@@ -222,7 +214,7 @@ const searchFields: ItemFormSearch[] = [
 ];
 
 const searchParams = ref<SearchContract>(
-  clearInvalidParams(searchFields, disabledFields.value)
+  getDefaultParams(searchFields, disabledFields.value)
 );
 
 const getListContract = async () => {
@@ -247,7 +239,7 @@ const onChangePage = async (pageNumber: number) => {
   page.value = pageNumber;
   onSsr.value = false;
   await getListContract();
-  helperApp.scrollToTop(elementId.value);
+  Helper.scrollToTop(elementId.value);
 };
 
 const handleSearch = async (formState: Record<string, any>) => {

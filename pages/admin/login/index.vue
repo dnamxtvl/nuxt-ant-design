@@ -88,7 +88,7 @@ import type { Rule } from "ant-design-vue/es/form";
 import { RULES_VALIDATION } from "~/constants/config/validation";
 import type { ErrorResponse } from "~/types/common/res";
 import type { LoginResponse } from "~/types/auth/res";
-import helperApp from "~/utils/helper";
+import Helper from "~/utils/helper";
 import { ROUTE_APP } from "~/constants/config/route";
 import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
 import api from "~/api";
@@ -158,7 +158,7 @@ const onSubmit = () => {
     .then(async () => {
       loading.value = true;
       const res: { data: LoginResponse } = await api.auth.login(formState.value);
-      helperApp.setValueStoreLogin(res.data);
+      Helper.setValueStoreLogin(res.data);
 
       return navigateTo(ROUTE_APP.CONTRACT.LIST);
     })

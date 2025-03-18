@@ -137,7 +137,7 @@
 <script lang="ts">
 import { UpOutlined, DownOutlined } from "@ant-design/icons-vue";
 import type { ItemFormSearch } from "~/types/common/res";
-import { useRouter, useRoute } from "nuxt/app";
+import { useRoute } from "nuxt/app";
 import { cloneDeep } from "lodash";
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "~/constants/config/application";
 
@@ -167,7 +167,7 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const router = useRouter();
+    const config = useRuntimeConfig();
     const route = useRoute();
     const formState = ref<Record<string, any>>({});
     const resetFormState = ref<Record<string, any>>({});
@@ -225,16 +225,9 @@ export default defineComponent({
       });
     };
 
-    const updateUrl = (query: Record<string, any>) => {
-      router.push({
-        path: route.path,
-        query: query,
-      });
-    };
-
     onMounted(() => {
       setDefaultFormState();
-      fillFormStateFromUrl();
+      if (config.public.KEEP_URL) fillFormStateFromUrl();
     });
 
     const changeSelect = (item: ItemFormSearch) => {

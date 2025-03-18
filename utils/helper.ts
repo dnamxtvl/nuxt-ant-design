@@ -2,13 +2,16 @@ import { useMainStore } from "~/store";
 import moment from "moment";
 import { USER_TYPE_ENUM } from "~/constants/enums/user";
 import {
+  DEFAULT_PAGE,
+  DEFAULT_PER_PAGE,
   JWT_KEY_ACEESS_TOKEN_NAME,
   USER_PROFILE_KEY_NAME,
 } from "~/constants/config/application";
 import CookieManager from "~/utils/cookies";
 import type { LoginResponse } from "~/types/auth/res";
+import { useRoute as useRouteNuxt } from "nuxt/app";
 
-export default class helperApp {
+export default class Helper {
   static getErrorMessage = (error: unknown): string => {
     if (error instanceof Error) {
       return error.message
@@ -102,5 +105,19 @@ export default class helperApp {
 
   static scrollToTop = (elementId: string) => {
     document.getElementById(elementId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  static getDefaultPage = () => {
+    const useRoute = useRouteNuxt();
+
+    return useRuntimeConfig().public.KEEP_URL && useValidator().isValidPage(useRoute.query.page)
+      ? Number(useRoute.query.page) : DEFAULT_PAGE
+  };
+
+  static getDefaultPerPage = () => {
+    const useRoute = useRouteNuxt();
+
+    return useRuntimeConfig().public.KEEP_URL && useValidator().isValidPerPage(useRoute.query.limit)
+      ? Number(useRoute.query.limit) : DEFAULT_PER_PAGE
   };
 };

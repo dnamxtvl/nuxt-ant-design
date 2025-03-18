@@ -1,5 +1,5 @@
 import { ROUTE_APP } from "~/constants/config/route";
-import helperApp from "~/utils/helper";
+import Helper from "~/utils/helper";
 import { notification } from 'ant-design-vue';
 import type { NotificationPlacement } from 'ant-design-vue/lib/notification';
 import { StatusCodes } from "http-status-codes";
@@ -13,6 +13,7 @@ export const customFetch = $fetch.create({ // CSR
   onRequest({ options }) {
     const config = useRuntimeConfig();
     options.timeout = config.public.FETCH_TIMEOUT as unknown as number;
+    options.baseURL = config.public.BACKEND_URL;
 
     const token = CookieManager.getCookie(JWT_KEY_ACEESS_TOKEN_NAME);
     options.headers.set('Accept', 'application/json');
@@ -39,6 +40,7 @@ export async function useCustomFetch<T>(url: string, options: UseFetchOptions<T>
         'Content-Type': options.method === 'POST' ? 'multipart/form-data' : 'application/json',
       },
       immediate: true,
+      baseURL: config.public.BACKEND_URL,
       timeout: config.public.FETCH_TIMEOUT as unknown as number,
       onRequest({ options }) {
         const tokenFetch = CookieManager.getCookie(JWT_KEY_ACEESS_TOKEN_NAME);
@@ -68,7 +70,7 @@ export async function useCustomFetch<T>(url: string, options: UseFetchOptions<T>
 
 const logOut = () => {
   pushNotification("Token Expired", "Your token has expired. Please log in again.");
-  helperApp.logOutWhenTokenExpired();
+  Helper.logOutWhenTokenExpired();
   if (import.meta.server) return navigateTo(ROUTE_APP.AUTH.LOGIN);
 
   const router = useRouter();
@@ -133,8 +135,9 @@ export const pushNotification = (message: string, description: string) => {
   }
 };
 
-export const clearInvalidParams = (searchFields: ItemFormSearch[], disabedFields: string[] = []) => {
+export const getDefaultParams = (searchFields: ItemFormSearch[], disabedFields: string[] = []) => {
   let invalidParams: string[] = [];
+  const config = useRuntimeConfig();
   let validParams = Object.fromEntries(
     searchFields
       .filter(({ defaultValue }) => defaultValue)
@@ -151,6 +154,11 @@ export const clearInvalidParams = (searchFields: ItemFormSearch[], disabedFields
         ];
       })
   );
+
+  if (!config.public.KEEP_URL) {
+    return validParams;
+  }
+
   const route = useRoute();
   const params = route.query;
 
@@ -196,21 +204,26 @@ const removeInvalidParams = (invalidParams: string[]) => {
 };
 
 const serializePageParam = () => {
-  const router = useRouter();
   const route = useRoute();
   if (route.query.page && !useValidator().isValidPage(route.query.page)) {
     const newPageQuery = { ...route.query, page: DEFAULT_PAGE };
-    router.push({
-      path: route.path,
-      query: newPageQuery,
-    });
+    updateUrl(newPageQuery);
   }
 
   if (route.query.limit && !useValidator().isValidPerPage(route.query.limit)) {
     const newOffsetQuery = { ...route.query, limit: DEFAULT_PER_PAGE };
-    router.push({
-      path: route.path,
-      query: newOffsetQuery,
-    });
+    updateUrl(newOffsetQuery);
   }
+};
+
+export const updateUrl = (query: Record<string, any>) => {
+  const router = useRouter();
+  const route = useRoute();
+  const config = useRuntimeConfig();
+  if (!config.public.KEEP_URL) return;
+  
+  router.push({
+    path: route.path,
+    query: query,
+  });
 };

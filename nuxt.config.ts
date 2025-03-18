@@ -15,17 +15,6 @@ export default defineNuxtConfig({
       meta: [{ name: 'Nuxt app', content: 'Nuxt Ant Design' }],
     },
   },
-  routeRules: {
-    "/api/**": {
-      proxy: {
-        to: process.env.BACKEND_URL_PROXY,
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      },
-    },
-  },
   css: [
     "~/assets/css/tailwind/main.css",
     '~/assets/fonts/fontawesome.css',
@@ -45,6 +34,7 @@ export default defineNuxtConfig({
       FETCH_TIMEOUT: process.env.FETCH_TIMEOUT,
       FETCH_RETRY: process.env.FETCH_RETRY,
       FETCH_RETRY_DELAY: process.env.FETCH_RETRY_DELAY,
+      KEEP_URL: process.env.KEEP_URL === 'true',
     },
   },
   modules: [
@@ -59,7 +49,6 @@ export default defineNuxtConfig({
       { code: 'en', name: 'English' },
       { code: 'jp', name: 'Japanese' },
     ],
-
   },
   antd:{
     extractStyle: true,
