@@ -63,6 +63,7 @@ const loading = useState<boolean>("globalLoading", () => false);
 const i18n = useI18n();
 const disabledFields = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"]);
 const listContract = ref<ListContract>();
+const onSsr = ref<boolean>(true);
 
 const page = ref<number>(
   useValidator().isValidPage(useRoute.query.page)
@@ -228,7 +229,7 @@ const getListContract = async () => {
     page: page.value,
     limit: limit.value,
     ...searchParams.value,
-  });
+  }, onSsr.value);
 
   listContract.value = data as ListContract;
   loading.value = false;
@@ -242,13 +243,14 @@ const onChangePerPage = (perPage: number) => {
 
 const onChangePage = async (pageNumber: number) => {
   page.value = pageNumber;
+  onSsr.value = false;
   await getListContract();
 };
 
 const handleSearch = async (formState: Record<string, any>) => {
   page.value = DEFAULT_PAGE;
   searchParams.value = formState;
-
+  onSsr.value = false;
   await getListContract();
 };
 
@@ -256,7 +258,7 @@ const handleResetFilter = async (formState: Record<string, any>) => {
   page.value = DEFAULT_PAGE;
   limit.value = DEFAULT_PER_PAGE;
   searchParams.value = formState;
-
+  onSsr.value = false;
   await getListContract();
 };
 </script>
