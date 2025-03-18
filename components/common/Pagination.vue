@@ -16,14 +16,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref } from "vue";
+import { useRouter, useRoute } from "nuxt/app";
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "~/constants/config/application";
 
 export default defineComponent({
   name: "Pagination",
   props: {
     currentPage: {
       type: Number,
-      default: 1,
+      default: DEFAULT_PAGE,
     },
     totalItem: {
       type: Number,
@@ -31,23 +33,36 @@ export default defineComponent({
     },
     perPageSize: {
       type: Number,
-      default: 10,
+      default: DEFAULT_PER_PAGE,
     },
   },
   setup(props, { emit }) {
+    const router = useRouter();
+    const route = useRoute();
     const isChangingPageSize = ref<boolean>(false);
 
     const onChange = (page: number) => {
       if (!isChangingPageSize.value) {
+        updateUrl({ ...route.query, page });
         emit("onChange", page);
       }
+
       isChangingPageSize.value = false;
     };
 
     const onChangeSize = (current: number, size: number) => {
       isChangingPageSize.value = true;
+      updateUrl({ ...route.query, page: DEFAULT_PAGE, limit: size });
+
       emit("onChangeSize", size);
-      emit("onChange", 1);
+      emit("onChange", DEFAULT_PAGE);
+    };
+
+    const updateUrl = (query: Record<string, any>) => {
+      router.push({
+        path: route.path,
+        query: query,
+      });
     };
 
     onMounted(() => {

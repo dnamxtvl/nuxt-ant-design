@@ -37,9 +37,9 @@
   </a-layout-header>
 </template>
 <script lang="ts">
-import { FETCH_API } from "~/constants/config/api";
 import helperApp from "~/utils/helper";
 import { ROUTE_APP } from "~/constants/config/route";
+import api from "~/api";
 
 export default defineComponent({
   name: "Header",
@@ -59,10 +59,9 @@ export default defineComponent({
 
     const logout = async () => {
       try {
-        await customFetch(FETCH_API.AUTH.LOGOUT, {
-          method: "post",
-        });
+        await api.auth.logout();
         helperApp.logOutWhenTokenExpired();
+
         return navigateTo(ROUTE_APP.AUTH.LOGIN);
       } catch (err) {}
     };

@@ -1,13 +1,13 @@
 export const API_CONST = {
     AUTH: {
-        LOGIN: 'admin/login',
-        LOGOUT: 'admin/logout',
+        LOGIN: '/api/admin/login',
+        LOGOUT: '/api/admin/logout',
     },
     CONTRACT: {
-        LIST: 'admin/contract/list',
+        LIST: '/api/admin/contract/list',
     },
     USER: {
-        LIST: 'admin/user/list',
+        LIST: '/api/admin/user/list',
     }
 };
 

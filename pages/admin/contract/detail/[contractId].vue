@@ -62,7 +62,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import TitleScreen from "~/components/common/TitleScreen.vue";
 import { ref } from "vue";
 import Breadcrumb from "~/components/common/Breadcrumb.vue";
@@ -79,53 +79,25 @@ definePageMeta({
   layout: "admin-dashboard",
 });
 
-export default {
-  components: {
-    TitleScreen,
-    Breadcrumb,
-    MainContent,
-    ContractPartner,
-    ContractBuilder,
-    SiteOwner,
-    ProjectInfo,
+const route = useRoute();
+const contractId = route.params.contractId as string;
+const activeTab = ref<string>("1");
+const i18n = useI18n();
+const itemBreadcrumbs = ref<ItemBreadcrumb[]>([
+  {
+    name: "home",
+    link: "/",
   },
-  setup() {
-    const route = useRoute();
-    const contractId = route.params.contractId as string;
-    const activeTab = ref<string>("1");
-    const i18n = useI18n();
-    const itemBreadcrumbs = ref<ItemBreadcrumb[]>([
-      {
-        name: "home",
-        link: "/",
-      },
-      {
-        name: "list",
-        link: "/contract/list",
-      },
-      {
-        name: "contract_detail",
-        link: "/contract/detail",
-      },
-    ]);
-
-    const handleSearch = (formState: Record<string, any>) => {
-      console.log("formState", formState.keyword);
-    };
-
-    const handleResetFilter = () => {
-      console.log("handleResetFilter");
-    };
-
-    onMounted(async () => {});
-
-    return {
-      itemBreadcrumbs,
-      activeTab,
-      handleSearch,
-      handleResetFilter,
-    };
+  {
+    name: "list",
+    link: "/contract/list",
   },
-};
+  {
+    name: "contract_detail",
+    link: "/contract/detail",
+  },
+]);
+
+onMounted(async () => {});
 </script>
 <style scoped></style>

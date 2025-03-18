@@ -7,7 +7,6 @@ import {
 } from "~/constants/config/application";
 import CookieManager from "~/utils/cookies";
 import type { LoginResponse } from "~/types/auth/res";
-import { ROUTE_APP } from "~/constants/config/route";
 
 export default class helperApp {
   static getErrorMessage = (error: unknown): string => {
