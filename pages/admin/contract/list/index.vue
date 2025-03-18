@@ -39,7 +39,6 @@
 
 <script lang="ts" setup>
 import TitleScreen from "~/components/common/TitleScreen.vue";
-import { ref } from "vue";
 import Pagination from "~/components/common/Pagination.vue";
 import Breadcrumb from "~/components/common/Breadcrumb.vue";
 import type { ItemBreadcrumb, ItemFormSearch } from "~/types/common/res";
@@ -50,7 +49,6 @@ import { RULES_VALIDATION } from "~/constants/config/validation";
 import type { ListContract } from "~/types/contract/res";
 import type { SearchContract } from "~/types/contract/req";
 import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
-import { useRoute as useRouteNuxt } from "nuxt/app";
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "~/constants/config/application";
 import api from "~/api";
 import Helper from "~/utils/helper";
