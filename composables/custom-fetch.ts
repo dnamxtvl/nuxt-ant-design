@@ -18,9 +18,7 @@ export const customFetch = $fetch.create({ // CSR
     const token = CookieManager.getCookie(JWT_KEY_ACEESS_TOKEN_NAME);
     options.headers.set('Accept', 'application/json');
     options.headers.set('Content-Type', options.method === 'POST' ? 'multipart/form-data' : 'application/json');
-    if (token) {
-      options.headers.set('Authorization', `Bearer ${token}`);
-    }
+    if (token) options.headers.set('Authorization', `Bearer ${token}`);
   },
   onRequestError({ error }) {
     handleFetchError(error);
