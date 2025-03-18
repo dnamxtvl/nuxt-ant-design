@@ -134,8 +134,9 @@ export default class BaseService {
     getInstanceAxios = () => {
         const config = useRuntimeConfig();
         const instance = axios.create();
+        instance.defaults.baseURL = config.public.BACKEND_URL;
 
-        // instance.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+        instance.defaults.headers.post['Content-Type'] = 'multipart/form-data';
         instance.defaults.headers.get['Content-Type'] = 'application/json';
         instance.defaults.headers.put['Content-Type'] = 'multipart/form-data';
         instance.defaults.headers.delete['Content-Type'] = 'application/json';
