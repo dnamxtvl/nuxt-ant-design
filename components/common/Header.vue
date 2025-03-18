@@ -37,7 +37,7 @@
   </a-layout-header>
 </template>
 <script lang="ts">
-import helperApp from "~/utils/helper";
+import Helper from "~/utils/helper";
 import { ROUTE_APP } from "~/constants/config/route";
 import api from "~/api";
 
@@ -60,7 +60,7 @@ export default defineComponent({
     const logout = async () => {
       try {
         await api.auth.logout();
-        helperApp.logOutWhenTokenExpired();
+        Helper.logOutWhenTokenExpired();
 
         return navigateTo(ROUTE_APP.AUTH.LOGIN);
       } catch (err) {}

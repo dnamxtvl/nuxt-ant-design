@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { useRouter, useRoute } from "nuxt/app";
+import { useRoute } from "nuxt/app";
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "~/constants/config/application";
 
 export default defineComponent({
@@ -37,7 +37,6 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const router = useRouter();
     const route = useRoute();
     const isChangingPageSize = ref<boolean>(false);
 
@@ -56,13 +55,6 @@ export default defineComponent({
 
       emit("onChangeSize", size);
       emit("onChange", DEFAULT_PAGE);
-    };
-
-    const updateUrl = (query: Record<string, any>) => {
-      router.push({
-        path: route.path,
-        query: query,
-      });
     };
 
     onMounted(() => {

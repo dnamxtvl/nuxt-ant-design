@@ -1,4 +1,4 @@
-import helperApp from "~/utils/helper";
+import Helper from "~/utils/helper";
 import axios from 'axios';
 import type { ErrorResponse, ResponseData } from "~/types/common/res";
 import { StatusCodes } from "http-status-codes";
@@ -25,7 +25,7 @@ export default class BaseService {
 
                 errors = errorMessages;
             } else {
-                errors = [helperApp.getErrorMessage(e.response.data.message)];
+                errors = [Helper.getErrorMessage(e.response.data.message)];
             }
 
             codeError = e.response.status;
