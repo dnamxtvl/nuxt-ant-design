@@ -54,7 +54,7 @@ export async function useCustomFetch<T>(url: string, options: UseFetchOptions<T>
       },
     } as UseFetchOptions<T>
 
-    const { data, error } = await useFetch<T>(url, optionFetch);
+    const { data, error } = await useFetch(url, optionFetch);
     if (error.value && import.meta.server) {
       if (error.value.statusCode === StatusCodes.UNAUTHORIZED) {
         logOut();
