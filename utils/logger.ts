@@ -1,14 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 
-const logDir = process.server ? path.resolve(process.cwd(), 'logs') : '';
+const logDir = import.meta.server ? path.resolve(process.cwd(), 'logs') : '';
 
-if (process.server && !fs.existsSync(logDir)) {
+if (import.meta.server && !fs.existsSync(logDir)) {
   fs.mkdirSync(logDir, { recursive: true });
 }
 
 const logToFile = (level: string, message: string | object) => {
-  if (process.server) {
+  if (import.meta.server) {
     const config = useRuntimeConfig();
     const now = new Date();
     const jstOffset = config.public.APP_ENV === 'production' ? (9 * 60 * 60 * 1000) : (7 * 60 * 60 * 1000); // JP UTC in production, VN UTC in development
