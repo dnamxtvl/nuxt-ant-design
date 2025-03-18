@@ -60,7 +60,6 @@ definePageMeta({
 });
 
 const elementId = ref<string>("list-contract");
-const useRoute = useRouteNuxt();
 const loading = useState<boolean>("globalLoading", () => false);
 const i18n = useI18n();
 const disabledFields = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"]);
