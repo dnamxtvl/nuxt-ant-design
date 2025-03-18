@@ -224,18 +224,20 @@ const searchParams = ref<SearchContract>(
 
 const getListContract = async () => {
   loading.value = true;
-  const data = await api.contract.list({
-    page: page.value,
-    limit: limit.value,
-    ...searchParams.value,
-  });
 
-  listContract.value = data as ListContract;
+  try {
+    const data = await api.contract.list({
+      page: page.value,
+      limit: limit.value,
+      ...searchParams.value,
+    });
 
-  loading.value = false;
+    loading.value = false;
+    listContract.value = data as ListContract;
+  } catch (error) {
+    loading.value = false;
+  }
 };
-
-await getListContract();
 
 const onChangePerPage = (perPage: number) => {
   limit.value = perPage;
@@ -260,5 +262,9 @@ const handleResetFilter = async (formState: Record<string, any>) => {
 
   await getListContract();
 };
+
+onMounted(async () => {
+  await getListContract();
+});
 </script>
 <style scoped></style>

@@ -9,9 +9,11 @@ import { DEFAULT_PAGE, DEFAULT_PER_PAGE, JWT_KEY_ACEESS_TOKEN_NAME } from '~/con
 import CookieManager from "~/utils/cookies";
 import { useRouter, useRoute } from "nuxt/app";
 
-export const customFetch = $fetch.create({
+export const customFetch = $fetch.create({ // CSR
   onRequest({ options }) {
-    options.baseURL = useRuntimeConfig().public.BACKEND_URL;
+    const config = useRuntimeConfig();
+    options.timeout = config.public.FETCH_TIMEOUT as unknown as number;
+
     const token = CookieManager.getCookie(JWT_KEY_ACEESS_TOKEN_NAME);
     options.headers.set('Accept', 'application/json');
     options.headers.set('Content-Type', options.method === 'POST' ? 'multipart/form-data' : 'application/json');
@@ -27,17 +29,17 @@ export const customFetch = $fetch.create({
   },
 });
 
-export async function useCustomFetch<T>(url: string, options: UseFetchOptions<T> = {}) {
+export async function useCustomFetch<T>(url: string, options: UseFetchOptions<T> = {}) { // SSR
+  const config = useRuntimeConfig();
   const optionFetch = 
     {
       ...options,
-      baseURL: useRuntimeConfig().public.BACKEND_URL,
       headers: {
         'Accept': 'application/json',
         'Content-Type': options.method === 'POST' ? 'multipart/form-data' : 'application/json',
       },
       immediate: true,
-      debug: true,
+      timeout: config.public.FETCH_TIMEOUT as unknown as number,
       onRequest({ options }) {
         const tokenFetch = CookieManager.getCookie(JWT_KEY_ACEESS_TOKEN_NAME);
         if (tokenFetch) {
@@ -54,7 +56,7 @@ export async function useCustomFetch<T>(url: string, options: UseFetchOptions<T>
 
     const { data, error } = await useFetch<T>(url, optionFetch);
 
-    if (error.value && options.server) {
+    if (error.value && import.meta.server) {
       const errorServer = {
         status: error.value.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
         error: error.value?.message || "An error occurred",
@@ -122,7 +124,7 @@ export const displayNotification = (error: ErrorResponse) => {
 
 
 export const pushNotification = (message: string, description: string) => {
-  if (process.client) {
+  if (import.meta.client) {
     const placement: NotificationPlacement = "topRight";
     notification.error({
       message: message,
