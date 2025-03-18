@@ -1,5 +1,5 @@
 <template>
-  <div id="list-contract">
+  <div :id="elementId">
     <!-- Breadcrumb -->
     <Breadcrumb :itemBreads="itemBreadcrumbs" />
     <TitleScreen titleScreen="list_user" contractNumber="GCNT90013" />
@@ -59,6 +59,7 @@ definePageMeta({
   layout: "admin-dashboard",
 });
 
+const elementId = ref<string>("list-contract");
 const useRoute = useRouteNuxt();
 const loading = useState<boolean>("globalLoading", () => false);
 const i18n = useI18n();
@@ -246,7 +247,7 @@ const onChangePage = async (pageNumber: number) => {
   page.value = pageNumber;
   onSsr.value = false;
   await getListContract();
-  helperApp.scrollToTop("list-contract");
+  helperApp.scrollToTop(elementId.value);
 };
 
 const handleSearch = async (formState: Record<string, any>) => {
