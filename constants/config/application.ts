@@ -48,6 +48,7 @@ export const ERR_MESSAGE = {
     404: 'Page Not Found!',
     500: 'Internal Server Error',
     403: 'Forbidden',
+    422: 'Unprocessable Entity',
 }
 
 export const PER_PAGE = [10, 20, 50, 100];

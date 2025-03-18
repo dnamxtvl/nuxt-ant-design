@@ -55,15 +55,12 @@ export async function useCustomFetch<T>(url: string, options: UseFetchOptions<T>
     } as UseFetchOptions<T>
 
     const { data, error } = await useFetch<T>(url, optionFetch);
-
     if (error.value && import.meta.server) {
-      const errorServer = {
-        status: error.value.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
-        error: error.value?.message || "An error occurred",
-        responseCode: typeof error.value?.data?.errors?.code === 'number' ? error.value?.data?.errors?.code : 0,
+      if (error.value.statusCode === StatusCodes.UNAUTHORIZED) {
+        logOut();
+      } else {
+        throw createError({ statusCode: error.value.statusCode, message: error.value.message });
       }
-      
-      throw errorServer;
     }
 
     return data.value;
@@ -72,8 +69,9 @@ export async function useCustomFetch<T>(url: string, options: UseFetchOptions<T>
 const logOut = () => {
   pushNotification("Token Expired", "Your token has expired. Please log in again.");
   helperApp.logOutWhenTokenExpired();
-  const router = useRouter();
+  if (import.meta.server) return navigateTo(ROUTE_APP.AUTH.LOGIN);
 
+  const router = useRouter();
   router.push(ROUTE_APP.AUTH.LOGIN);
 }
 
@@ -106,6 +104,7 @@ const handleFetchError = (response: any) => {
   };
 
   displayNotification(errorData);
+  logger.error(errorData);
 
   throw errorData;
 };

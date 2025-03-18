@@ -17,7 +17,7 @@
     <!-- End Filter -->
     <div class="content-box">
       <!-- Table -->
-      <TableMergeCell
+      <TableListContract
         title="search_result"
         :total="listContract?.pagination.records"
         :results="listContract?.data"
@@ -45,7 +45,7 @@ import Breadcrumb from "~/components/common/Breadcrumb.vue";
 import type { ItemBreadcrumb, ItemFormSearch } from "~/types/common/res";
 import FormSearch from "~/components/common/FormSearch.vue";
 import { useI18n } from "vue-i18n";
-import TableMergeCell from "~/components/contract/list/TableMergeCell.vue";
+import TableListContract from "~/components/contract/list/TableListContract.vue";
 import { RULES_VALIDATION } from "~/constants/config/validation";
 import type { ListContract } from "~/types/contract/res";
 import type { SearchContract } from "~/types/contract/req";
@@ -224,20 +224,17 @@ const searchParams = ref<SearchContract>(
 
 const getListContract = async () => {
   loading.value = true;
+  const data = await api.contract.list({
+    page: page.value,
+    limit: limit.value,
+    ...searchParams.value,
+  });
 
-  try {
-    const data = await api.contract.list({
-      page: page.value,
-      limit: limit.value,
-      ...searchParams.value,
-    });
-
-    loading.value = false;
-    listContract.value = data as ListContract;
-  } catch (error) {
-    loading.value = false;
-  }
+  listContract.value = data as ListContract;
+  loading.value = false;
 };
+
+await getListContract();
 
 const onChangePerPage = (perPage: number) => {
   limit.value = perPage;
@@ -262,9 +259,5 @@ const handleResetFilter = async (formState: Record<string, any>) => {
 
   await getListContract();
 };
-
-onMounted(async () => {
-  await getListContract();
-});
 </script>
 <style scoped></style>
