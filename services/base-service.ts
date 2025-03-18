@@ -32,7 +32,7 @@ export default class BaseService {
         }
 
         error({
-            code: codeError,
+            status: codeError,
             error: errors,
             responseCode: typeof e.response?.data?.errors?.code == 'number' ? e.response.data.errors.code : 0,
         });
