@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="list-contract">
     <!-- Breadcrumb -->
     <Breadcrumb :itemBreads="itemBreadcrumbs" />
     <TitleScreen titleScreen="list_user" contractNumber="GCNT90013" />
@@ -53,6 +53,7 @@ import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
 import { useRoute as useRouteNuxt } from "nuxt/app";
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "~/constants/config/application";
 import api from "~/api";
+import helperApp from "~/utils/helper";
 
 definePageMeta({
   layout: "admin-dashboard",
@@ -245,6 +246,7 @@ const onChangePage = async (pageNumber: number) => {
   page.value = pageNumber;
   onSsr.value = false;
   await getListContract();
+  helperApp.scrollToTop("list-contract");
 };
 
 const handleSearch = async (formState: Record<string, any>) => {

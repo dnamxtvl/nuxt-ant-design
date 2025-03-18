@@ -99,4 +99,8 @@ export default class helperApp {
     CookieManager.setCookie(USER_PROFILE_KEY_NAME, userInfo);
     store.login(store.$state, userInfo, data.token);
   };
+
+  static scrollToTop = (elementId: string) => {
+    document.getElementById(elementId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 };
