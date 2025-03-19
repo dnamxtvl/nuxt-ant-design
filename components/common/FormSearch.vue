@@ -171,7 +171,6 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const config = useRuntimeConfig();
     const route = useRoute();
     const formState = ref<Record<string, any>>({});
     const resetFormState = ref<Record<string, any>>({});

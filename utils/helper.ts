@@ -107,14 +107,14 @@ export default class Helper {
     document.getElementById(elementId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  static getDefaultPage = (keepUrl = false) => {
+  static getDefaultPage = (keepUrl: boolean = false) => {
     const useRoute = useRouteNuxt();
 
     return keepUrl && useValidator().isValidPage(useRoute.query.page)
       ? Number(useRoute.query.page) : DEFAULT_PAGE
   };
 
-  static getDefaultPerPage = (keepUrl = false) => {
+  static getDefaultPerPage = (keepUrl: boolean = false) => {
     const useRoute = useRouteNuxt();
 
     return keepUrl && useValidator().isValidPerPage(useRoute.query.limit)

@@ -213,7 +213,7 @@ const removeInvalidParams = (invalidParams: string[]) => {
   }
 };
 
-const serializePageParam = (keepUrl = false) => {
+const serializePageParam = (keepUrl: boolean = false) => {
   const route = useRoute();
   if (route.query.page && !useValidator().isValidPage(route.query.page)) {
     const newPageQuery = { ...route.query, page: DEFAULT_PAGE };
@@ -226,7 +226,7 @@ const serializePageParam = (keepUrl = false) => {
   }
 };
 
-export const updateUrl = (query: Record<string, any>, keepUrl = false) => {
+export const updateUrl = (query: Record<string, any>, keepUrl: boolean = false) => {
   const router = useRouter();
   const route = useRoute();
   if (!keepUrl) return;
