@@ -1,6 +1,5 @@
 import { DUMMY_API } from '~/api/dummy';
 import { API_CONST } from '~/constants/config/api';
-import type { ErrorResponse } from '~/types/common/res';
 import type { SearchContractParams } from '~/types/contract/req';
 
 export default class ContractService {

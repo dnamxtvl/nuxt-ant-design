@@ -165,6 +165,10 @@ export default defineComponent({
       type: String,
       required: false,
     },
+    keepUrl: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { emit }) {
     const config = useRuntimeConfig();
@@ -187,14 +191,14 @@ export default defineComponent({
         );
         const queryParamUpdates = Object.fromEntries(Object.entries(formStateEmit).filter(([key]) => !disabledFields.value.includes(key)));
 
-        updateUrl({ ...queryParamUpdates, page: DEFAULT_PAGE, limit: route.query.limit || DEFAULT_PER_PAGE });
+        updateUrl({ ...queryParamUpdates, page: DEFAULT_PAGE, limit: route.query.limit || DEFAULT_PER_PAGE }, props.keepUrl);
         emit("submit", formStateEmit);
       });
     };
 
     const handleClear = () => {
       formState.value = cloneDeep(resetFormState.value);
-      updateUrl({});
+      updateUrl({}, props.keepUrl);
       emit("handleClear", formState.value);
     };
 
@@ -227,7 +231,7 @@ export default defineComponent({
 
     onMounted(() => {
       setDefaultFormState();
-      if (config.public.KEEP_URL) fillFormStateFromUrl();
+      if (props.keepUrl) fillFormStateFromUrl();
     });
 
     const changeSelect = (item: ItemFormSearch) => {

@@ -35,6 +35,10 @@ export default defineComponent({
       type: Number,
       default: DEFAULT_PER_PAGE,
     },
+    keepUrl: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { emit }) {
     const route = useRoute();
@@ -42,7 +46,7 @@ export default defineComponent({
 
     const onChange = (page: number) => {
       if (!isChangingPageSize.value) {
-        updateUrl({ ...route.query, page });
+        updateUrl({ ...route.query, page }, props.keepUrl);
         emit("onChange", page);
       }
 
@@ -51,7 +55,7 @@ export default defineComponent({
 
     const onChangeSize = (current: number, size: number) => {
       isChangingPageSize.value = true;
-      updateUrl({ ...route.query, page: DEFAULT_PAGE, limit: size });
+      updateUrl({ ...route.query, page: DEFAULT_PAGE, limit: size }, props.keepUrl);
 
       emit("onChangeSize", size);
       emit("onChange", DEFAULT_PAGE);

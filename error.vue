@@ -7,7 +7,7 @@
       :sub-title="getMsgError(error.statusCode)"
     >
       <template #extra>
-        <a-button type="primary" class="mt-4" @click="handleError">Go Home</a-button>
+        <nuxt-link :to="ROUTE_APP.CONTRACT.LIST"><a-button type="primary" class="mt-4">Go Home</a-button></nuxt-link>
       </template>
     </a-result>
   </div>
@@ -22,10 +22,6 @@ const props = defineProps({
 });
 
 const appLoaded = ref(false);
-const handleError = () => {
-  navigateTo(ROUTE_APP.CONTRACT.LIST);
-};
-
 const getMsgError = (statusCode: number) => {
   return ERR_MESSAGE[statusCode] || "An error occurred";
 };

@@ -11,6 +11,7 @@
       :numBasicFilter="12"
       :fields="searchFields"
       :disabledFields="disabledFields"
+      :keepUrl="keepUrl"
       @submit="handleSearch"
       @handleClear="handleResetFilter"
     />
@@ -27,6 +28,7 @@
       <Pagination
         :currentPage="page"
         :totalItem="listContract?.pagination.records"
+        :keepUrl="keepUrl"
         @onChange="onChangePage"
         :perPageSize="limit"
         @onChangeSize="onChangePerPage"
@@ -50,7 +52,6 @@ import { RULES_VALIDATION } from "~/constants/config/validation";
 import type { ListContract } from "~/types/contract/res";
 import type { SearchContract } from "~/types/contract/req";
 import FullScreenLoader from "~/components/common/FullScreenLoader.vue";
-import { useRoute as useRouteNuxt } from "nuxt/app";
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "~/constants/config/application";
 import api from "~/api";
 import Helper from "~/utils/helper";
@@ -60,15 +61,15 @@ definePageMeta({
 });
 
 const elementId = ref<string>("list-contract");
-const useRoute = useRouteNuxt();
 const loading = useState<boolean>("globalLoading", () => false);
 const i18n = useI18n();
 const disabledFields = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"]);
 const listContract = ref<ListContract>();
 const onSsr = ref<boolean>(true);
+const keepUrl = ref<boolean>(true);
 
-const page = ref<number>(Helper.getDefaultPage());
-const limit = ref<number>(Helper.getDefaultPerPage());
+const page = ref<number>(Helper.getDefaultPage(keepUrl.value));
+const limit = ref<number>(Helper.getDefaultPerPage(keepUrl.value));
 
 const itemBreadcrumbs = ref<ItemBreadcrumb[]>([
   {
@@ -214,7 +215,7 @@ const searchFields: ItemFormSearch[] = [
 ];
 
 const searchParams = ref<SearchContract>(
-  getDefaultParams(searchFields, disabledFields.value)
+  getDefaultParams(searchFields, disabledFields.value, keepUrl.value)
 );
 
 const getListContract = async () => {

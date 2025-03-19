@@ -9,6 +9,17 @@ export default defineNuxtConfig({
     host: '0.0.0.0',
     port: 3000
   },
+  routeRules: {
+    "/api/**": {
+      proxy: {
+        to: process.env.BACKEND_URL_PROXY,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      },
+    },
+  },
   app: {
     head: {
       title: 'Nuxt Ant Design',
@@ -34,7 +45,6 @@ export default defineNuxtConfig({
       FETCH_TIMEOUT: process.env.FETCH_TIMEOUT,
       FETCH_RETRY: process.env.FETCH_RETRY,
       FETCH_RETRY_DELAY: process.env.FETCH_RETRY_DELAY,
-      KEEP_URL: process.env.KEEP_URL === 'true',
     },
   },
   modules: [

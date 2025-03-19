@@ -107,17 +107,17 @@ export default class Helper {
     document.getElementById(elementId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  static getDefaultPage = () => {
+  static getDefaultPage = (keepUrl = false) => {
     const useRoute = useRouteNuxt();
 
-    return useRuntimeConfig().public.KEEP_URL && useValidator().isValidPage(useRoute.query.page)
+    return keepUrl && useValidator().isValidPage(useRoute.query.page)
       ? Number(useRoute.query.page) : DEFAULT_PAGE
   };
 
-  static getDefaultPerPage = () => {
+  static getDefaultPerPage = (keepUrl = false) => {
     const useRoute = useRouteNuxt();
 
-    return useRuntimeConfig().public.KEEP_URL && useValidator().isValidPerPage(useRoute.query.limit)
+    return keepUrl && useValidator().isValidPerPage(useRoute.query.limit)
       ? Number(useRoute.query.limit) : DEFAULT_PER_PAGE
   };
 };

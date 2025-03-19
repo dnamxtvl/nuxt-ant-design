@@ -105,13 +105,23 @@ const handleFetchError = (response: any) => {
     responseCode: typeof response?._data?.errors?.code === 'number' ? response._data.errors.code : 0,
   };
 
-  displayNotification(errorData);
   logger.error(errorData);
+  showErrorPage(codeError);
+  showErrorNotification(errorData);
 
   throw errorData;
 };
 
-export const displayNotification = (error: ErrorResponse) => {
+const showErrorPage = (statusCode: number) => {
+  if (import.meta.client && (statusCode === StatusCodes.INTERNAL_SERVER_ERROR ||
+    statusCode === StatusCodes.FORBIDDEN ||
+    statusCode === StatusCodes.NOT_FOUND) ||
+    statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
+      throw showError({ statusCode: statusCode });
+  }
+}
+
+export const showErrorNotification = (error: ErrorResponse) => {
   if (error.status === StatusCodes.UNAUTHORIZED) {
     logOut();
   } else if (error.status === StatusCodes.SERVICE_UNAVAILABLE) {
@@ -135,9 +145,8 @@ export const pushNotification = (message: string, description: string) => {
   }
 };
 
-export const getDefaultParams = (searchFields: ItemFormSearch[], disabedFields: string[] = []) => {
+export const getDefaultParams = (searchFields: ItemFormSearch[], disabedFields: string[] = [], keepUrl = false) => {
   let invalidParams: string[] = [];
-  const config = useRuntimeConfig();
   let validParams = Object.fromEntries(
     searchFields
       .filter(({ defaultValue }) => defaultValue)
@@ -155,18 +164,20 @@ export const getDefaultParams = (searchFields: ItemFormSearch[], disabedFields: 
       })
   );
 
-  if (!config.public.KEEP_URL) {
-    return validParams;
-  }
-
   const route = useRoute();
   const params = route.query;
+
+  if (!keepUrl) {
+    if (Object.keys(params).length > 0) updateUrl({}, true);
+
+    return validParams;
+  }
 
   Object.keys(params).forEach((key: string) => {
     const param = params[key] as string;
 
     if (key == "page" || key == "limit") {
-      serializePageParam();
+      serializePageParam(true);
     } else if (param !== undefined && param != "" && param != null && !disabedFields.includes(key) && key !== "page" && key !== "limit") {
       const field = searchFields.find((field) => field.name === key);
 
@@ -203,24 +214,23 @@ const removeInvalidParams = (invalidParams: string[]) => {
   }
 };
 
-const serializePageParam = () => {
+const serializePageParam = (keepUrl = false) => {
   const route = useRoute();
   if (route.query.page && !useValidator().isValidPage(route.query.page)) {
     const newPageQuery = { ...route.query, page: DEFAULT_PAGE };
-    updateUrl(newPageQuery);
+    updateUrl(newPageQuery, keepUrl);
   }
 
   if (route.query.limit && !useValidator().isValidPerPage(route.query.limit)) {
     const newOffsetQuery = { ...route.query, limit: DEFAULT_PER_PAGE };
-    updateUrl(newOffsetQuery);
+    updateUrl(newOffsetQuery, keepUrl);
   }
 };
 
-export const updateUrl = (query: Record<string, any>) => {
+export const updateUrl = (query: Record<string, any>, keepUrl = false) => {
   const router = useRouter();
   const route = useRoute();
-  const config = useRuntimeConfig();
-  if (!config.public.KEEP_URL) return;
+  if (!keepUrl) return;
   
   router.push({
     path: route.path,
