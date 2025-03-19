@@ -133,7 +133,6 @@ export const showErrorNotification = (error: ErrorResponse) => {
   }
 };
 
-
 export const pushNotification = (message: string, description: string) => {
   if (import.meta.client) {
     const placement: NotificationPlacement = "topRight";

@@ -66,7 +66,7 @@ const i18n = useI18n();
 const disabledFields = ref<string[]>(["jyutyu_jigyousyo_name", "eigyo_tantousya"]);
 const listContract = ref<ListContract>();
 const onSsr = ref<boolean>(true);
-const keepUrl = ref<boolean>(true);
+const keepUrl = ref<boolean>(false);
 
 const page = ref<number>(Helper.getDefaultPage(keepUrl.value));
 const limit = ref<number>(Helper.getDefaultPerPage(keepUrl.value));
