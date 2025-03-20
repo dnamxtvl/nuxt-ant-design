@@ -197,6 +197,7 @@ export default defineComponent({
 
     const handleClear = () => {
       formState.value = cloneDeep(resetFormState.value);
+      formRef.value.resetFields();
       updateUrl({}, props.keepUrl);
       emit("handleClear", formState.value);
     };
